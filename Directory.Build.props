@@ -1,0 +1,11 @@
+<Project>
+  <!--
+    Location of the sciter-js-sdk-main checkout (headers, packfolder.exe, sciter.dll).
+    Override by setting the SCITER_SDK_ROOT environment variable if your checkout
+    lives somewhere other than the default sibling layout under ____WORK____.
+  -->
+  <PropertyGroup>
+    <SciterSdkRoot Condition="'$(SciterSdkRoot)'=='' And '$(SCITER_SDK_ROOT)'!=''">$(SCITER_SDK_ROOT)</SciterSdkRoot>
+    <SciterSdkRoot Condition="'$(SciterSdkRoot)'==''">$(MSBuildThisFileDirectory)..\..\..\sciter-js-sdk-main\sciter-js-sdk-main</SciterSdkRoot>
+  </PropertyGroup>
+</Project>

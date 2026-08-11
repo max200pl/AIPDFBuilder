@@ -1,0 +1,39 @@
+<html
+  window-resizable
+  window-frame="solid-with-shadow"
+  window-width="900px"
+  window-height="600px"
+>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>sciterjs-windows</title>
+    <style src="shared/lib/tokens.css" />
+    <style>
+      html {
+        background-color: var(--color-bg);
+        color: var(--color-text);
+        font: 14px/1.4 system;
+      }
+      body {
+        width: *;
+        height: *;
+        flow: vertical;
+        content-vertical-align: middle;
+        content-horizontal-align: center;
+      }
+    </style>
+    <script type="module">
+      // Ctrl+R — reload from source (dev convenience)
+      document.on("keydown", function (evt) {
+        if (evt.ctrlKey && evt.code === "KeyR") {
+          Window.this.load(document.url());
+          return true;
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <h1>sciterjs-windows</h1>
+    <p>Blank Sciter.js sandbox — build pages/components here.</p>
+  </body>
+</html>

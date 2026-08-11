@@ -1,0 +1,48 @@
+:root {
+  /* Colors — brand */
+  --color-brand-dark: #243453;
+  --color-brand-blue: #1E3E84;
+  --color-brand-accent: #1CB8FF;
+
+  /* Colors — surface */
+  --color-bg: #1a1a1a;
+  --color-surface: #252525;
+  --color-surface-light: #E8EBF0;
+  --color-border: #333333;
+
+  /* Colors — text */
+  --color-text: #e5e5e5;
+  --color-text-muted: #888888;
+  --color-text-dark: #243453;
+  --color-text-light: #ffffff;
+  --color-text-light-muted: rgba(255, 255, 255, 0.6);
+
+  /* Colors — UI */
+  --color-primary: #4E4EFF;
+  --color-icon-muted: #909BA6;
+  --color-close-hover: #E81123;
+  --color-overlay-dark: rgba(0, 0, 0, 0.3);
+  --color-overlay-medium: rgba(0, 0, 0, 0.7);
+  --color-overlay-light: rgba(0, 0, 0, 0.4);
+  --color-overlay-subtle: rgba(0, 0, 0, 0.15);
+  --color-popover-bg: rgba(232, 239, 255, 0.8);
+  --color-surface-accent: #E8EFFF;
+  --color-text-black: #000000;
+  --color-gray-med: #707070;
+
+  /* Shadows */
+  --shadow-main: 0 4dip 4dip var(--color-overlay-subtle);
+
+  /* Spacing */
+  --space-xs: 4dip;
+  --space-sm: 8dip;
+  --space-md: 16dip;
+  --space-lg: 24dip;
+  --space-xl: 32dip;
+
+  /* Radius */
+  --radius-sm: 4dip;
+  --radius-md: 8dip;
+  --radius-popover: 10dip;
+  --radius-lg: 14dip;
+}

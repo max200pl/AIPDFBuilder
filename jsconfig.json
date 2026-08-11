@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "checkJs": true,
+    "target": "es2020",
+    "jsx": "react",
+    "baseUrl": ".",
+    "lib": ["es2020"],
+    "types": []
+  },
+  "include": ["res/**/*.js", "sciter.d.ts", "sciter-extra.d.ts"],
+  "exclude": ["node_modules"]
+}
