@@ -1,5 +1,5 @@
 # Build
-bin/
+builds/
 obj/
 src/resources.cpp
 *.user

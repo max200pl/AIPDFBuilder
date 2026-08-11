@@ -22,9 +22,9 @@ static bool dev_main_htm_url(std::wstring& url) {
   if (slash)
     *slash = 0;
 
-  // exePath is bin\x64\<Config>\ — three levels up (Config -> x64 -> bin) reaches repo root.
+  // exePath is builds\<Config>\ — two levels up (Config -> builds) reaches repo root.
   WCHAR relative[MAX_PATH] = {0};
-  swprintf_s(relative, L"%s\\..\\..\\..\\res\\main.htm", exePath);
+  swprintf_s(relative, L"%s\\..\\..\\res\\main.htm", exePath);
 
   WCHAR fullPath[MAX_PATH] = {0};
   if (!GetFullPathNameW(relative, MAX_PATH, fullPath, NULL))
