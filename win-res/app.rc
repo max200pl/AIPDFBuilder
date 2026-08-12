@@ -1,0 +1,5 @@
+// sciter.dll embedded as a binary resource, unpacked at runtime by
+// preload_sciter_dll() in src/main.cpp — see that function for why.
+// Resolved via the ResourceCompile AdditionalIncludeDirectories entry
+// in the vcxproj, not a relative path here.
+SCITER_DLL RCDATA "sciter.dll"

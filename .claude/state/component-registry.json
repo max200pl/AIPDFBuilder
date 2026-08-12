@@ -1,0 +1,13 @@
+{
+  "schema_version": "2.0",
+  "generated_by": "seed-frontend-docs",
+  "seed": true,
+  "frontend_roots": [
+    {
+      "root": "res",
+      "framework": "sciter-reactor",
+      "entry_point": "res/main.htm"
+    }
+  ],
+  "components": []
+}

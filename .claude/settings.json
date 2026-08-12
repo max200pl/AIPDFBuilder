@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(build.bat*)",
+      "Bash(run.bat*)",
+      "Bash(tools\\run-scapp.bat*)",
+      "Bash(MSBuild.exe*)",
+      "Bash(git status*)",
+      "Bash(git log*)",
+      "Bash(git diff*)",
+      "Bash(git branch*)"
+    ],
+    "deny": [
+      "Bash(rm -rf *)",
+      "Bash(git push --force*)"
+    ]
+  }
+}

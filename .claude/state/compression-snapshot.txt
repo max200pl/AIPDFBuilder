@@ -1,0 +1,4 @@
+autoload_lines=87
+claude_md_lines=44
+rules_unconditional=1
+rules_conditional=6

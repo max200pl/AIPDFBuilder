@@ -11,3 +11,10 @@ package-lock.json
 
 # Secrets
 .env
+
+# Claude Code — personal files
+CLAUDE.local.md
+.claude/settings.local.json
+.claude/agent-memory-local/
+.claude/state/reports/
+.claude/state/last-*

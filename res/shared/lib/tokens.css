@@ -30,6 +30,21 @@
   --color-text-black: #000000;
   --color-gray-med: #707070;
 
+  /* Colors — Figma file 2jGq5p5qY4lsf5QK2stfOY, "Quick Action Cards" component (node 13020:18203) */
+  --color-bg-white: #ffffff;
+  --color-text-primary: #171d26;
+  --color-icon-default: #485f7d;
+  --color-border-light: #bdc9db;
+
+  /* Colors — Figma file 2jGq5p5qY4lsf5QK2stfOY, Release Notes template (node 20:311) — full-page
+     variable pull. "Soda White" / var(--primary-background-color) both resolve to #ffffff and are
+     already covered by --color-bg-white above, so no duplicate token was added for them. */
+  --color-soda-black: #303030;
+  --color-soda-blue: #0068df;
+  --color-soda-green-hover: #00972d;
+  --color-border-subtle: #e1e2e6;
+  --color-text-body: #666666;
+
   /* Shadows */
   --shadow-main: 0 4dip 4dip var(--color-overlay-subtle);
 

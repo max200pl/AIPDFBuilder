@@ -1,0 +1,20 @@
+%% SEED — adjust to your project's conventions.
+%% No real components/pages/data flow exist yet; this reflects the ONLY real boundary in the
+%% project today (native host <-> Sciter script runtime via the SOM passport, per
+%% .claude/rules/architecture.md and api-design.md) plus the router utility that exists but
+%% isn't wired up. Replace once /analyze-frontend's data-flow-mapper has real flow to detect.
+
+sequenceDiagram
+    participant User
+    participant View as Page/Component (res/shared/**)
+    participant Router as router.js slot registry
+    participant Passport as MainWindow SOM passport (src/main.cpp)
+    participant Native as Native host (C++17)
+
+    User->>View: interacts (click/input)
+    View->>Router: navigate(routeId) %% SEED — no caller wired yet, see reference-page-scaffold.md
+    Router-->>View: componentUpdate() triggers re-render
+    View->>Passport: %% SEED/TODO — passport is currently empty (SOM_PASSPORT_BEGIN/END, no members)
+    Passport->>Native: (no native calls exist yet)
+    Native-->>Passport: (no return values exist yet)
+    Passport-->>View: (nothing to bind yet)

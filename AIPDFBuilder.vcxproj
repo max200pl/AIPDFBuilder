@@ -58,7 +58,7 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>WINDOWS;WIN32;WIN64;DEBUG;_DEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WINDOWS;WIN32;WIN64;DEBUG;_DEBUG;_CRT_SECURE_NO_WARNINGS;SKIP_MAIN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SciterSdkRoot)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -79,15 +79,15 @@
     <PreBuildEvent>
       <Command>"$(SciterSdkRoot)\bin\windows\packfolder.exe" "$(ProjectDir)res" "$(ProjectDir)src\resources.cpp" -v "resources"</Command>
     </PreBuildEvent>
-    <PostBuildEvent>
-      <Command>copy /Y "$(SciterSdkRoot)\bin\windows\x64\sciter.dll" "$(OutDir)sciter.dll"</Command>
-    </PostBuildEvent>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(SciterSdkRoot)\bin\windows\x64;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>WINDOWS;WIN32;WIN64;NDEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WINDOWS;WIN32;WIN64;NDEBUG;_CRT_SECURE_NO_WARNINGS;SKIP_MAIN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SciterSdkRoot)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>None</DebugInformationFormat>
       <Optimization>MaxSpeed</Optimization>
@@ -113,13 +113,16 @@
     <PreBuildEvent>
       <Command>"$(SciterSdkRoot)\bin\windows\packfolder.exe" "$(ProjectDir)res" "$(ProjectDir)src\resources.cpp" -v "resources"</Command>
     </PreBuildEvent>
-    <PostBuildEvent>
-      <Command>copy /Y "$(SciterSdkRoot)\bin\windows\x64\sciter.dll" "$(OutDir)sciter.dll"</Command>
-    </PostBuildEvent>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(SciterSdkRoot)\bin\windows\x64;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="$(SciterSdkRoot)\include\sciter-main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="win-res\app.rc" />
   </ItemGroup>
   <ItemGroup>
     <None Include="win-res\dpi-aware.manifest" />
