@@ -1,0 +1,80 @@
+/* FileListRow — Figma file 2jGq5p5qY4lsf5QK2stfOY, node 3698:15485 ("State=Default"; 1200×80
+ * master, FILL width + SPACE_BETWEEN — the row is fluid and stretches to its container).
+ * Styling per .claude/docs/reference-styling-flow.md (tokens via var(); type is built ONLY
+ * through the typography.css @mixin set — the Sciter font shorthand is broken when fed a token)
+ * + toolkit reference-sciter-styling.md / reference-sciter-css.md.
+ *
+ * Geometry notes:
+ * - The design's 0.5dip bottom stroke is an INSIDE stroke; Sciter's border sits inside the
+ *   80dip border-box, matching.
+ * - The master's top-corner rounding ([8,8,0,0]) is deliberately NOT emitted — corner clipping
+ *   is the parent list container's concern (page contract).
+ * - Text line boxes follow the design's intrinsic line heights (24dip / 18dip, Figma
+ *   lineHeightPx); the mixins' line-height 100% would undersize them (24 = 16 × 150%).
+ * - Vertical centering + inter-sibling gaps use child spring margins / explicit child margins
+ *   (the sanctioned Sciter idioms — content-*-align is unreliable here). */
+@import url(../../lib/typography.css);
+
+@set file-list-row {
+  :root {
+    box-sizing: border-box;
+    flow: horizontal;
+    width: *;
+    height: 80dip;
+    padding: 8dip 24dip 8dip 16dip;
+    background: var(--color-bg-white);
+    border-bottom: 0.5dip solid var(--color-border-light);
+    cursor: pointer;
+  }
+
+  .file-list-row__left {
+    flow: horizontal;
+    margin-top: *;      /* spring pair — centers the 44dip group in the 64dip padded interior */
+    margin-bottom: *;
+  }
+
+  .file-list-row__icon {
+    display: block;
+    width: 24dip;
+    height: 24dip;
+    margin-top: *;      /* spring pair — centers the 24dip icon against the 44dip text column */
+    margin-bottom: *;
+    margin-right: 16dip; /* design itemSpacing between icon and text column */
+  }
+
+  .file-list-row__info {
+    flow: vertical;
+    width: 453dip;
+  }
+
+  .file-list-row__name {
+    display: block;
+    width: 435dip;
+    @font-base-semibold;
+    line-height: 24dip; /* design lineHeightPx — the mixin's 100% (16dip) undersizes the line box */
+    color: var(--color-text-primary);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: none;
+    margin-bottom: 2dip; /* design itemSpacing between name and path */
+  }
+
+  .file-list-row__path {
+    display: block;
+    width: 448dip;
+    @font-xs-regular;
+    line-height: 18dip; /* design lineHeightPx */
+    color: var(--color-icon-default);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: none;
+  }
+
+  .file-list-row__actions {
+    width: 32dip;
+    height: 32dip;
+    margin-left: *;     /* spring — pushes the (empty) action slot to the right padding edge */
+    margin-top: *;      /* spring pair — centers the 32dip slot vertically */
+    margin-bottom: *;
+  }
+}

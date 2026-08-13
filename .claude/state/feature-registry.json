@@ -1,0 +1,119 @@
+{
+  "entries": {
+    "13043:1667": {
+      "built": null,
+      "design_version_token": "sha256:8256d617ff4fad37d878002e61ca30ff56cc9d6fee417ac2da234913d359d1db",
+      "drift": {
+        "changed_units": [],
+        "checked_at": "2026-08-12T16:02:15Z",
+        "design_updated": false,
+        "needs_rebuild": [],
+        "new_units": [],
+        "removed_units": []
+      },
+      "evidence_ref": ".claude/state/reports/sciter-create-page-20260812-160300.md",
+      "figma_node_id": "13043:1667",
+      "gate1_design_ready": {
+        "band": "Not Ready",
+        "counts": {
+          "ambiguous": 0,
+          "blocking": 2,
+          "ds_violations": 0,
+          "missing_states": 0,
+          "naming_divergence": 0,
+          "warnings": 0
+        },
+        "score": 88,
+        "tool_version": "figma-design-guard",
+        "verified_at": "2026-08-12T16:02:15Z"
+      },
+      "gate2_feature_feasible": {
+        "axes_absent": [
+          "REQUIREMENTS"
+        ],
+        "axes_evaluated": [
+          "DESIGN",
+          "PROJECT",
+          "ENVIRONMENT"
+        ],
+        "counts": {
+          "DESIGN": 1,
+          "ENVIRONMENT": 0,
+          "PROJECT": 0,
+          "REQUIREMENTS": 0
+        },
+        "gaps": [
+          {
+            "band": "Not Ready",
+            "detail": "design not ready (band: 'Not Ready'; 2 must-fix)",
+            "owner": "DESIGN"
+          }
+        ],
+        "notes": [],
+        "verdict": "NOT_BUILDABLE"
+      },
+      "kind": "feature",
+      "name": "MessageBox",
+      "ready_for_dev": false,
+      "units": {}
+    },
+    "2001:385": {
+      "built": null,
+      "design_version_token": "sha256:11dff893cc46928d1ac76f9ab3bfe9aaf28b6372b697d49264fa98e3166bbe5d",
+      "drift": {
+        "changed_units": [],
+        "checked_at": "2026-08-12T16:24:21Z",
+        "design_updated": false,
+        "needs_rebuild": [],
+        "new_units": [],
+        "removed_units": []
+      },
+      "evidence_ref": ".claude/state/reports/sciter-create-page-20260812-142712.md",
+      "figma_node_id": "2001:385",
+      "gate1_design_ready": {
+        "band": "Not Ready",
+        "counts": {
+          "ambiguous": 0,
+          "blocking": 2,
+          "ds_violations": 0,
+          "missing_states": 0,
+          "naming_divergence": 0,
+          "warnings": 0
+        },
+        "score": 88,
+        "tool_version": "figma-design-guard",
+        "verified_at": "2026-08-12T16:24:21Z"
+      },
+      "gate2_feature_feasible": {
+        "axes_absent": [
+          "REQUIREMENTS"
+        ],
+        "axes_evaluated": [
+          "DESIGN",
+          "PROJECT",
+          "ENVIRONMENT"
+        ],
+        "counts": {
+          "DESIGN": 1,
+          "ENVIRONMENT": 0,
+          "PROJECT": 0,
+          "REQUIREMENTS": 0
+        },
+        "gaps": [
+          {
+            "band": "Not Ready",
+            "detail": "design not ready (band: 'Not Ready'; 2 must-fix)",
+            "owner": "DESIGN"
+          }
+        ],
+        "notes": [],
+        "verdict": "NOT_BUILDABLE"
+      },
+      "kind": "feature",
+      "name": "Home",
+      "ready_for_dev": false,
+      "units": {}
+    }
+  },
+  "schema": "feature-registry/1.0"
+}

@@ -45,8 +45,17 @@
   --color-border-subtle: #e1e2e6;
   --color-text-body: #666666;
 
+  /* Colors — Figma file 2jGq5p5qY4lsf5QK2stfOY, "Home" screen-set (node 2001:385). Variable
+     names in the design: Background/Workspace, Core/Deep, Background/Hover, Core/Core Accent. */
+  --color-bg-workspace: #f6f7f8;
+  --color-core-deep: #090c11;
+  --color-bg-hover: #e5edfa;
+  --color-accent-blue: #0048ce;
+
   /* Shadows */
   --shadow-main: 0 4dip 4dip var(--color-overlay-subtle);
+  /* "Basic Shadow" from the Home screen-set (0/2/0 #485F7D at 20%) */
+  --shadow-card: 0 2dip 0 rgba(72, 95, 125, 0.2);
 
   /* Spacing */
   --space-xs: 4dip;
@@ -60,4 +69,6 @@
   --radius-md: 8dip;
   --radius-popover: 10dip;
   --radius-lg: 14dip;
+  /* "border-radius/button" from the Home screen-set (node 2001:385) */
+  --radius-button: 5dip;
 }

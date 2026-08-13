@@ -1,0 +1,55 @@
+/*
+ * res/shared/components/SortBy/SortBy.css
+ * Sources: .claude/docs/reference-styling-flow.md (project stepper: tokens -> styleset ->
+ * typography mixins -> dip units) + component-creator docs/reference-sciter-styling.md +
+ * docs/reference-sciter-css.md (toolkit fallback / syntax).
+ * Figma: file 2jGq5p5qY4lsf5QK2stfOY, node 3851:39434 ("State=Default", 150x40).
+ *
+ * Note: inside a @set, root-element declarations MUST sit in a `:root {}` rule (bare
+ * declarations in the set body are dropped by the engine — verified by Gate-1 on this build).
+ */
+
+@import url(../../lib/typography.css); /* shared lib (mixins), not a sibling component */
+
+@set sort-by {
+  :root {
+    flow: horizontal;
+    box-sizing: border-box; /* Figma boxes are border-box; Sciter defaults to content-box —
+                               without this the root renders 176x58 (150+padding+border) */
+    width: 150dip;
+    height: 40dip;
+    padding: 8dip 16dip 8dip 8dip; /* top | right 16 | bottom | left 8 — per design */
+    background: var(--color-bg-white);
+    border: 1dip solid var(--color-border-light);
+    border-radius: var(--radius-button); /* 5dip */
+    overflow: none; /* clipped — Sciter form (never `hidden`) */
+    cursor: pointer; /* click-stub tier: whole field is the click surface */
+  }
+
+  .sort-by__content {
+    flow: horizontal;
+    height: 24dip;
+  }
+
+  .sort-by__icon {
+    display: block;
+    width: 24dip;
+    height: 24dip;
+  }
+
+  .sort-by__label {
+    display: block;
+    @font-sm-medium;
+    line-height: 21dip; /* Figma text-node box is 21dip tall (node 3851:39262) — overrides the
+                           mixin's 100% so the rendered box matches the design geometry */
+    color: var(--color-text-primary);
+    margin: * 0 * 8dip; /* 8dip gap after the glyph; star top/bottom center it in the 24dip row */
+  }
+
+  .sort-by__chevron {
+    display: block;
+    width: 12dip;
+    height: 12dip;
+    margin: * 0 * *; /* left star pushes to the right edge (space-between); top/bottom center */
+  }
+}

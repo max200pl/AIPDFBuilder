@@ -1,0 +1,554 @@
+<html window-frame="extended" window-resizable="true" window-width="1600" window-height="880" window-x="160" window-y="66">
+  <head>
+    <meta charset="utf-8" />
+    <title>Storybook · AIPDFBuilder</title>
+    <style>
+      :root {
+        --bg: #f7f7f8;
+        --panel: #ffffff;
+        --border: #e2e3e5;
+        --text: #1f2328;
+        --muted: #6b7280;
+        --accent: #2563eb;
+        --status-done: #16a34a;
+        --status-verified: #16a34a;
+        --status-unverified: #d97706;
+        --status-scanned-only: #6b7280;
+        --status-stale: #b91c1c;
+        --status-unknown: #9ca3af;
+      }
+      html { width:*; height:*; background: var(--bg); font: 13dip/1.4 system; color: var(--text); }
+      body { margin:0; width:*; height:*; flow: vertical; }
+
+      .caption { flow: horizontal; height: 38dip; background: var(--panel); border-bottom: 1dip solid var(--border); padding: 0 14dip; }
+      .caption__lights { width: 78dip; }
+      .caption__title { margin: * auto; font: 13dip system; font-weight: 600; color: var(--text); }
+      .caption__count { margin: * 0; font-size: 11dip; color: var(--muted); padding-left: 8dip; }
+
+      .main { width: *; height: *; flow: horizontal; }
+
+      .sidebar { width: 280dip; height:*; flow: vertical; background: var(--panel); border-right: 1dip solid var(--border); }
+      .sidebar__header { padding: 12dip; border-bottom: 1dip solid var(--border); flow: vertical; }
+      .sidebar__title { font-weight: 600; padding-bottom: 6dip; }
+      .sidebar__search { width: *; padding: 4dip 8dip; border: 1dip solid var(--border); border-radius: 4dip; font: 13dip system; }
+
+      .sidebar__scroll { width: *; height: *; overflow-y: scroll-indicator; flow: vertical; }
+      .sidebar__group-title { padding: 10dip 12dip 4dip; font-size: 10dip; font-weight: 600; text-transform: uppercase; color: var(--muted); letter-spacing: 0.5dip; }
+      .sidebar__group-title--muted { opacity: 0.55; }
+      .sidebar__counts { font-size: 10dip; color: var(--muted); padding-bottom: 6dip; }
+      .sidebar__sort { width: *; margin-top: 6dip; padding: 3dip 6dip; border: 1dip solid var(--border); border-radius: 4dip; font: 12dip system; }
+      .badge-noprev { margin-left: 6dip; margin-top: *; margin-bottom: *; font-size: 9dip; color: var(--muted); border: 1dip solid var(--border); border-radius: 3dip; padding: 0 3dip; }
+      .leaf--no-preview .sidebar__name { color: var(--muted); }
+      .sidebar__tree { display: block; width: *; height: max-content; padding: 0 4dip 6dip; border: none; background: transparent; font: 13dip system; color: var(--text); }
+      .sidebar__tree > option,
+      .sidebar__tree option.node > option { display: block; width: *; }
+      .sidebar__tree option > caption { flow: horizontal; padding: 4dip 6dip; width: *; }
+      .sidebar__tree option > caption:hover { background: #eef0f3; cursor: pointer; }
+      .sidebar__tree option:current > caption { background: #dbeafe; color: var(--accent); font-weight: 500; }
+      /* Sciter sets :current on the ancestor folder path too — suppress
+         that visual so only the actual leaf looks selected. */
+      .sidebar__tree option.node:current > caption { background: transparent; color: inherit; font-weight: normal; }
+      .sidebar__tree option.node:current > caption:hover { background: #eef0f3; }
+
+      .sidebar__icon { width: 14dip; height: 14dip; margin-top: *; margin-bottom: *; margin-right: 6dip; }
+      .sidebar__name { margin-top: *; margin-bottom: *; }
+
+      .detail { width: *; height: *; flow: vertical; }
+      .detail__header { padding: 16dip 20dip; border-bottom: 1dip solid var(--border); flow: vertical; background: var(--panel); }
+      .detail__title { font: 18dip/1.2 system; font-weight: 600; padding-bottom: 6dip; }
+      .detail__meta { flow: horizontal; font-size: 11dip; color: var(--muted); overflow: hidden; }
+      .detail__meta > * { margin-right: 12dip; white-space: nowrap; }
+      .detail__meta a { color: var(--accent); text-decoration: none; }
+      .detail__desc { font-size: 12dip; padding-top: 8dip; color: var(--text); }
+      .detail__mono { font: 11dip monospace; }
+      .detail__canvas { width: *; height: *; background: var(--bg); padding: 24dip; overflow: scroll-indicator; }
+      .detail__canvas-frame { width: *; height: *; border: 1dip solid var(--border); border-radius: 6dip; background: white; }
+      .detail__empty { width: *; height: *; flow: vertical; text-align: center; color: var(--muted); font-size: 14dip; padding: 40dip; }
+
+      .pill { display: inline-block; padding: 2dip 6dip; border-radius: 8dip; font-size: 10dip; font-weight: 500; background: var(--bg); border: 1dip solid var(--border); }
+      .pill--done, .pill--verified { color: var(--status-done); border-color: var(--status-done); }
+      .pill--unverified { color: var(--status-unverified); border-color: var(--status-unverified); }
+      .pill--stale { color: var(--status-stale); border-color: var(--status-stale); }
+      .pill--scanned-only { color: var(--status-scanned-only); border-color: var(--status-scanned-only); }
+      .pill--unknown { color: var(--status-unknown); border-color: var(--status-unknown); }
+
+      .story-tabs { flow: horizontal; border-bottom: 1dip solid var(--border); background: var(--panel); padding: 0 12dip; overflow-x: scroll-indicator; }
+      .story-tabs__tab { padding: 8dip 16dip; color: var(--muted); font: 12dip/1 system; cursor: pointer; border-bottom: 2dip solid transparent; white-space: nowrap; }
+      .story-tabs__tab:hover { color: var(--text); }
+      .story-tabs__tab--active { color: var(--accent); font-weight: 500; border-bottom-color: var(--accent); }
+
+      .welcome { width: *; height: *; flow: vertical; padding: 64dip 56dip 32dip 56dip; background: var(--bg); }
+      .welcome__eyebrow { font-size: 11dip; font-weight: 600; text-transform: uppercase; letter-spacing: 1dip; color: var(--muted); }
+      .welcome__title { font: 36dip/1.1 system; font-weight: 700; color: var(--text); padding-top: 8dip; }
+      .welcome__lede { font-size: 14dip; line-height: 1.6; color: var(--muted); padding-top: 18dip; max-width: 560dip; }
+      .welcome__hints { padding-top: 28dip; flow: vertical; }
+      .welcome__hint { font-size: 12dip; color: var(--text); padding: 4dip 0; }
+      .welcome__hint > span { color: var(--muted); padding-left: 6dip; }
+      .welcome__footer { margin-top: *; font-size: 11dip; color: var(--muted); padding-top: 32dip; }
+    </style>
+
+    <script type="module">
+      import {launch as launchURL} from "@env";
+      import * as sys from "@sys";
+
+      const REGISTRY     = [{"name": "GridAndLists", "path": "res/shared/components/GridAndLists/GridAndLists.js", "kind": "ui", "type": "component", "description": "24x24dip grid/list view-toggle icon; a click dispatches a bubbling 'view-toggle' intent event with the current type — no internal toggle state, parent owns the view mode.", "uses": [], "parent": null, "variants": ["grid"], "states": ["Default"], "status": "managed", "created_at": "2026-08-12T16:00:00Z", "last_verified_at": "2026-08-12T16:00:00Z", "figma_node_id": "2728:6825", "figma_file_key": "2jGq5p5qY4lsf5QK2stfOY", "figma_connected": false, "ssim_score": 0.985, "interactivity": "button", "interaction_axes": ["click-emit"], "_status": "managed", "_figmaUrl": "https://www.figma.com/design/2jGq5p5qY4lsf5QK2stfOY?node-id=2728:6825", "_group": null, "_stories": ["Default"], "_previewJsUrl": "C:/____WORK____/AIPDFBuilder/res/shared/components/GridAndLists/GridAndLists.preview.js", "_componentDir": "C:/____WORK____/AIPDFBuilder/res/shared/components/GridAndLists/", "_cssUrls": ["C:/____WORK____/AIPDFBuilder/res/shared/components/GridAndLists/GridAndLists.css"], "_storyHtmls": {"Default": "<!-- generated-by: sciter-devtools wrapper · stable filename · safe to delete -->\n<html window-frame=\"extended\" window-resizable=\"true\"\n      window-width=\"800\" window-height=\"600\"\n      window-x=\"40\" window-y=\"40\">\n  <head>\n    <meta charset=\"utf-8\" />\n    <title>GridAndLists · Default<\/title>\n    <style src=\"C:/____WORK____/AIPDFBuilder/res/shared/components/GridAndLists/GridAndLists.css\" />\n    <style>\n      html { width:*; height:*; margin:0; padding:0; border:none; background:white; overflow:hidden; }\n      body { margin:0; padding:0; border:none; background:white; width: max-content; height: max-content; }\n      .sdt-err { color:#b91c1c; padding:12dip; font:12dip/1.4 monospace; white-space:pre-wrap; }\n    <\/style>\n    <script type=\"module\">\n      try {\n        try { await import(\"../../../.sdt-preview-shim.js\"); }\n        catch (e) { throw new Error(\"Preview shim failed: ../../../.sdt-preview-shim.js\\n\" + e); }\n        const stories = await import(\"./GridAndLists.preview.js\");\n        const story = stories[\"Default\"];\n        if (typeof story !== \"function\") {\n          throw new Error(\"Story \" + \"Default\" + \" not found in \" + \"./GridAndLists.preview.js\");\n        }\n        document.body.content(story());\n      } catch (e) {\n        document.body.content(<pre class=\"sdt-err\">{\"Preview load error:\\n\" + (e && (e.stack || e.message) || e)}<\/pre>);\n      }\n    <\/script>\n  <\/head>\n  <body><\/body>\n<\/html>\n"}, "_previewExists": true, "_uid": "GridAndLists"}, {"name": "FileListRow", "path": "res/shared/components/FileListRow/FileListRow.js", "kind": "ui", "type": "component", "figma_file_key": "2jGq5p5qY4lsf5QK2stfOY", "figma_node_id": "3698:15485", "uses": [], "variants": ["Default"], "states": ["default"], "interactivity": "click-stub", "ssim_score": 0.937, "status": "managed", "_status": "managed", "_figmaUrl": "https://www.figma.com/design/2jGq5p5qY4lsf5QK2stfOY?node-id=3698:15485", "_group": null, "_stories": ["Default"], "_previewJsUrl": "C:/____WORK____/AIPDFBuilder/res/shared/components/FileListRow/FileListRow.preview.js", "_componentDir": "C:/____WORK____/AIPDFBuilder/res/shared/components/FileListRow/", "_cssUrls": ["C:/____WORK____/AIPDFBuilder/res/shared/components/FileListRow/FileListRow.css"], "_storyHtmls": {"Default": "<!-- generated-by: sciter-devtools wrapper · stable filename · safe to delete -->\n<html window-frame=\"extended\" window-resizable=\"true\"\n      window-width=\"800\" window-height=\"600\"\n      window-x=\"40\" window-y=\"40\">\n  <head>\n    <meta charset=\"utf-8\" />\n    <title>FileListRow · Default<\/title>\n    <style src=\"C:/____WORK____/AIPDFBuilder/res/shared/components/FileListRow/FileListRow.css\" />\n    <style>\n      html { width:*; height:*; margin:0; padding:0; border:none; background:white; overflow:hidden; }\n      body { margin:0; padding:0; border:none; background:white; width: max-content; height: max-content; }\n      .sdt-err { color:#b91c1c; padding:12dip; font:12dip/1.4 monospace; white-space:pre-wrap; }\n    <\/style>\n    <script type=\"module\">\n      try {\n        try { await import(\"../../../.sdt-preview-shim.js\"); }\n        catch (e) { throw new Error(\"Preview shim failed: ../../../.sdt-preview-shim.js\\n\" + e); }\n        const stories = await import(\"./FileListRow.preview.js\");\n        const story = stories[\"Default\"];\n        if (typeof story !== \"function\") {\n          throw new Error(\"Story \" + \"Default\" + \" not found in \" + \"./FileListRow.preview.js\");\n        }\n        document.body.content(story());\n      } catch (e) {\n        document.body.content(<pre class=\"sdt-err\">{\"Preview load error:\\n\" + (e && (e.stack || e.message) || e)}<\/pre>);\n      }\n    <\/script>\n  <\/head>\n  <body><\/body>\n<\/html>\n"}, "_previewExists": true, "_uid": "FileListRow"}, {"name": "FileThumbnail", "path": "res/shared/components/FileThumbnail/FileThumbnail.js", "kind": "ui", "type": "component", "figma_file_key": "2jGq5p5qY4lsf5QK2stfOY", "figma_node_id": "3698:16104", "uses": [], "variants": ["Default"], "states": [], "interactivity": "click-stub", "status": "managed", "ssim_score": 0.964, "_status": "managed", "_figmaUrl": "https://www.figma.com/design/2jGq5p5qY4lsf5QK2stfOY?node-id=3698:16104", "_group": null, "_stories": ["Default"], "_previewJsUrl": "C:/____WORK____/AIPDFBuilder/res/shared/components/FileThumbnail/FileThumbnail.preview.js", "_componentDir": "C:/____WORK____/AIPDFBuilder/res/shared/components/FileThumbnail/", "_cssUrls": ["C:/____WORK____/AIPDFBuilder/res/shared/components/FileThumbnail/FileThumbnail.css"], "_storyHtmls": {"Default": "<!-- generated-by: sciter-devtools wrapper · stable filename · safe to delete -->\n<html window-frame=\"extended\" window-resizable=\"true\"\n      window-width=\"800\" window-height=\"600\"\n      window-x=\"40\" window-y=\"40\">\n  <head>\n    <meta charset=\"utf-8\" />\n    <title>FileThumbnail · Default<\/title>\n    <style src=\"C:/____WORK____/AIPDFBuilder/res/shared/components/FileThumbnail/FileThumbnail.css\" />\n    <style>\n      html { width:*; height:*; margin:0; padding:0; border:none; background:white; overflow:hidden; }\n      body { margin:0; padding:0; border:none; background:white; width: max-content; height: max-content; }\n      .sdt-err { color:#b91c1c; padding:12dip; font:12dip/1.4 monospace; white-space:pre-wrap; }\n    <\/style>\n    <script type=\"module\">\n      try {\n        try { await import(\"../../../.sdt-preview-shim.js\"); }\n        catch (e) { throw new Error(\"Preview shim failed: ../../../.sdt-preview-shim.js\\n\" + e); }\n        const stories = await import(\"./FileThumbnail.preview.js\");\n        const story = stories[\"Default\"];\n        if (typeof story !== \"function\") {\n          throw new Error(\"Story \" + \"Default\" + \" not found in \" + \"./FileThumbnail.preview.js\");\n        }\n        document.body.content(story());\n      } catch (e) {\n        document.body.content(<pre class=\"sdt-err\">{\"Preview load error:\\n\" + (e && (e.stack || e.message) || e)}<\/pre>);\n      }\n    <\/script>\n  <\/head>\n  <body><\/body>\n<\/html>\n"}, "_previewExists": true, "_uid": "FileThumbnail"}, {"name": "SortBy", "path": "res/shared/components/SortBy/SortBy.js", "kind": "ui", "type": "component", "figma_file_key": "2jGq5p5qY4lsf5QK2stfOY", "figma_node_id": "3851:39434", "uses": [], "variants": ["Default"], "states": ["default"], "interactivity": "click-stub", "ssim_score": 0.868, "status": "managed", "_status": "managed", "_figmaUrl": "https://www.figma.com/design/2jGq5p5qY4lsf5QK2stfOY?node-id=3851:39434", "_group": null, "_stories": ["Default"], "_previewJsUrl": "C:/____WORK____/AIPDFBuilder/res/shared/components/SortBy/SortBy.preview.js", "_componentDir": "C:/____WORK____/AIPDFBuilder/res/shared/components/SortBy/", "_cssUrls": ["C:/____WORK____/AIPDFBuilder/res/shared/components/SortBy/SortBy.css"], "_storyHtmls": {"Default": "<!-- generated-by: sciter-devtools wrapper · stable filename · safe to delete -->\n<html window-frame=\"extended\" window-resizable=\"true\"\n      window-width=\"800\" window-height=\"600\"\n      window-x=\"40\" window-y=\"40\">\n  <head>\n    <meta charset=\"utf-8\" />\n    <title>SortBy · Default<\/title>\n    <style src=\"C:/____WORK____/AIPDFBuilder/res/shared/components/SortBy/SortBy.css\" />\n    <style>\n      html { width:*; height:*; margin:0; padding:0; border:none; background:white; overflow:hidden; }\n      body { margin:0; padding:0; border:none; background:white; width: max-content; height: max-content; }\n      .sdt-err { color:#b91c1c; padding:12dip; font:12dip/1.4 monospace; white-space:pre-wrap; }\n    <\/style>\n    <script type=\"module\">\n      try {\n        try { await import(\"../../../.sdt-preview-shim.js\"); }\n        catch (e) { throw new Error(\"Preview shim failed: ../../../.sdt-preview-shim.js\\n\" + e); }\n        const stories = await import(\"./SortBy.preview.js\");\n        const story = stories[\"Default\"];\n        if (typeof story !== \"function\") {\n          throw new Error(\"Story \" + \"Default\" + \" not found in \" + \"./SortBy.preview.js\");\n        }\n        document.body.content(story());\n      } catch (e) {\n        document.body.content(<pre class=\"sdt-err\">{\"Preview load error:\\n\" + (e && (e.stack || e.message) || e)}<\/pre>);\n      }\n    <\/script>\n  <\/head>\n  <body><\/body>\n<\/html>\n"}, "_previewExists": true, "_uid": "SortBy"}, {"name": "QuickActionCard", "path": "res/shared/components/QuickActionCard/QuickActionCard.js", "kind": "ui", "type": "component", "description": "148x148 quick-action tile: optional 40dip SVG icon over a centered wrapping label; click emits a bubbling 'quick-action' event carrying the action id.", "uses": [], "parent": null, "variants": [], "states": ["Default"], "status": "managed", "created_at": "2026-08-12T15:03:48Z", "last_verified_at": "2026-08-12T15:03:48Z", "figma_node_id": "3760:15072", "figma_file_key": "2jGq5p5qY4lsf5QK2stfOY", "figma_connected": false, "ssim_score": 0.974, "interactivity": "button", "interaction_axes": ["click-emit"], "_status": "managed", "_figmaUrl": "https://www.figma.com/design/2jGq5p5qY4lsf5QK2stfOY?node-id=3760:15072", "_group": null, "_stories": ["Default", "NoIcon"], "_previewJsUrl": "C:/____WORK____/AIPDFBuilder/res/shared/components/QuickActionCard/QuickActionCard.preview.js", "_componentDir": "C:/____WORK____/AIPDFBuilder/res/shared/components/QuickActionCard/", "_cssUrls": ["C:/____WORK____/AIPDFBuilder/res/shared/components/QuickActionCard/QuickActionCard.css"], "_storyHtmls": {"Default": "<!-- generated-by: sciter-devtools wrapper · stable filename · safe to delete -->\n<html window-frame=\"extended\" window-resizable=\"true\"\n      window-width=\"800\" window-height=\"600\"\n      window-x=\"40\" window-y=\"40\">\n  <head>\n    <meta charset=\"utf-8\" />\n    <title>QuickActionCard · Default<\/title>\n    <style src=\"C:/____WORK____/AIPDFBuilder/res/shared/components/QuickActionCard/QuickActionCard.css\" />\n    <style>\n      html { width:*; height:*; margin:0; padding:0; border:none; background:white; overflow:hidden; }\n      body { margin:0; padding:0; border:none; background:white; width: max-content; height: max-content; }\n      .sdt-err { color:#b91c1c; padding:12dip; font:12dip/1.4 monospace; white-space:pre-wrap; }\n    <\/style>\n    <script type=\"module\">\n      try {\n        try { await import(\"../../../.sdt-preview-shim.js\"); }\n        catch (e) { throw new Error(\"Preview shim failed: ../../../.sdt-preview-shim.js\\n\" + e); }\n        const stories = await import(\"./QuickActionCard.preview.js\");\n        const story = stories[\"Default\"];\n        if (typeof story !== \"function\") {\n          throw new Error(\"Story \" + \"Default\" + \" not found in \" + \"./QuickActionCard.preview.js\");\n        }\n        document.body.content(story());\n      } catch (e) {\n        document.body.content(<pre class=\"sdt-err\">{\"Preview load error:\\n\" + (e && (e.stack || e.message) || e)}<\/pre>);\n      }\n    <\/script>\n  <\/head>\n  <body><\/body>\n<\/html>\n", "NoIcon": "<!-- generated-by: sciter-devtools wrapper · stable filename · safe to delete -->\n<html window-frame=\"extended\" window-resizable=\"true\"\n      window-width=\"800\" window-height=\"600\"\n      window-x=\"40\" window-y=\"40\">\n  <head>\n    <meta charset=\"utf-8\" />\n    <title>QuickActionCard · NoIcon<\/title>\n    <style src=\"C:/____WORK____/AIPDFBuilder/res/shared/components/QuickActionCard/QuickActionCard.css\" />\n    <style>\n      html { width:*; height:*; margin:0; padding:0; border:none; background:white; overflow:hidden; }\n      body { margin:0; padding:0; border:none; background:white; width: max-content; height: max-content; }\n      .sdt-err { color:#b91c1c; padding:12dip; font:12dip/1.4 monospace; white-space:pre-wrap; }\n    <\/style>\n    <script type=\"module\">\n      try {\n        try { await import(\"../../../.sdt-preview-shim.js\"); }\n        catch (e) { throw new Error(\"Preview shim failed: ../../../.sdt-preview-shim.js\\n\" + e); }\n        const stories = await import(\"./QuickActionCard.preview.js\");\n        const story = stories[\"NoIcon\"];\n        if (typeof story !== \"function\") {\n          throw new Error(\"Story \" + \"NoIcon\" + \" not found in \" + \"./QuickActionCard.preview.js\");\n        }\n        document.body.content(story());\n      } catch (e) {\n        document.body.content(<pre class=\"sdt-err\">{\"Preview load error:\\n\" + (e && (e.stack || e.message) || e)}<\/pre>);\n      }\n    <\/script>\n  <\/head>\n  <body><\/body>\n<\/html>\n"}, "_previewExists": true, "_uid": "QuickActionCard"}, {"name": "FeaturesRibbon", "path": "res/shared/components/FeaturesRibbon/FeaturesRibbon.js", "kind": "ui", "type": "component", "figma_file_key": "2jGq5p5qY4lsf5QK2stfOY", "figma_node_id": "8006:23276", "parent": null, "uses": [], "variants": ["State=Home"], "states": [], "interactivity": "click-stub", "ssim_score": null, "status": "pending", "_status": "pending", "_figmaUrl": "https://www.figma.com/design/2jGq5p5qY4lsf5QK2stfOY?node-id=8006:23276", "_group": null, "_stories": ["Default"], "_previewJsUrl": "C:/____WORK____/AIPDFBuilder/res/shared/components/FeaturesRibbon/FeaturesRibbon.preview.js", "_componentDir": "C:/____WORK____/AIPDFBuilder/res/shared/components/FeaturesRibbon/", "_cssUrls": ["C:/____WORK____/AIPDFBuilder/res/shared/components/FeaturesRibbon/FeaturesRibbon.css"], "_storyHtmls": {"Default": "<!-- generated-by: sciter-devtools wrapper · stable filename · safe to delete -->\n<html window-frame=\"extended\" window-resizable=\"true\"\n      window-width=\"800\" window-height=\"600\"\n      window-x=\"40\" window-y=\"40\">\n  <head>\n    <meta charset=\"utf-8\" />\n    <title>FeaturesRibbon · Default<\/title>\n    <style src=\"C:/____WORK____/AIPDFBuilder/res/shared/components/FeaturesRibbon/FeaturesRibbon.css\" />\n    <style>\n      html { width:*; height:*; margin:0; padding:0; border:none; background:white; overflow:hidden; }\n      body { margin:0; padding:0; border:none; background:white; width: max-content; height: max-content; }\n      .sdt-err { color:#b91c1c; padding:12dip; font:12dip/1.4 monospace; white-space:pre-wrap; }\n    <\/style>\n    <script type=\"module\">\n      try {\n        try { await import(\"../../../.sdt-preview-shim.js\"); }\n        catch (e) { throw new Error(\"Preview shim failed: ../../../.sdt-preview-shim.js\\n\" + e); }\n        const stories = await import(\"./FeaturesRibbon.preview.js\");\n        const story = stories[\"Default\"];\n        if (typeof story !== \"function\") {\n          throw new Error(\"Story \" + \"Default\" + \" not found in \" + \"./FeaturesRibbon.preview.js\");\n        }\n        document.body.content(story());\n      } catch (e) {\n        document.body.content(<pre class=\"sdt-err\">{\"Preview load error:\\n\" + (e && (e.stack || e.message) || e)}<\/pre>);\n      }\n    <\/script>\n  <\/head>\n  <body><\/body>\n<\/html>\n"}, "_previewExists": true, "_uid": "FeaturesRibbon"}, {"name": "PrimaryButton", "path": "res/shared/components/PrimaryButton/PrimaryButton.js", "kind": "ui", "type": "component", "figma_file_key": "2jGq5p5qY4lsf5QK2stfOY", "figma_node_id": "2371:7625", "uses": [], "parent": null, "variants": ["Default"], "states": [], "ssim_score": 0.942, "status": "managed", "interactivity": "click-stub", "_status": "managed", "_figmaUrl": "https://www.figma.com/design/2jGq5p5qY4lsf5QK2stfOY?node-id=2371:7625", "_group": null, "_stories": ["Default"], "_previewJsUrl": "C:/____WORK____/AIPDFBuilder/res/shared/components/PrimaryButton/PrimaryButton.preview.js", "_componentDir": "C:/____WORK____/AIPDFBuilder/res/shared/components/PrimaryButton/", "_cssUrls": ["C:/____WORK____/AIPDFBuilder/res/shared/components/PrimaryButton/PrimaryButton.css"], "_storyHtmls": {"Default": "<!-- generated-by: sciter-devtools wrapper · stable filename · safe to delete -->\n<html window-frame=\"extended\" window-resizable=\"true\"\n      window-width=\"800\" window-height=\"600\"\n      window-x=\"40\" window-y=\"40\">\n  <head>\n    <meta charset=\"utf-8\" />\n    <title>PrimaryButton · Default<\/title>\n    <style src=\"C:/____WORK____/AIPDFBuilder/res/shared/components/PrimaryButton/PrimaryButton.css\" />\n    <style>\n      html { width:*; height:*; margin:0; padding:0; border:none; background:white; overflow:hidden; }\n      body { margin:0; padding:0; border:none; background:white; width: max-content; height: max-content; }\n      .sdt-err { color:#b91c1c; padding:12dip; font:12dip/1.4 monospace; white-space:pre-wrap; }\n    <\/style>\n    <script type=\"module\">\n      try {\n        try { await import(\"../../../.sdt-preview-shim.js\"); }\n        catch (e) { throw new Error(\"Preview shim failed: ../../../.sdt-preview-shim.js\\n\" + e); }\n        const stories = await import(\"./PrimaryButton.preview.js\");\n        const story = stories[\"Default\"];\n        if (typeof story !== \"function\") {\n          throw new Error(\"Story \" + \"Default\" + \" not found in \" + \"./PrimaryButton.preview.js\");\n        }\n        document.body.content(story());\n      } catch (e) {\n        document.body.content(<pre class=\"sdt-err\">{\"Preview load error:\\n\" + (e && (e.stack || e.message) || e)}<\/pre>);\n      }\n    <\/script>\n  <\/head>\n  <body><\/body>\n<\/html>\n"}, "_previewExists": true, "_uid": "PrimaryButton"}, {"name": "SystemRibbon", "path": "res/shared/components/SystemRibbon/SystemRibbon.js", "kind": "ui", "type": "component", "figma_file_key": "2jGq5p5qY4lsf5QK2stfOY", "figma_node_id": "2139:586", "uses": [], "parent": null, "variants": ["default"], "states": [], "ssim_score": 0.93, "status": "managed", "interactivity": "click-stub", "_status": "managed", "_figmaUrl": "https://www.figma.com/design/2jGq5p5qY4lsf5QK2stfOY?node-id=2139:586", "_group": null, "_stories": ["Default"], "_previewJsUrl": "C:/____WORK____/AIPDFBuilder/res/shared/components/SystemRibbon/SystemRibbon.preview.js", "_componentDir": "C:/____WORK____/AIPDFBuilder/res/shared/components/SystemRibbon/", "_cssUrls": ["C:/____WORK____/AIPDFBuilder/res/shared/components/SystemRibbon/SystemRibbon.css"], "_storyHtmls": {"Default": "<!-- generated-by: sciter-devtools wrapper · stable filename · safe to delete -->\n<html window-frame=\"extended\" window-resizable=\"true\"\n      window-width=\"800\" window-height=\"600\"\n      window-x=\"40\" window-y=\"40\">\n  <head>\n    <meta charset=\"utf-8\" />\n    <title>SystemRibbon · Default<\/title>\n    <style src=\"C:/____WORK____/AIPDFBuilder/res/shared/components/SystemRibbon/SystemRibbon.css\" />\n    <style>\n      html { width:*; height:*; margin:0; padding:0; border:none; background:white; overflow:hidden; }\n      body { margin:0; padding:0; border:none; background:white; width: max-content; height: max-content; }\n      .sdt-err { color:#b91c1c; padding:12dip; font:12dip/1.4 monospace; white-space:pre-wrap; }\n    <\/style>\n    <script type=\"module\">\n      try {\n        try { await import(\"../../../.sdt-preview-shim.js\"); }\n        catch (e) { throw new Error(\"Preview shim failed: ../../../.sdt-preview-shim.js\\n\" + e); }\n        const stories = await import(\"./SystemRibbon.preview.js\");\n        const story = stories[\"Default\"];\n        if (typeof story !== \"function\") {\n          throw new Error(\"Story \" + \"Default\" + \" not found in \" + \"./SystemRibbon.preview.js\");\n        }\n        document.body.content(story());\n      } catch (e) {\n        document.body.content(<pre class=\"sdt-err\">{\"Preview load error:\\n\" + (e && (e.stack || e.message) || e)}<\/pre>);\n      }\n    <\/script>\n  <\/head>\n  <body><\/body>\n<\/html>\n"}, "_previewExists": true, "_uid": "SystemRibbon"}, {"name": "MessageBox", "path": "res/shared/dialogs/MessageBox/MessageBox.js", "kind": "ui", "type": "dialog", "description": "512x430 modal message-box dialog — single-export-inline ShowMessageBox factory (modalWindow family, seeded dialog convention): centered info icon + two-line title, static password field with CAPS/eye affordances, static checkbox row, CTA pair Cancel (inline outlined button) + Ok (composed PrimaryButton). Dismissal via Window.this.close(value); no route slot.", "uses": ["PrimaryButton"], "parent": null, "variants": [], "states": ["Default"], "status": "managed", "created_at": "2026-08-12T16:01:54Z", "last_verified_at": "2026-08-12T16:01:54Z", "figma_node_id": "13034:20523", "figma_file_key": "2jGq5p5qY4lsf5QK2stfOY", "figma_connected": false, "ssim_score": 0.929, "interactivity": "click-stub", "_status": "managed", "_figmaUrl": "https://www.figma.com/design/2jGq5p5qY4lsf5QK2stfOY?node-id=13034:20523", "_group": null, "_stories": ["Default"], "_previewJsUrl": "C:/____WORK____/AIPDFBuilder/res/shared/dialogs/MessageBox/MessageBox.preview.js", "_componentDir": "C:/____WORK____/AIPDFBuilder/res/shared/dialogs/MessageBox/", "_cssUrls": ["C:/____WORK____/AIPDFBuilder/res/shared/dialogs/MessageBox/MessageBox.css"], "_storyHtmls": {"Default": "<!-- generated-by: sciter-devtools wrapper · stable filename · safe to delete -->\n<html window-frame=\"extended\" window-resizable=\"true\"\n      window-width=\"800\" window-height=\"600\"\n      window-x=\"40\" window-y=\"40\">\n  <head>\n    <meta charset=\"utf-8\" />\n    <title>MessageBox · Default<\/title>\n    <style src=\"C:/____WORK____/AIPDFBuilder/res/shared/dialogs/MessageBox/MessageBox.css\" />\n    <style>\n      html { width:*; height:*; margin:0; padding:0; border:none; background:white; overflow:hidden; }\n      body { margin:0; padding:0; border:none; background:white; width: max-content; height: max-content; }\n      .sdt-err { color:#b91c1c; padding:12dip; font:12dip/1.4 monospace; white-space:pre-wrap; }\n    <\/style>\n    <script type=\"module\">\n      try {\n        try { await import(\"../../../.sdt-preview-shim.js\"); }\n        catch (e) { throw new Error(\"Preview shim failed: ../../../.sdt-preview-shim.js\\n\" + e); }\n        const stories = await import(\"./MessageBox.preview.js\");\n        const story = stories[\"Default\"];\n        if (typeof story !== \"function\") {\n          throw new Error(\"Story \" + \"Default\" + \" not found in \" + \"./MessageBox.preview.js\");\n        }\n        document.body.content(story());\n      } catch (e) {\n        document.body.content(<pre class=\"sdt-err\">{\"Preview load error:\\n\" + (e && (e.stack || e.message) || e)}<\/pre>);\n      }\n    <\/script>\n  <\/head>\n  <body><\/body>\n<\/html>\n"}, "_previewExists": true, "_uid": "MessageBox"}, {"name": "Home", "path": "res/pages/Home/Home.js", "type": "page", "kind": "ui", "status": "pending", "figma_file_key": "2jGq5p5qY4lsf5QK2stfOY", "figma_node_id": "2001:385", "uses": ["SystemRibbon", "FeaturesRibbon", "QuickActionCard", "SortBy", "GridAndLists", "FileListRow", "FileThumbnail", "PrimaryButton", "MessageBox"], "_status": "pending", "_figmaUrl": "https://www.figma.com/design/2jGq5p5qY4lsf5QK2stfOY?node-id=2001:385", "_group": null, "_stories": ["Default"], "_previewJsUrl": "C:/____WORK____/AIPDFBuilder/res/pages/Home/Home.preview.js", "_componentDir": "C:/____WORK____/AIPDFBuilder/res/pages/Home/", "_cssUrls": ["C:/____WORK____/AIPDFBuilder/res/pages/Home/Home.css"], "_storyHtmls": {"Default": "<!-- generated-by: sciter-devtools wrapper · stable filename · safe to delete -->\n<html window-frame=\"extended\" window-resizable=\"true\"\n      window-width=\"800\" window-height=\"600\"\n      window-x=\"40\" window-y=\"40\">\n  <head>\n    <meta charset=\"utf-8\" />\n    <title>Home · Default<\/title>\n    <style src=\"C:/____WORK____/AIPDFBuilder/res/pages/Home/Home.css\" />\n    <style>\n      html { width:*; height:*; margin:0; padding:0; border:none; background:white; overflow:hidden; }\n      body { margin:0; padding:0; border:none; background:white; width: max-content; height: max-content; }\n      .sdt-err { color:#b91c1c; padding:12dip; font:12dip/1.4 monospace; white-space:pre-wrap; }\n    <\/style>\n    <script type=\"module\">\n      try {\n        try { await import(\"../../.sdt-preview-shim.js\"); }\n        catch (e) { throw new Error(\"Preview shim failed: ../../.sdt-preview-shim.js\\n\" + e); }\n        const stories = await import(\"./Home.preview.js\");\n        const story = stories[\"Default\"];\n        if (typeof story !== \"function\") {\n          throw new Error(\"Story \" + \"Default\" + \" not found in \" + \"./Home.preview.js\");\n        }\n        document.body.content(story());\n      } catch (e) {\n        document.body.content(<pre class=\"sdt-err\">{\"Preview load error:\\n\" + (e && (e.stack || e.message) || e)}<\/pre>);\n      }\n    <\/script>\n  <\/head>\n  <body><\/body>\n<\/html>\n"}, "_previewExists": true, "_uid": "Home"}];
+      const TYPES        = ["page", "dialog", "component"];
+      const TREE         = [{"type": "page", "nodes": [{"name": "Home", "children": []}]}, {"type": "dialog", "nodes": [{"name": "MessageBox", "children": []}]}, {"type": "component", "nodes": [{"name": "FeaturesRibbon", "children": []}, {"name": "FileListRow", "children": []}, {"name": "FileThumbnail", "children": []}, {"name": "GridAndLists", "children": []}, {"name": "PrimaryButton", "children": []}, {"name": "QuickActionCard", "children": []}, {"name": "SortBy", "children": []}, {"name": "SystemRibbon", "children": []}]}];
+      const DEP_TREES    = {"GridAndLists": {"name": "GridAndLists", "type": "component", "kind": "ui", "children": []}, "FileListRow": {"name": "FileListRow", "type": "component", "kind": "ui", "children": []}, "FileThumbnail": {"name": "FileThumbnail", "type": "component", "kind": "ui", "children": []}, "SortBy": {"name": "SortBy", "type": "component", "kind": "ui", "children": []}, "QuickActionCard": {"name": "QuickActionCard", "type": "component", "kind": "ui", "children": []}, "FeaturesRibbon": {"name": "FeaturesRibbon", "type": "component", "kind": "ui", "children": []}, "PrimaryButton": {"name": "PrimaryButton", "type": "component", "kind": "ui", "children": []}, "SystemRibbon": {"name": "SystemRibbon", "type": "component", "kind": "ui", "children": []}, "MessageBox": {"name": "MessageBox", "type": "dialog", "kind": "ui", "children": [{"name": "PrimaryButton", "type": "component", "kind": "ui", "children": []}]}, "Home": {"name": "Home", "type": "page", "kind": "ui", "children": [{"name": "SystemRibbon", "type": "component", "kind": "ui", "children": []}, {"name": "FeaturesRibbon", "type": "component", "kind": "ui", "children": []}, {"name": "QuickActionCard", "type": "component", "kind": "ui", "children": []}, {"name": "SortBy", "type": "component", "kind": "ui", "children": []}, {"name": "GridAndLists", "type": "component", "kind": "ui", "children": []}, {"name": "FileListRow", "type": "component", "kind": "ui", "children": []}, {"name": "FileThumbnail", "type": "component", "kind": "ui", "children": []}, {"name": "PrimaryButton", "type": "component", "kind": "ui", "children": []}, {"name": "MessageBox", "type": "dialog", "kind": "ui", "children": [{"name": "PrimaryButton", "type": "component", "kind": "ui", "children": []}]}]}};
+      const FRONTENDS    = [];
+      const PROJECT_DIR  = "C:/____WORK____/AIPDFBuilder";
+      const PROJECT_NAME = "AIPDFBuilder";
+      // Keyed by the twin-aware display id: multi-root twins carry distinct
+      // _uid values ("Name (root)"), so they no longer collapse into one slot.
+      const BY_NAME     = REGISTRY.reduce((m, c) => { m[c._uid || c.name] = c; return m; }, {});
+      const COUNTS      = {"total": 10, "rendered": 10, "ui_no_preview": 0, "non_ui_excluded": 0};   // GP-531 inventory breakdown for the header
+      const LOG_PATH    = "C:/____WORK____/AIPDFBuilder/tools/story-book/storybook.log";     // crash-trail file (synchronous writes survive a native crash)
+
+      // Append a line to the crash-trail SYNCHRONOUSLY (sys.fs.openSync + writeSync + close). Unlike
+      // console.log→buffered-stdout, a synchronous+closed write is flushed to disk BEFORE the next
+      // call — so if a preview renders a native <popup>/<window> and takes the whole process down,
+      // the last line on disk names the culprit. Best-effort: never throws.
+      function _crumb(msg) {
+        try {
+          if (typeof sys !== "undefined" && sys.fs && sys.fs.openSync) {
+            const f = sys.fs.openSync(LOG_PATH, "a");
+            f.writeSync(msg + "\n");
+            f.close();
+          }
+        } catch (_) {}
+      }
+
+      // GP-531 viewer-side sort comparator over leaf display-ids. QuickJS-safe (no localeCompare).
+      function _leafCmp(sortBy, a, b) {
+        const la = (a || "").toLowerCase(), lb = (b || "").toLowerCase();
+        const byName = la < lb ? -1 : la > lb ? 1 : 0;
+        if (sortBy === "status") {
+          const sa = String((BY_NAME[a] || {})._status || ""), sc = String((BY_NAME[b] || {})._status || "");
+          return sa < sc ? -1 : sa > sc ? 1 : byName;
+        }
+        if (sortBy === "preview") {
+          const pa = (BY_NAME[a] || {})._previewExists ? 0 : 1, pb = (BY_NAME[b] || {})._previewExists ? 0 : 1;
+          return (pa - pb) || byName;
+        }
+        return byName;  // "name" (default)
+      }
+
+      function vscodeUrlFor(relPath) {
+        if (!relPath) return null;
+        // PROJECT_DIR is normalised to forward slashes by storybook.py.
+        // Mac/Linux: abs starts with "/" → "vscode://file//abs/path" (double slash is correct for VS Code URI handler)
+        // Windows:   abs starts with "C:/" → "vscode://file/C:/abs/path"
+        const abs = PROJECT_DIR + "/" + relPath.replace(/\\/g, "/");
+        return "vscode://file/" + abs;
+      }
+
+      const ICON_FOLDER    = "<svg viewBox='0 0 16 16' xmlns='http://www.w3.org/2000/svg'><path fill='%23db2777' d='M1.5 3.5h4l1.5 1.5h7.5v8.5h-13z'/></svg>";
+      const STATUS_COLORS  = {
+        "done":          "#16a34a",
+        "verified":      "#16a34a",
+        "unverified":    "#d97706",
+        "stale":         "#b91c1c",
+        "scanned-only":  "#6b7280",
+        "unknown":       "#9ca3af",
+      };
+      function iconComponentFor(status) {
+        const c = encodeURIComponent(STATUS_COLORS[status] || STATUS_COLORS.unknown);
+        return "<svg viewBox='0 0 16 16' xmlns='http://www.w3.org/2000/svg'>"
+             + "<rect x='2' y='2' width='12' height='12' rx='1' fill='none' stroke='" + c + "' stroke-width='1.4'/>"
+             + "<line x1='8' y1='2' x2='8' y2='14' stroke='" + c + "' stroke-width='1.4'/>"
+             + "<line x1='2' y1='8' x2='14' y2='8' stroke='" + c + "' stroke-width='1.4'/></svg>";
+      }
+
+      requestAnimationFrame(() => {
+        try { Window.this.move(160, 66, 1600, 880); } catch (e) {}
+      });
+
+      // Story content lookup: returns {html, dir} for frame.loadHtml().
+      // Python embeds wrapper HTML strings inline in the registry JSON.
+      // Sciter uses `dir` (the component directory) as the base URL for
+      // resolving import "./preview.js" and all transitive relative imports.
+      function storyContentFor(c, storyName) {
+        if (!c) return null;
+        // Current schema: _storyHtmls + _componentDir
+        if (c._storyHtmls) {
+          const htmls = c._storyHtmls;
+          const dir = c._componentDir || "";
+          const html = (storyName && htmls[storyName]) || htmls[Object.keys(htmls)[0]] || null;
+          return html ? {html, dir} : null;
+        }
+        // Fallback: legacy _storyUrls (pre-inline schema — load by file path).
+        if (c._storyUrls) {
+          const url = (storyName && c._storyUrls[storyName]) || c._storyUrls[Object.keys(c._storyUrls)[0]] || null;
+          return url ? {url} : null;
+        }
+        return null;
+      }
+
+      class App extends Element {
+        this() {
+          // Start on a welcome screen — user picks the first component
+          // from the sidebar deliberately.
+          this.active = null;
+          this.activeStory = null;
+          this.filter = "";
+          this.sortBy = "name";   // GP-531: name | status | preview (viewer-side)
+          // Folders that contain >1 component start expanded so the user
+          // sees the full catalog without having to click around.
+          this.openFolders = new Set();
+          for (const g of TREE) {
+            for (const n of g.nodes) {
+              if (n.children && n.children.length) this.openFolders.add(n.name);
+            }
+          }
+        }
+        _firstStory(c) { return c && Array.isArray(c._stories) && c._stories.length ? c._stories[0] : null; }
+
+        onSearch(evt, el) { this.filter = (el.value || "").toLowerCase(); this.componentUpdate(); }
+        onSort(evt, el) { this.sortBy = (el.value || "name"); this.componentUpdate(); }
+        onSelect(c) {
+          if (!c) return;
+          const uid = (x) => x && (x._uid || x.name);
+          if (this.active && uid(this.active) === uid(c)) return;
+          this.active = c;
+          this.activeStory = this._firstStory(c);
+          try { this.componentUpdate(); } catch (e) { try { console.error("storybook: onSelect update failed: " + e); } catch (_) {} _crumb("onSelect update failed: " + e); }
+          requestAnimationFrame(() => { try { this._loadStory(); } catch (e) { _crumb("_loadStory threw: " + e); } });
+        }
+        ["on change at select|tree.sidebar__tree"](evt, tree) {
+          if (this._suppressTreeChange) return true;
+          try { return this._onTreeChange(evt, tree); }
+          catch (e) { try { console.error("storybook: tree-change failed: " + e); } catch (_) {} _crumb("tree-change failed: " + e); return true; }
+        }
+        _onTreeChange(evt, tree) {
+          // Look for the leaf with :current. Sciter also flags the
+          // ancestor folder with :current (parent-path highlight); a
+          // plain `option:current` selector would return the folder
+          // (first match in tree order), masking the actual leaf.
+          let leaf = tree.$("option[name]:current");
+          if (!leaf && evt.target && evt.target.getAttribute && evt.target.getAttribute("name")) {
+            leaf = evt.target;
+          }
+          if (leaf) {
+            const name = leaf.getAttribute("name");
+            const c = BY_NAME[name];
+            if (c) this.onSelect(c);
+            return true;
+          }
+          // Folder caption click — restore selection so the preview
+          // stays on whichever component was active before. Folders are
+          // navigation containers, not selectable items.
+          const restoreTo = this.active ? (this.active._uid || this.active.name) : "";
+          this._suppressTreeChange = true;
+          try { tree.value = restoreTo; }
+          finally { this._suppressTreeChange = false; }
+          return true;
+        }
+        ["on expand at select|tree.sidebar__tree > option"](evt, opt) {
+          const folder = opt.getAttribute("folder");
+          if (folder) this.openFolders.add(folder);
+          return true;
+        }
+        ["on collapse at select|tree.sidebar__tree > option"](evt, opt) {
+          const folder = opt.getAttribute("folder");
+          if (folder) this.openFolders.delete(folder);
+          return true;
+        }
+        // Sciter's tree defaults to double-click to toggle a folder; map
+        // single click on the folder caption to expand/collapse too.
+        // Selector matches any caption inside the tree; the [folder]
+        // attribute check filters to folder rows only (leaves don't
+        // have it), so leaf clicks fall through to default selection.
+        ["on click at select|tree.sidebar__tree caption"](evt, caption) {
+          const opt = caption.parentElement;
+          if (!opt || !opt.getAttribute("folder")) return false;
+          opt.state.expanded = !opt.state.expanded;
+          return true;
+        }
+        onSelectStory(s) {
+          if (this.activeStory === s) return;
+          this.activeStory = s;
+          try { this.componentUpdate(); } catch (e) { try { console.error("storybook: onSelectStory update failed: " + e); } catch (_) {} }
+          requestAnimationFrame(() => { try { this._loadStory(); } catch (e) {} });
+        }
+
+        _loadStory(retry) {
+          retry = retry || 0;
+          const c = this.active;
+          if (!c || !c._previewExists) {
+            this._lastLoadedKey = null;
+            const frameEl = document.$("frame#canvas");
+            if (frameEl && frameEl.frame) {
+              try { frameEl.frame.loadEmpty(); } catch (e) {}
+            }
+            return;
+          }
+          const frameEl = document.$("frame#canvas");
+          // Frame is recreated by Reactor when switching FROM a no-preview
+          // component TO one with a preview; its `.frame` host isn't ready
+          // on the first rAF tick. Retry a few times before giving up.
+          if (!frameEl || !frameEl.frame) {
+            if (retry < 10) requestAnimationFrame(() => this._loadStory(retry + 1));
+            return;
+          }
+          const key = (c._uid || c.name || "") + ":" + (this.activeStory || "");
+          if (this._lastLoadedKey === key) return;
+          this._lastLoadedKey = key;
+          const content = storyContentFor(c, this.activeStory);
+          if (!content) return;
+          // Breadcrumb BEFORE the load: if a preview renders a native <popup>/<window> it can take
+          // the whole process down with no JS exception — the log then ends at "loading …", naming
+          // the culprit. A matching "loaded …" line means the frame accepted it.
+          const _id = (c._uid || c.name || "?") + " / " + (this.activeStory || "default");
+          try { console.log("storybook: loading " + _id); } catch (_) {}
+          _crumb("loading " + _id);   // sync — survives a native crash inside the load
+          try {
+            if (content.html) {
+              // Inline HTML: baseUrl (component dir) lets Sciter resolve
+              // import "./X.js" and transitive relative imports correctly.
+              frameEl.frame.loadHtml(content.html, content.dir);
+            } else if (content.url) {
+              // Legacy fallback: load from file path.
+              frameEl.frame.loadFile(content.url);
+            }
+            try { console.log("storybook: loaded " + _id); } catch (_) {}
+            _crumb("loaded  " + _id);
+          } catch (e) {
+            try { console.error("storybook: load FAILED " + _id + ": " + e); } catch (_) {}
+            _crumb("load FAILED " + _id + ": " + e);
+          }
+        }
+
+        // ONE bootstrap path. Double-firing (attached + componentDidMount)
+        // was triggering Sciter to promote the loaded content into a new
+        // top-level window for SOME components (race in frame init).
+        attached() { requestAnimationFrame(() => this._loadStory()); }
+
+        // Default <a href> in Sciter doesn't open external URLs — route
+        // http(s)/vscode links through OS.
+        ["on click at a"](evt, link) {
+          const href = link.getAttribute("href");
+          if (!href || !/^(https?|vscode):/i.test(href)) return false;
+          if (/^vscode:/i.test(href)) {
+            // Extract path from vscode://file/<path> and open with `code` CLI.
+            // launchURL(vscode://) is unreliable on Windows; sys.spawn avoids it.
+            // No quotes around path — embedded quotes corrupt the path on Windows.
+            const raw = href.replace(/^vscode:\/\/file\//i, "").replace(/%3A/gi, ":");
+            try { sys.spawn(["cmd.exe", "/c", "code " + raw]); } catch (_) {}
+          } else {
+            try { launchURL(href); } catch (_) {}
+          }
+          return true;
+        }
+
+        _matchesFilter(name) {
+          if (!this.filter) return true;
+          return (name || "").toLowerCase().includes(this.filter);
+        }
+        _renderLeaf(name) {
+          const c = BY_NAME[name];
+          if (!c) return null;
+          const status = c._status || "unknown";
+          const noPrev = c._previewExists === false;   // GP-531: surface, don't hide
+          return (
+            <option key={name} name={name} value={name} class={noPrev ? "leaf--no-preview" : ""}>
+              <caption>
+                <img class="sidebar__icon" src={"data:image/svg+xml;utf8," + iconComponentFor(status)} />
+                <span class="sidebar__name">{name}</span>
+                {noPrev ? <span class="badge-noprev">no preview</span> : null}
+              </caption>
+            </option>
+          );
+        }
+        _renderFolder(node) {
+          const names = [node.name].concat(node.children || []);
+          const visible = names.filter(n => this._matchesFilter(n));
+          if (!visible.length) return null;
+          const expanded = this.openFolders.has(node.name) ||
+                           (this.filter && visible.length) ||
+                           (this.active && visible.indexOf(this.active.name) >= 0);
+          // Folder option has no `name`/`value` — clicks only expand/collapse.
+          // Only the leaf <option>s inside trigger component selection.
+          return (
+            <option.node key={node.name} folder={node.name} expanded={!!expanded}>
+              <caption>
+                <img class="sidebar__icon" src={"data:image/svg+xml;utf8," + ICON_FOLDER} />
+                <span class="sidebar__name">{node.name}</span>
+              </caption>
+              {visible.map(n => this._renderLeaf(n))}
+            </option>
+          );
+        }
+        _renderTreeNode(node) {
+          if (node.children && node.children.length) return this._renderFolder(node);
+          if (!this._matchesFilter(node.name)) return null;
+          return this._renderLeaf(node.name);
+        }
+        renderSidebar() {
+          const groups = TREE.filter(g => {
+            return g.nodes.some(n => {
+              if (n.children && n.children.length) {
+                return [n.name].concat(n.children).some(nn => this._matchesFilter(nn));
+              }
+              return this._matchesFilter(n.name);
+            });
+          });
+          const activeName = this.active ? (this.active._uid || this.active.name) : "";
+          const groupHasActive = (g) => g.nodes.some(n =>
+            n.name === activeName ||
+            (n.children && n.children.indexOf(activeName) >= 0)
+          );
+          return (
+            <div class="sidebar">
+              <div class="sidebar__header">
+                <div class="sidebar__counts">{COUNTS.total} components · {COUNTS.rendered} rendered · {COUNTS.ui_no_preview} no-preview</div>
+                <input type="text" class="sidebar__search" placeholder="search…" value={this.filter || ""} oninput={(evt, el) => this.onSearch(evt, el)} />
+                <select class="sidebar__sort" value={this.sortBy} onchange={(evt, el) => this.onSort(evt, el)}>
+                  <option value="name">sort: name</option>
+                  <option value="status">sort: status</option>
+                  <option value="preview">sort: has preview</option>
+                </select>
+              </div>
+              <div class="sidebar__scroll">
+                {groups.map(g =>
+                  <div key={"g:" + (g.slice ? "slice:" : "type:") + g.type}>
+                    <div class={"sidebar__group-title" + (g._muted ? " sidebar__group-title--muted" : "")}>{g.type}</div>
+                    <select|tree class="sidebar__tree" treelines value={groupHasActive(g) ? activeName : ""}>
+                      {g.nodes.slice().sort((a, b) => _leafCmp(this.sortBy, a.name, b.name)).map(n => this._renderTreeNode(n)).filter(Boolean)}
+                    </select>
+                  </div>
+                )}
+              </div>
+            </div>
+          );
+        }
+        renderDetailHeader() {
+          const c = this.active;
+          if (!c) return <div class="detail__header"><div class="detail__title">Select a component</div></div>;
+          const status = c._status || "unknown";
+          return (
+            <div class="detail__header">
+              <div class="detail__title">{c._uid || c.name}</div>
+              <div class="detail__meta">
+                <span class={"pill pill--" + status}>{status}</span>
+                {c.type     ? <span class="pill">{c.type}</span> : null}
+                {c.frontend ? <span class="pill">{c.frontend}</span> : null}
+                {c.layer    ? <span class="pill">{c.layer}</span> : null}
+                {typeof c.ssim_score === "number" ? <span>SSIM {c.ssim_score.toFixed(3)}</span> : null}
+                {c._figmaUrl ? <a href={c._figmaUrl}>Figma ↗</a> : null}
+                {c.path ? <a href={vscodeUrlFor(c.path)} title={c.path}>VS Code ↗</a> : null}
+              </div>
+              {this.renderUsesLine(c)}
+              {/* description is AI-facing only (component-creator reuse lookup) — NOT displayed in storybook */}
+            </div>
+          );
+        }
+        renderUsesLine(c) {
+          // Revived dep-tree data (DEP_TREES anchor was dead after the
+          // loadHtml-engine restore): one muted line of direct uses[].
+          const t = DEP_TREES[c._uid || c.name];
+          if (!t || !Array.isArray(t.children) || !t.children.length) return null;
+          const parts = t.children.map(ch =>
+            ch.name + (ch.children && ch.children.length ? " (+" + ch.children.length + ")" : ""));
+          return <div style="font-size:8pt;color:#8a8a8a;margin-top:2dip">Uses: {parts.join(" · ")}</div>;
+        }
+        renderStoryTabs() {
+          const c = this.active;
+          if (!c || !Array.isArray(c._stories) || c._stories.length <= 1) return null;
+          return (
+            <div class="story-tabs">
+              {c._stories.map(s =>
+                <div class={"story-tabs__tab" + (s === this.activeStory ? " story-tabs__tab--active" : "")}
+                     key={s} onclick={() => this.onSelectStory(s)}>{s}</div>
+              )}
+            </div>
+          );
+        }
+        renderDetailCanvas() {
+          const c = this.active;
+          if (!c) return <div class="detail__canvas"><div class="detail__empty">Select a component from the sidebar.</div></div>;
+          if (!c._previewExists) return <div class="detail__canvas"><div class="detail__empty">No preview file.</div></div>;
+          return (
+            <div class="detail__canvas">
+              <frame id="canvas" class="detail__canvas-frame" />
+            </div>
+          );
+        }
+        renderWelcome() {
+          return (
+            <div class="welcome">
+              <div class="welcome__eyebrow">Component catalog</div>
+              <div class="welcome__title">Storybook</div>
+              <div class="welcome__lede">
+                A minimal visual catalog of every component registered in
+                this project. Browse the tree on the left, open a leaf to
+                preview it live. Folders group components by their parent
+                primitive; the icon colour reflects verification status.
+              </div>
+              <div class="welcome__hints">
+                <div class="welcome__hint">Click a component<span>load its preview</span></div>
+                <div class="welcome__hint">Click a folder<span>expand or collapse</span></div>
+                <div class="welcome__hint">Click the path<span>open the source file in VS Code</span></div>
+                <div class="welcome__hint">Click Figma ↗<span>open the design reference in the browser</span></div>
+              </div>
+              <div class="welcome__footer">Made by Maksym Poskannyi · 2026</div>
+            </div>
+          );
+        }
+        renderCaption() {
+          return (
+            <header class="caption" role="window-caption">
+              <span class="caption__lights" />
+              <span class="caption__title">Storybook · {PROJECT_NAME}</span>
+              <span class="caption__count">{REGISTRY.length} components</span>
+            </header>
+          );
+        }
+        // Defensive render wrapper (GP-531): one bad component/story must not blank or crash the
+        // whole catalog. Every key render moment runs through this — on a throw it logs and returns
+        // a safe fallback, so switching to a component with a malformed entry degrades to a local
+        // "render error" placeholder instead of taking down the viewer.
+        _safe(label, fn, fallback) {
+          try { return fn(); }
+          catch (e) {
+            try { console.error("storybook: render[" + label + "] failed: " + e); } catch (_) {}
+            _crumb("render[" + label + "] failed: " + e);
+            return fallback;
+          }
+        }
+        render() {
+          try {
+            return (
+              <body>
+                {this._safe("caption", () => this.renderCaption(), <header class="caption" role="window-caption" />)}
+                <div class="main">
+                  {this._safe("sidebar", () => this.renderSidebar(),
+                    <div class="sidebar"><div class="sidebar__header"><div class="sidebar__counts">⚠ sidebar render error — see console</div></div></div>)}
+                  <div class="detail">
+                    {this.active ? this._safe("detail-header", () => this.renderDetailHeader(),
+                      <div class="detail__header"><div class="detail__title">⚠ header render error</div></div>) : null}
+                    {this.active ? this._safe("story-tabs", () => this.renderStoryTabs(), null) : null}
+                    {this.active ? this._safe("detail-canvas", () => this.renderDetailCanvas(),
+                      <div class="detail__canvas"><div class="detail__empty">⚠ Failed to render this component — see console. The rest of the catalog still works.</div></div>)
+                     : this._safe("welcome", () => this.renderWelcome(), <div class="welcome" />)}
+                  </div>
+                </div>
+              </body>
+            );
+          } catch (e) {
+            try { console.error("storybook: render() failed: " + e); } catch (_) {}
+            return (
+              <body><div class="main"><div class="detail"><div class="detail__canvas">
+                <div class="detail__empty">⚠ Storybook render error — see console.</div>
+              </div></div></div></body>
+            );
+          }
+        }
+      }
+
+      _crumb("catalog ready — " + REGISTRY.length + " entries");
+      try { document.body.patch(<App />); }
+      catch (e) { try { console.error("storybook: initial patch failed: " + e); } catch (_) {} _crumb("initial patch failed: " + e); }
+    </script>
+  </head>
+  <body></body>
+</html>

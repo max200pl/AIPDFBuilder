@@ -8,21 +8,26 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>AIPDFBuilder</title>
     <style src="shared/lib/tokens.css" />
+    <style src="shared/lib/typography.css" />
     <style>
       html {
-        background-color: var(--color-bg);
-        color: var(--color-text);
+        background-color: var(--color-bg-workspace);
+        color: var(--color-text-primary);
         font: 14px/1.4 system;
       }
       body {
         width: *;
         height: *;
         flow: vertical;
-        content-vertical-align: middle;
-        content-horizontal-align: center;
+        padding: 0;
+        margin: 0;
       }
     </style>
     <script type="module">
+      // Window can't shrink below the design's base layout (window-width/height above
+      // stay the initial/restore size; the host starts the window maximized).
+      Window.this.minSize = [900, 600];
+
       // Ctrl+R — reload from source (dev convenience)
       document.on("keydown", function (evt) {
         if (evt.ctrlKey && evt.code === "KeyR") {
@@ -30,10 +35,11 @@
           return true;
         }
       });
+
+      // App bootstrap — mount the root shell (router wiring lives in app/App.js).
+      import { App } from "./app/App.js";
+      document.body.content(<App />);
     </script>
   </head>
-  <body>
-    <h1>AIPDFBuilder</h1>
-    <p>Blank Sciter.js sandbox — build pages/components here.</p>
-  </body>
+  <body></body>
 </html>

@@ -9,5 +9,203 @@
       "entry_point": "res/main.htm"
     }
   ],
-  "components": []
+  "components": [
+    {
+      "name": "GridAndLists",
+      "path": "res/shared/components/GridAndLists/GridAndLists.js",
+      "kind": "ui",
+      "type": "component",
+      "description": "24x24dip grid/list view-toggle icon; a click dispatches a bubbling 'view-toggle' intent event with the current type — no internal toggle state, parent owns the view mode.",
+      "uses": [],
+      "parent": null,
+      "variants": [
+        "grid"
+      ],
+      "states": [
+        "Default"
+      ],
+      "status": "managed",
+      "created_at": "2026-08-12T16:00:00Z",
+      "last_verified_at": "2026-08-12T16:00:00Z",
+      "figma_node_id": "2728:6825",
+      "figma_file_key": "2jGq5p5qY4lsf5QK2stfOY",
+      "figma_connected": false,
+      "ssim_score": 0.985,
+      "interactivity": "button",
+      "interaction_axes": [
+        "click-emit"
+      ]
+    },
+    {
+      "name": "FileListRow",
+      "path": "res/shared/components/FileListRow/FileListRow.js",
+      "kind": "ui",
+      "type": "component",
+      "figma_file_key": "2jGq5p5qY4lsf5QK2stfOY",
+      "figma_node_id": "3698:15485",
+      "uses": [],
+      "variants": [
+        "Default"
+      ],
+      "states": [
+        "default"
+      ],
+      "interactivity": "click-stub",
+      "ssim_score": 0.937,
+      "status": "managed"
+    },
+    {
+      "name": "FileThumbnail",
+      "path": "res/shared/components/FileThumbnail/FileThumbnail.js",
+      "kind": "ui",
+      "type": "component",
+      "figma_file_key": "2jGq5p5qY4lsf5QK2stfOY",
+      "figma_node_id": "3698:16104",
+      "uses": [],
+      "variants": [
+        "Default"
+      ],
+      "states": [],
+      "interactivity": "click-stub",
+      "status": "managed",
+      "ssim_score": 0.964
+    },
+    {
+      "name": "SortBy",
+      "path": "res/shared/components/SortBy/SortBy.js",
+      "kind": "ui",
+      "type": "component",
+      "figma_file_key": "2jGq5p5qY4lsf5QK2stfOY",
+      "figma_node_id": "3851:39434",
+      "uses": [],
+      "variants": [
+        "Default"
+      ],
+      "states": [
+        "default"
+      ],
+      "interactivity": "click-stub",
+      "ssim_score": 0.868,
+      "status": "managed"
+    },
+    {
+      "name": "QuickActionCard",
+      "path": "res/shared/components/QuickActionCard/QuickActionCard.js",
+      "kind": "ui",
+      "type": "component",
+      "description": "148x148 quick-action tile: optional 40dip SVG icon over a centered wrapping label; click emits a bubbling 'quick-action' event carrying the action id.",
+      "uses": [],
+      "parent": null,
+      "variants": [],
+      "states": [
+        "Default"
+      ],
+      "status": "managed",
+      "created_at": "2026-08-12T15:03:48Z",
+      "last_verified_at": "2026-08-12T15:03:48Z",
+      "figma_node_id": "3760:15072",
+      "figma_file_key": "2jGq5p5qY4lsf5QK2stfOY",
+      "figma_connected": false,
+      "ssim_score": 0.974,
+      "interactivity": "button",
+      "interaction_axes": [
+        "click-emit"
+      ]
+    },
+    {
+      "name": "FeaturesRibbon",
+      "path": "res/shared/components/FeaturesRibbon/FeaturesRibbon.js",
+      "kind": "ui",
+      "type": "component",
+      "figma_file_key": "2jGq5p5qY4lsf5QK2stfOY",
+      "figma_node_id": "8006:23276",
+      "parent": null,
+      "uses": [],
+      "variants": [
+        "State=Home"
+      ],
+      "states": [],
+      "interactivity": "click-stub",
+      "ssim_score": null,
+      "status": "pending"
+    },
+    {
+      "name": "PrimaryButton",
+      "path": "res/shared/components/PrimaryButton/PrimaryButton.js",
+      "kind": "ui",
+      "type": "component",
+      "figma_file_key": "2jGq5p5qY4lsf5QK2stfOY",
+      "figma_node_id": "2371:7625",
+      "uses": [],
+      "parent": null,
+      "variants": [
+        "Default"
+      ],
+      "states": [],
+      "ssim_score": 0.942,
+      "status": "managed",
+      "interactivity": "click-stub"
+    },
+    {
+      "name": "SystemRibbon",
+      "path": "res/shared/components/SystemRibbon/SystemRibbon.js",
+      "kind": "ui",
+      "type": "component",
+      "figma_file_key": "2jGq5p5qY4lsf5QK2stfOY",
+      "figma_node_id": "2139:586",
+      "uses": [],
+      "parent": null,
+      "variants": [
+        "default"
+      ],
+      "states": [],
+      "ssim_score": 0.93,
+      "status": "managed",
+      "interactivity": "click-stub"
+    },
+    {
+      "name": "MessageBox",
+      "path": "res/shared/dialogs/MessageBox/MessageBox.js",
+      "kind": "ui",
+      "type": "dialog",
+      "description": "512x430 modal message-box dialog — single-export-inline ShowMessageBox factory (modalWindow family, seeded dialog convention): centered info icon + two-line title, static password field with CAPS/eye affordances, static checkbox row, CTA pair Cancel (inline outlined button) + Ok (composed PrimaryButton). Dismissal via Window.this.close(value); no route slot.",
+      "uses": [
+        "PrimaryButton"
+      ],
+      "parent": null,
+      "variants": [],
+      "states": [
+        "Default"
+      ],
+      "status": "managed",
+      "created_at": "2026-08-12T16:01:54Z",
+      "last_verified_at": "2026-08-12T16:01:54Z",
+      "figma_node_id": "13034:20523",
+      "figma_file_key": "2jGq5p5qY4lsf5QK2stfOY",
+      "figma_connected": false,
+      "ssim_score": 0.929,
+      "interactivity": "click-stub"
+    },
+    {
+      "name": "Home",
+      "path": "res/pages/Home/Home.js",
+      "type": "page",
+      "kind": "ui",
+      "status": "pending",
+      "figma_file_key": "2jGq5p5qY4lsf5QK2stfOY",
+      "figma_node_id": "2001:385",
+      "uses": [
+        "SystemRibbon",
+        "FeaturesRibbon",
+        "QuickActionCard",
+        "SortBy",
+        "GridAndLists",
+        "FileListRow",
+        "FileThumbnail",
+        "PrimaryButton",
+        "MessageBox"
+      ]
+    }
+  ],
+  "generated": "2026-08-12T16:22:33Z"
 }

@@ -1,0 +1,61 @@
+/* FileThumbnail — one grid document tile (Figma file 2jGq5p5qY4lsf5QK2stfOY, node 3698:16104,
+ * "State=Default", 168×239). Styling per .claude/docs/reference-styling-flow.md (tokens via
+ * var(); type ONLY via the typography.css @mixin set — Sciter's font shorthand is broken with
+ * var() tokens) + toolkit reference-sciter-styling.md / reference-sciter-css.md.
+ *
+ * Geometry: root 168dip wide, vertical flow; preview box 168×212 (12dip visual inset around the
+ * 144×188 page image = 11dip padding/margin + the img's 1dip border, which Sciter draws OUTSIDE
+ * the content box); 6dip gap to the label row (child-margin gap idiom); label row 168×21 with a
+ * 12dip left inset. Border note: the delivered preview-page.png does NOT bake the design's thin
+ * border — it is drawn in CSS on the img (orchestrator-authorized contract amendment). */
+@import url(../../lib/typography.css);
+
+@set file-thumbnail {
+  :root {
+    width: 168dip;
+    flow: vertical;
+    cursor: pointer;
+  }
+
+  .file-thumbnail__preview {
+    box-sizing: border-box;
+    width: *;
+    /* Horizontal inset via child margin, not padding: Sciter anchors block children at the
+     * border-box origin, so horizontal padding never shifts them (verified by Gate-1: x-delta
+     * exactly the 12dip padding). Vertical padding contributes to height correctly — kept.
+     * 11dip (not 12): + the img's 1dip border = the design's 12dip content inset. */
+    padding: 11dip 0;
+    /* Design radius is 12dip — no --radius-* token matches (sm=4, md=8, popover=10, lg=14),
+     * so the literal design value is kept rather than bending a token. */
+    border-radius: 12dip;
+  }
+
+  .file-thumbnail__page {
+    display: block;
+    width: 144dip;
+    height: 188dip;
+    /* Contract amendment (orchestrator-authorized, disclosed as a run-report finding): the
+     * delivered preview-page.png does not bake the design's border, so it is drawn here.
+     * Sciter draws the border OUTSIDE the 144×188 content box — the ring lands at
+     * x11..156 / y11..200, exactly the reference's one-pixel #BDC9DB ring. */
+    border: 1dip solid var(--color-border-light);
+    margin: 0 11dip; /* 11dip + 1dip border = the design's 12dip content inset */
+  }
+
+  .file-thumbnail__label-row {
+    box-sizing: border-box;
+    width: *;
+    margin-top: 6dip; /* the 6dip design gap between preview box and label row */
+  }
+
+  .file-thumbnail__name {
+    @font-sm-regular;
+    line-height: 21dip; /* design: 150% of 14dip (Figma text box is 21dip tall) — overrides the mixin's 100% */
+    color: var(--color-text-primary);
+    width: *;
+    margin-left: 12dip; /* the design's 12dip left inset (child margin — see note above) */
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: none;
+  }
+}

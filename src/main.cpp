@@ -116,7 +116,7 @@ int uimain(std::function<int()> run) {
   if (!loaded)
     loaded = pwin->load(WSTR("this://app/main.htm"));
 
-  pwin->expand();
+  pwin->expand(true); // true = show maximized (SCITER_WINDOW_STATE_MAXIMIZED)
 
   return run();
 }

@@ -1,0 +1,172 @@
+/*
+ * res/shared/dialogs/MessageBox/MessageBox.css
+ * Figma: file 2jGq5p5qY4lsf5QK2stfOY, instance 13043:1667 (512x430), master 13034:20523.
+ * Sources: .claude/docs/reference-styling-flow.md (tokens -> styleset -> typography mixins ->
+ * dip units) + toolkit reference-sciter-styling.md / reference-sciter-css.md.
+ *
+ * Engine facts honored (verified this project, scapp 5.0.3.21 — feedback_ssim_styleset_root):
+ * - Bare declarations inside @set are SILENTLY DROPPED — root styles wrapped in :root {}.
+ * - Sciter renders content-box (a declared box-sizing: border-box did NOT take effect on the
+ *   PrimaryButton Gate-1) — all bordered boxes below are sized content = outer − borders, and
+ *   the design's root padding is carried as child margins, never root padding.
+ * - Glyphs render via foreground-image at NATURAL size, centered (QuickActionCard precedent —
+ *   an <img> child stretches to its box).
+ * - Star margins center fixed-size children (SortBy/QuickActionCard precedent); content-*-align
+ *   is avoided where a sibling uses star sizing (feedback_ssim_centering).
+ */
+
+@import url(../../lib/typography.css);
+
+@set message-box {
+  :root {
+    display: block;
+    position: relative;
+    width: 510dip;   /* + 1dip border per side = 512dip outer */
+    height: 428dip;  /* + 1dip border per side = 430dip outer */
+    background-color: var(--color-bg-white);
+    border: 1dip solid var(--color-border-light);
+    border-radius: var(--radius-md); /* 8dip */
+    box-shadow: var(--shadow-card);  /* 0 2dip 0 rgba(72,95,125,0.2) — outside the box; excluded
+                                        from the scoped SSIM (reference exported --strip-effects) */
+    overflow: none; /* clipped — Sciter form (never `hidden`) */
+  }
+
+  .message-box__close {
+    position: absolute;
+    top: 3dip;      /* design: 48x48 at (460,4) outer -> (459,3) inside the 1dip border */
+    right: 3dip;
+    width: 48dip;
+    height: 48dip;
+    border-radius: var(--radius-button); /* 5dip */
+    foreground-image: url(img/close-x.svg); /* static glyph, baked colors, natural size (14x14) */
+    foreground-repeat: no-repeat;
+    foreground-position: 50% 50%;
+    cursor: pointer;
+  }
+
+  .message-box__content {
+    display: block;
+    margin: 47dip 39dip 0 39dip; /* design padding 48 top / 40 sides, minus the 1dip root border;
+                                    implicit width 432dip (510 − 39×2) */
+  }
+
+  .message-box__icon-row {
+    flow: horizontal;
+    height: 32dip;
+  }
+  .message-box__info-icon {
+    display: block;
+    width: 32dip;
+    height: 32dip;
+    margin: 0 *; /* star pair centers the fixed box in the 432dip row */
+    foreground-image: url(img/info-32.svg); /* static glyph (blue info), natural size (30x30), centered */
+    foreground-repeat: no-repeat;
+    foreground-position: 50% 50%;
+  }
+
+  .message-box__title {
+    display: block;
+    margin-top: 16dip;
+    @font-lg-semibold;   /* Poppins 600 / 18dip */
+    line-height: 27dip;  /* Figma lineHeightPx 27 — two lines = the design's 54dip box */
+    color: var(--color-text-primary);
+    text-align: center;
+  }
+
+  .message-box__field-label {
+    display: block;
+    margin-top: 24dip;
+    height: 40dip;
+    @font-base-semibold; /* Poppins 600 / 16dip */
+    line-height: 24dip;
+    color: var(--color-text-primary);
+    vertical-align: middle; /* Figma textAlignVertical CENTER within the 40dip line box */
+  }
+
+  .message-box__field {
+    height: 46dip; /* + 1dip border per side = 48dip outer */
+    border: 1dip solid var(--color-border-light);
+    border-radius: var(--radius-sm); /* 4dip */
+    background-color: var(--color-bg-white);
+    flow: horizontal;
+  }
+  .message-box__field-text {
+    height: 24dip;
+    margin: * 0 * 16dip; /* 16dip left pad per design; star pair centers vertically in the row */
+    @font-base-regular;  /* Poppins 400 / 16dip */
+    line-height: 24dip;
+    color: var(--color-text-primary);
+    white-space: nowrap;
+  }
+  .message-box__field-right {
+    flow: horizontal;
+    height: 24dip;
+    margin: * 8dip * *; /* left star = spring to the right edge; 8dip right pad per design */
+  }
+  .message-box__caps {
+    height: 24dip;
+    @font-base-regular;
+    line-height: 24dip;
+    color: var(--color-icon-default); /* #485F7D */
+    white-space: nowrap;
+  }
+  .message-box__eye {
+    display: block;
+    width: 24dip;
+    height: 24dip;
+    margin-left: 8dip; /* gap after CAPS per design */
+    foreground-image: url(img/visibility-eye.svg); /* static glyph, 24x24 master export, centered */
+    foreground-repeat: no-repeat;
+    foreground-position: 50% 50%;
+  }
+
+  .message-box__checkbox-row {
+    margin-top: 24dip;
+    height: 40dip;
+    flow: horizontal;
+  }
+  .message-box__checkbox {
+    width: 20dip;  /* + 2dip border per side = 24dip outer */
+    height: 20dip;
+    margin: 8dip 0; /* centers the 24dip outer box in the 40dip row */
+    border: 2dip solid var(--color-icon-default);
+    border-radius: var(--radius-sm);
+  }
+  .message-box__checkbox-text {
+    height: 24dip;
+    margin: 8dip 0 8dip 8dip; /* 8dip gap after the box per design */
+    @font-base-regular;
+    line-height: 24dip;
+    color: var(--color-text-primary);
+    white-space: nowrap;
+  }
+
+  .message-box__ctas {
+    margin-top: 24dip;
+    height: 40dip;
+    flow: horizontal;
+  }
+  .message-box__cancel {
+    margin-left: *; /* star pair with .message-box__ok's margin-right centers the 408dip block */
+    width: 197dip;  /* + 1.5dip border per side = 200dip outer */
+    height: 37dip;  /* + 1.5dip border per side = 40dip outer */
+    border: 1.5dip solid var(--color-core-deep); /* #090C11 */
+    border-radius: var(--radius-button); /* 5dip */
+    background-color: var(--color-bg-white);
+    flow: horizontal;
+    cursor: pointer;
+  }
+  .message-box__cancel-label {
+    margin: *; /* centers both axes in the button box */
+    @font-sm-medium; /* Poppins 500 / 14dip */
+    line-height: 21dip; /* Figma label box 21dip */
+    color: var(--color-core-deep);
+    white-space: nowrap;
+  }
+  .message-box__ok {
+    flow: horizontal;
+    height: 40dip;
+    margin-left: 8dip; /* CTA gap per design */
+    margin-right: *;   /* star pair with .message-box__cancel's margin-left */
+  }
+}

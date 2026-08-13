@@ -1,0 +1,35 @@
+<html
+  window-frame="solid-with-shadow"
+  window-width="512dip"
+  window-height="430dip"
+  window-alignment="-5"
+  window-resizable="false"
+>
+  <!-- Dialog window document — the SDK custom-dialog shape (docs/md/DOM/Window.md
+       § modal({params}) + docs/md/HTML/html-window.md): root window-* attributes carry the
+       frame, the 512x430dip outer size, and alignment -5 (centered against the parent window).
+       Shown via ShowMessageBox() in MessageBox.js; props arrive as Window.this.parameters. -->
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style src="../../lib/tokens.css" />
+    <style src="../../lib/typography.css" />
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: var(--color-bg-white);
+      }
+      body {
+        width: *;
+        height: *;
+        overflow: hidden; /* the card's outside box-shadow (2dip) must not spawn scrollbars */
+      }
+    </style>
+    <script type="module">
+      import { MessageBoxBody } from "./MessageBox.js";
+      document.body.content(JSX(MessageBoxBody, Window.this.parameters ?? {}, []));
+    </script>
+  </head>
+  <body></body>
+</html>

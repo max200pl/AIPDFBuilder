@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0",
+  "seed": true,
+  "generated_by": "sciter-create-page (dialog-idioms seed, 2026-08-12)",
+  "note": "Skeleton — only dialog_idioms is populated, from the Sciter SDK dialog baseline (AUTO-GENERATED; review). Replace this file wholesale via /analyze-frontend once real conventions exist in res/.",
+  "dialog_idioms": {
+    "auto_generated": true,
+    "base_class": "",
+    "discriminator": [
+      {
+        "family": "modalWindow",
+        "signal": "any dialog / modal-window surface"
+      }
+    ],
+    "dismiss": {
+      "close_path": "Window.this.close([value])",
+      "return_value_enum": "",
+      "return_value_protocol": ""
+    },
+    "families": [
+      {
+        "body_export": null,
+        "factory_export": "default",
+        "factory_prefix": "Show",
+        "file_shape": "single-export-inline",
+        "import_path": "modalWindow",
+        "layout_base": "",
+        "mechanism": "modal-window",
+        "name": "modalWindow",
+        "show_backdrop": "modalBackdrop",
+        "show_backdrop_param": "showBackdrop",
+        "source_file": "",
+        "window_frame": "variable",
+        "window_frame_param": "frameType"
+      }
+    ],
+    "file_contract": "single-export-inline (one Show<Name> factory, inline kids body, no separate body export) — SDK baseline",
+    "inventory": [],
+    "provenance": "seed",
+    "review_note": "AUTO-GENERATED from the Sciter SDK dialog baseline — no dialog convention was detected in this project. This is a minimal SDK-grounded start (reference-sciter-dialogs.md), NOT a discovered project architecture: review the family name, layout-base, backdrop token, and frame, then correct before relying on it.",
+    "substrate": [],
+    "trigger_idioms": [
+      "dialog-route",
+      "direct"
+    ]
+  }
+}

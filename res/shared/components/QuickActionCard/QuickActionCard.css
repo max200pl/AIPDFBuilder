@@ -1,0 +1,64 @@
+/* QuickActionCard — Figma file 2jGq5p5qY4lsf5QK2stfOY, node 3760:15072 ("State=Default", 148×148).
+ * Styling per .claude/docs/reference-styling-flow.md (tokens via var(); type ONLY via the
+ * typography.css @mixin set — the Sciter font shorthand is broken with variable tokens) +
+ * toolkit reference-sciter-styling.md / reference-sciter-css.md.
+ *
+ * Geometry note: the design's 16/8 insets are NOT root padding — Sciter anchors star/spring
+ * children at the border-box origin and ignores parent padding for them (calibrated quirk,
+ * Gate-1 proven: padded root rendered the content at x:0 w:148). The sanctioned remedy is
+ * explicit margins on the child, which is what positions the content frame at x:8 y:26 w:132
+ * h:96 exactly as in Figma (1dip inside stroke does not offset children in the design). */
+@import url(../../lib/typography.css);
+
+@set quick-action-card {
+  :root {
+    box-sizing: border-box;
+    width: 148dip;
+    height: 148dip;
+    background: var(--color-bg-white);
+    border: 1dip solid var(--color-border-light);
+    border-radius: var(--radius-sm);
+    flow: vertical;
+    cursor: pointer;
+  }
+
+  .quick-action-card__content {
+    display: block;
+    width: *;
+    height: 96dip;
+    margin-top: *;    /* spring pair — centers the 96dip block vertically in the card */
+    margin-bottom: *;
+    margin-left: 7dip;  /* + 1dip border = the design's 8dip side inset → x:8, w:132 */
+    margin-right: 7dip;
+    flow: vertical;
+  }
+
+  .quick-action-card__icon {
+    display: block;   /* icon boxes in flow:vertical must be block to center (feedback_ssim_icon_in_flow) */
+    width: 40dip;
+    height: 40dip;
+    margin-left: *;   /* spring pair — center the 40dip box in the 132dip content width */
+    margin-right: *;
+    margin-top: *;    /* spring — pairs with the label's margin-bottom:* to center icon+label in 96dip */
+    margin-bottom: 16dip; /* design gap between icon and label */
+    /* Glyph via foreground-image (url set inline from the icon prop): renders the SVG at its
+     * NATURAL size, centered — an <img> child stretches to fit the 40dip box (pixel-proven:
+     * glyph 39×30 instead of 33×25) and Sciter ignores width:max-intrinsic on it. */
+    foreground-repeat: no-repeat;
+    foreground-position: 50% 50%;
+  }
+
+  .quick-action-card__label {
+    display: block;
+    width: *;
+    @font-sm-medium;
+    line-height: 150%; /* design text box is 21dip (14 × 1.5); the mixin's 100% undersizes it */
+    color: var(--color-text-primary);
+    text-align: center;
+    margin-bottom: *;  /* spring — pairs with the icon's margin-top:* */
+  }
+
+  .quick-action-card__label--solo {
+    margin-top: *;     /* no icon (e.g. the "Customize" card): the label centers alone */
+  }
+}

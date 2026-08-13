@@ -1,5 +1,5 @@
 {
-  "calibrated_at": "2026-08-12T14:09:16+00:00",
+  "calibrated_at": "2026-08-13T10:05:40+00:00",
   "compare": {
     "distinct": 0.0001,
     "identity": 1.0,
@@ -15,6 +15,15 @@
             ],
             "files": [
               "C:\\____WORK____\\AIPDFBuilder\\res\\shared\\fonts\\poppins\\Poppins-Light.ttf"
+            ],
+            "files_on_disk": true
+          },
+          "400": {
+            "declared_in": [
+              "C:\\____WORK____\\AIPDFBuilder\\res\\shared\\lib\\typography.css"
+            ],
+            "files": [
+              "C:\\____WORK____\\AIPDFBuilder\\res\\shared\\fonts\\poppins\\Poppins-Regular.ttf"
             ],
             "files_on_disk": true
           },
@@ -475,12 +484,154 @@
     "Yu Gothic UI Semilight"
   ],
   "invalidation": {
-    "fingerprint": "83443a764b85b49fd3b1dcdf446122affef84436619ccdbe8a9aac1589710927",
+    "fingerprint": "1701ed44538e090f718c8d59f840248a7c514a34e5ee8ac9b57a20ea715ffb20",
     "sciter_version": "5.0.3.21"
   },
   "layout": {
-    "error": "layout-matrix fixture not found: C:\\____WORK____\\AIPDFBuilder\\.claude\\state\\layout-matrix.preview.js",
-    "ok": false
+    "capture_png": "C:\\____WORK____\\AIPDFBuilder\\.claude\\state\\layout-matrix.png",
+    "cases": [
+      {
+        "actual": [
+          1,
+          1
+        ],
+        "expected": [
+          0.0,
+          0.0
+        ],
+        "name": "lt",
+        "ok": true
+      },
+      {
+        "actual": [
+          41,
+          1
+        ],
+        "expected": [
+          41.0,
+          0.0
+        ],
+        "name": "ct",
+        "ok": true
+      },
+      {
+        "actual": [
+          81,
+          1
+        ],
+        "expected": [
+          82,
+          0.0
+        ],
+        "name": "rt",
+        "ok": true
+      },
+      {
+        "actual": [
+          1,
+          23
+        ],
+        "expected": [
+          0.0,
+          24.0
+        ],
+        "name": "lm",
+        "ok": true
+      },
+      {
+        "actual": [
+          41,
+          23
+        ],
+        "expected": [
+          41.0,
+          24.0
+        ],
+        "name": "cm",
+        "ok": true
+      },
+      {
+        "actual": [
+          81,
+          23
+        ],
+        "expected": [
+          82,
+          24.0
+        ],
+        "name": "rm",
+        "ok": true
+      },
+      {
+        "actual": [
+          1,
+          46
+        ],
+        "expected": [
+          0.0,
+          48
+        ],
+        "name": "lb",
+        "ok": true
+      },
+      {
+        "actual": [
+          41,
+          46
+        ],
+        "expected": [
+          41.0,
+          48
+        ],
+        "name": "cb",
+        "ok": true
+      },
+      {
+        "actual": [
+          81,
+          46
+        ],
+        "expected": [
+          82,
+          48
+        ],
+        "name": "rb",
+        "ok": true
+      },
+      {
+        "caption_cx": 85.0,
+        "illus_cx": 45.0,
+        "informational": true,
+        "name": "empty_state_offcentre",
+        "reproduces_documented": true
+      },
+      {
+        "detail": {
+          "group_centred": true,
+          "horizontal_order": true,
+          "inside_button": true
+        },
+        "name": "button_icontext",
+        "ok": true
+      },
+      {
+        "detail": {
+          "no_overlap": true,
+          "same_row": true
+        },
+        "name": "two_buttons_row",
+        "ok": true
+      }
+    ],
+    "ok": true,
+    "quirks": [
+      "multi-child under a SHARED alignElements centre: the narrower child hugs the block's left edge (renders off-centre) — give each differently-sized element its OWN centring container/row."
+    ],
+    "rules": [
+      "alignElements positions a SINGLE child exactly on both axes (l/c/r x t/m/b all land within tolerance).",
+      "image+text kids inside a button lay out as a centred horizontal group (icon before text).",
+      "two buttons side by side lay out left-to-right on one row (no overlap)."
+    ]
   },
   "project_readiness": [
     {
@@ -494,9 +645,9 @@
       "status": "ok"
     },
     {
-      "detail": "no .sdt-preview-shim.js found anywhere under the project — Step 0b's shim auto-load has nothing to load; a preview may render blank on any component whose base class touches an app-shell global",
+      "detail": "C:\\____WORK____\\AIPDFBuilder\\res\\.sdt-preview-shim.js",
       "name": "preview_shim",
-      "status": "missing"
+      "status": "ok"
     },
     {
       "detail": "FIGMA_ACCESS_TOKEN set in .env",

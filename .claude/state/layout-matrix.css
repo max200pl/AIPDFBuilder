@@ -1,0 +1,144 @@
+/* .claude/state/layout-matrix.css
+ * Doc-driven layout-matrix fixture styles — written by /calibrate-building-process (Step 4.7),
+ * consumed by layout-matrix.preview.js and rendered/assessed by `sciter-devtools calibrate`.
+ *
+ * Every idiom here is grounded in THIS project's docs / verified components — nothing invented:
+ * - @set with :root wrapper: bare declarations directly inside @set are SILENTLY DROPPED
+ *   (feedback_ssim_styleset_root #1, verified scapp 5.0.3.21).
+ * - Spring margins (`margin-*: *`): the sanctioned positioning idiom — one-sided spring pushes
+ *   the child to the opposite edge, a pair centers it (QuickActionCard.css).
+ * - content-*-align group centering on a <div> root, never a native <button>
+ *   (PrimaryButton.css + feedback_ssim_styleset_root #3).
+ * - display:block on boxes/imgs inside a flow parent — inline-block children ignore
+ *   content-*-align (feedback_ssim_icon_in_flow / feedback_ssim_display_block).
+ * - dip units throughout (frontend-components.md).
+ * - No padding on fixed-height roots — Sciter renders content-box (feedback_ssim_styleset_root
+ *   #2); gaps are carried as child margins.
+ * - Colors use project tokens with literal fallbacks: this fixture must isolate POSITIONING, so
+ *   it stays renderable even if the harness document doesn't carry tokens.css.
+ * - Captions use font-size longhand only — the broken form is the `font:` shorthand fed var()
+ *   (feedback_ssim_typography); no shorthand, no var() type here.
+ */
+
+@set layout-matrix {
+  :root {
+    display: block;
+    width: 420dip;
+    background: var(--color-bg-white, #ffffff);
+    color: var(--color-text-primary, #202020);
+  }
+
+  .matrix__title {
+    display: block;
+    font-size: 10dip;
+    margin: 6dip 8dip 2dip 8dip;
+  }
+
+  .matrix__row {
+    flow: horizontal;
+    margin: 2dip 8dip;
+  }
+
+  .matrix__case {
+    flow: vertical;
+    margin: 4dip 6dip;
+  }
+
+  .matrix__caption {
+    display: block;
+    font-size: 9dip;
+    margin-bottom: 3dip;
+  }
+
+  /* --- 3x3 alignElements grid ------------------------------------------------------------- */
+
+  .matrix__cell {
+    display: block;
+    width: 108dip;
+    height: 64dip;
+    border: 1dip solid #b3b3b3;
+    flow: vertical;
+  }
+
+  .matrix__box {
+    display: block;
+    width: 28dip;
+    height: 18dip;
+    background: var(--color-primary, #2f6fed);
+  }
+
+  /* Per-combo positioning via the spring-margin idiom (QuickActionCard.css). */
+  .h-l { margin-right: *; }
+  .h-c { margin-left: *; margin-right: *; }
+  .h-r { margin-left: *; }
+  .v-t { margin-bottom: *; }
+  .v-m { margin-top: *; margin-bottom: *; }
+  .v-b { margin-top: *; }
+
+  /* --- EmptyState bundle: narrow illustration above a WIDER caption, ONE shared centre ------ */
+  /* INFORMATIONAL case: children of a content-aligned parent align as ONE shrink-wrapped block,
+     never individually (feedback_ssim_centering) — re-verifies whether the narrow illustration
+     therefore sits off-centre on this engine. */
+
+  .matrix__empty-cell {
+    display: block;
+    width: 140dip;
+    height: 84dip;
+    border: 1dip solid #b3b3b3;
+    flow: vertical;
+    content-horizontal-align: center;
+    content-vertical-align: middle;
+  }
+
+  .matrix__illus {
+    display: block;
+    width: 36dip;
+    height: 26dip;
+    background: var(--color-primary, #2f6fed);
+    margin-bottom: 6dip;
+  }
+
+  .matrix__empty-caption {
+    display: block;
+    width: 116dip; /* deliberately wider than the 36dip illustration */
+    font-size: 9dip;
+    text-align: center;
+  }
+
+  /* --- image+text-in-a-button (PrimaryButton idiom: <div> root, group-centered kids) -------- */
+
+  .matrix__btn {
+    display: block;
+    width: 128dip;
+    height: 32dip;
+    background: var(--color-core-deep, #090c11);
+    border-radius: var(--radius-button, 5dip);
+    flow: horizontal;
+    content-horizontal-align: center;
+    content-vertical-align: middle;
+    cursor: pointer;
+  }
+
+  .matrix__btn-icon {
+    display: block; /* imgs default inline-block and ignore content-*-align (feedback_ssim_icon_in_flow) */
+    width: 14dip;
+    height: 14dip;
+    margin-right: 6dip;
+  }
+
+  .matrix__btn-text {
+    display: block;
+    font-size: 10dip;
+    color: var(--color-text-light, #ffffff);
+    white-space: nowrap;
+  }
+
+  /* --- two buttons side by side -------------------------------------------------------------- */
+
+  .matrix__btnrow {
+    flow: horizontal;
+  }
+
+  .matrix__btn--small { width: 56dip; }
+  .matrix__btn--b { margin-left: 8dip; }
+}

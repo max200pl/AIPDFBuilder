@@ -1,0 +1,104 @@
+/*
+ * FeaturesRibbon.css — styleset for FeaturesRibbon.js (consumed via
+ * __DIR__ + "FeaturesRibbon.css#features-ribbon").
+ * Styling per .claude/docs/reference-styling-flow.md (project stepper: token-first ->
+ * styleset -> typography mixins only, never shorthand-assembled type -> dip units) with
+ * toolkit fallback reference-sciter-styling.md / reference-sciter-css.md for @set syntax.
+ * Icon pattern follows project convention — see .claude/docs/reference-icon-connection.md
+ * (static active-state glyph, baked design color — no host fill/tint).
+ */
+
+/* Shared typography mixins (@font-xs-medium) — shared lib import, not a sibling component. */
+@import url(../../lib/typography.css);
+
+@set features-ribbon {
+  :root {
+    box-sizing: border-box; /* Sciter defaults to content-box — without this the root renders
+                               48dip tall (40 + borders + padding) and underhangs the band
+                               (measured: 48dip body in the first capture) */
+    height: 40dip;
+    flow: horizontal;
+    /* Design shows a 4dip vertical inset with 1dip borders drawn as Figma inner strokes
+       (non-layout). Under border-box sizing, 3dip padding + the 1dip border reproduces
+       the 32dip content band exactly (icon row at y=4, derived spec). */
+    padding: 3dip 8dip;
+    background: var(--color-bg-white);
+    border-top: 1dip solid var(--color-border-light);
+    border-bottom: 1dip solid var(--color-border-light);
+    overflow: none;
+  }
+
+  .features-ribbon__group {
+    /* The 32dip content band (icon-button height). `height: *` here resolved against the
+       root's border box (40dip) in Sciter, sinking every middle-aligned child by a few
+       pixels (Gate-1 measured); the explicit band height matches the design geometry. */
+    height: 32dip;
+    flow: horizontal;
+  }
+
+  .features-ribbon__home {
+    vertical-align: middle;
+  }
+
+  .features-ribbon__home-button {
+    width: 32dip;
+    height: 32dip;
+    border-radius: var(--radius-sm);
+    background: var(--color-bg-hover); /* #e5edfa — the active/selected Home state */
+    flow: vertical;
+  }
+
+  .features-ribbon__home-icon {
+    display: block; /* agent-memory feedback_ssim_icon_in_flow: block img + flex margins */
+    width: 18dip;
+    height: 18dip;
+    margin: *; /* flex margins — deterministic centering in the 32x32 button */
+  }
+
+  .features-ribbon__divider {
+    margin-left: 4dip; /* group gap (margin idiom, never offset/padding stacking) */
+    padding-left: 8dip; /* design: 8dip lead-in before the bar */
+    height: 20dip;
+    vertical-align: middle;
+    flow: horizontal;
+  }
+
+  .features-ribbon__divider-bar {
+    width: 1.25dip;
+    height: *;
+    background: var(--color-border-light);
+    border-radius: var(--radius-sm);
+  }
+
+  .features-ribbon__tabs {
+    margin-left: 4dip; /* group gap */
+    height: 25dip;
+    vertical-align: middle;
+    flow: horizontal;
+  }
+
+  .features-ribbon__tab {
+    height: 25dip;
+    padding: 0 8dip; /* horizontal per design; vertical centering via label flex margins */
+    border-radius: var(--radius-md);
+    background: var(--color-bg-white);
+    flow: vertical;
+    cursor: pointer; /* click-stub tier — interactive surface */
+  }
+
+  .features-ribbon__tab + .features-ribbon__tab {
+    margin-left: 8dip; /* tab gap (margin idiom) */
+  }
+
+  .features-ribbon__tab-label {
+    @font-xs-medium;
+    /* Figma's text box is 18dip high (Poppins 12 at the design's 150% default line);
+       the mixin's 100% line-height would top-anchor the label at 12dip. 18dip matches
+       the derived-spec text geometry (h=18, centered in the 25dip tab). */
+    line-height: 18dip;
+    color: var(--color-text-primary);
+    display: block;
+    margin: * 0; /* vertical flex margins — center the 18dip line in the 25dip tab */
+    white-space: nowrap;
+  }
+}

@@ -1,0 +1,63 @@
+/*
+ * res/shared/components/PrimaryButton/PrimaryButton.css
+ * Sources: .claude/docs/reference-styling-flow.md (project stepper: tokens -> styleset ->
+ * typography mixins -> dip units) + component-creator docs/reference-sciter-styling.md +
+ * docs/reference-sciter-css.md (toolkit fallback / syntax).
+ * Figma: file 2jGq5p5qY4lsf5QK2stfOY, node 2371:7625 ("Size=40, State=Default, Icons=No Icon",
+ * 200x40).
+ *
+ * Sciter quirks honored here (verified this wave):
+ * - Bare declarations directly inside a @set block are SILENTLY DROPPED — root-element styles
+ *   must be wrapped in :root { } inside the @set.
+ * - box-sizing defaults to content-box in Sciter — set border-box explicitly so height 40dip
+ *   includes the 6dip vertical padding.
+ * - Root is a <div> (project convention — see SortBy), not a native <button>: the scapp button
+ *   behavior brings its own UA face + caption layout that compete with styleset styling. Click
+ *   semantics come from the component's ["on click"] handler.
+ */
+
+@set primary-button {
+  :root {
+    display: inline-block;
+    vertical-align: middle;
+    height: 40dip;
+    min-width: 200dip;
+    /* no root padding: Sciter renders content-box (a declared box-sizing: border-box still
+       rendered content-box — Gate-1 verified a +6 y-shift and a 6-unit bottom overflow), so
+       padding would inflate the 40dip box. The design's 6/16 padding is carried as margins on
+       the centered child instead (sanctioned child-margin idiom). */
+    border: none;
+    background-color: var(--color-core-deep); /* #090c11 (longhand on purpose — immune to any
+                                                 shorthand+var() parsing quirk, same caution
+                                                 class as the documented type-shorthand bug) */
+    border-radius: var(--radius-button); /* 5dip */
+    flow: horizontal;
+    content-horizontal-align: center;
+    content-vertical-align: middle;
+    cursor: pointer; /* click-stub tier: whole button is the click surface */
+  }
+
+  .primary-button__icon-text {
+    flow: horizontal;
+    margin: 6dip 16dip; /* the design's root padding (6/16), carried as child margins — keeps
+                           the min edge spacing while content-align centers the margin block */
+    /* design gap is 8dip between icon and label; the No-Icon master has a single child, so the
+       gap materializes as a margin on the icon once an Icons=Yes variant is built */
+  }
+
+  .primary-button__label {
+    flow: horizontal;
+  }
+
+  .primary-button__text {
+    @font-sm-medium;
+    line-height: 20dip; /* Figma label frame box is 20dip tall (node 2371:7565) — overrides the
+                           mixin's 100% so the rendered box matches the design geometry */
+    min-width: 104dip; /* Figma text-node box is 104dip wide (node 2371:7566 — fixed-width text
+                          box in the master); min-width keeps the design box while longer labels
+                          can still grow */
+    text-align: center;
+    color: var(--color-text-light); /* #ffffff */
+    white-space: nowrap;
+  }
+}

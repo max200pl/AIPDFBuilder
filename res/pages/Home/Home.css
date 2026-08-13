@@ -1,0 +1,115 @@
+/* Home page styleset — Figma file 2jGq5p5qY4lsf5QK2stfOY, screen-set node 2001:385 (1920×1030,
+ * fluid here). Tokens from ../../shared/lib/tokens.css (document-level); type mixins imported
+ * below. Engine facts applied (Gate-1-proven by this wave's component builds): declarations for
+ * the styleset root live in :root{}; box-sizing border-box everywhere; child offsets are child
+ * MARGINS, never parent padding; spring margins (*) center fixed-width children. */
+
+@import url(../../shared/lib/typography.css);
+
+@set home {
+  :root {
+    flow: vertical;
+    width: *;
+    height: *;
+    box-sizing: border-box;
+    background: var(--color-bg-workspace);
+  }
+
+  /* ── Main two-column region (design: Main Content 1920×942, px 80 / py 24) ─────────────── */
+  .home__main { flow: horizontal; width: *; height: *; box-sizing: border-box; }
+
+  /* Left column = main pad 80 + Customize panel 472 (its own pad 80/24) → cards at (160, 48) */
+  .home__left { width: 552dip; height: *; flow: vertical; box-sizing: border-box; }
+  .home__cards { margin: 48dip 0 0 160dip; width: 312dip; flow: vertical; }
+  .home__cards-row { flow: horizontal; margin-bottom: 16dip; }
+  .home__cell--gap { margin-left: 16dip; }
+
+  /* Right region spans 552→window edge (1368 at design width) — exactly the drag-drop tint rect
+   * (Figma 3761:7807: #0048CE @ 10% = --color-accent-blue @ 10%). */
+  .home__right { width: *; height: *; flow: vertical; box-sizing: border-box; }
+  .home__right--dropzone { background: rgba(0, 72, 206, 0.1); }
+  /* True Recent Section = right region minus the main right pad 80 */
+  .home__recent { margin-right: 80dip; width: *; height: *; flow: vertical; box-sizing: border-box; }
+
+  /* ── List / grid states: Recent Block 1128 wide at (80, 48) inside the recent section ───── */
+  .home__recent-block { margin: 48dip 0 0 80dip; width: 1128dip; flow: vertical; }
+  .home__toolbar { flow: horizontal; height: 40dip; width: *; }
+  .home__heading {
+    @font-lg-semibold;
+    line-height: 28dip;
+    color: var(--color-text-primary);
+    margin: 6dip 0;
+    width: *;
+  }
+  .home__sorting { flow: horizontal; height: 40dip; }
+  .home__sorting-toggle { margin: 8dip 0 8dip 16dip; width: 24dip; height: 24dip; }
+
+  .home__list {
+    margin-top: 24dip;
+    width: *;
+    height: 720dip;
+    flow: vertical;
+    box-sizing: border-box;
+    background: var(--color-bg-white);
+    border: 1dip solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    overflow-y: auto;
+  }
+
+  .home__grid { margin-top: 24dip; width: *; flow: vertical; }
+  .home__grid-row { flow: horizontal; }
+  .home__grid-row--second { margin-top: 32dip; }
+  .home__tile--gap { margin-left: 24dip; }
+
+  /* ── Empty / drag-drop states (design: centered column, pt 140, gap 24) ─────────────────── */
+  .home__empty { margin-top: 140dip; width: *; flow: vertical; }
+  .home__empty-visual { width: 222dip; height: 200dip; margin-left: *; margin-right: *; }
+  .home__empty-title {
+    @font-lg-semibold;
+    line-height: 28dip;
+    color: var(--color-text-primary);
+    width: 352dip;
+    margin: 24dip * 0 *;
+    text-align: center;
+  }
+  .home__empty-body {
+    @font-base-regular;
+    line-height: 24dip;
+    color: var(--color-text-primary);
+    width: 352dip;
+    margin: 24dip * 0 *;
+    text-align: center;
+  }
+  .home__empty-cta { margin: 24dip * 0 *; }
+
+  /* ── Dialog state: full-window scrim + centered card (design: Overlay 13043:1665 =
+   * Core/Deep #090C11 @ 90%; MessageBox card at (704, 140) = horizontally centered) ────────── */
+  /* position:fixed + EXPLICIT dip size. S2-capture-proven engine facts on scapp 5.0.3.21:
+   * fixed + width/height 100% collapses to a content-width stripe; edge-pinned absolute
+   * (left/top/right/bottom 0) shifts the whole page flow by the overlay child's margins.
+   * Fixed with explicit dips leaves the page flow intact and anchors to the window. The literal
+   * 1920x1030 matches the design frame / preview viewport; the running app opens this dialog as
+   * a real modal window instead (see renderDialogLayer TODO), so the fixed size is
+   * preview-geometry, not production chrome. */
+  .home__scrim {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 1920dip;
+    height: 1030dip;
+    background: rgba(9, 12, 17, 0.9);
+    flow: vertical;
+  }
+  .home__dialog-card { margin: 140dip * 0 *; width: 512dip; }
+
+  /* Dialog phase: freeze page scrolling. The scrim overlays the CONTENT, but a live scroller
+     still paints its scrollbar chrome above the backdrop — both the page root and the
+     .home__list row scroller must stop scrolling while the dialog is up. Keyed off the
+     data-view-state attribute the render already stamps on the styleset root. */
+  :root[data-view-state="dialog"] {
+    overflow: hidden;
+  }
+  :root[data-view-state="dialog"] .home__list {
+    overflow-y: hidden;
+  }
+}

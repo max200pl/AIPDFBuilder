@@ -71,6 +71,31 @@ export class Home extends Element {
 }
 ```
 
+## Dialog file-shape
+
+AUTO-GENERATED from the Sciter SDK dialog baseline (`dialog-idioms seed`, 2026-08-12) — no dialog
+convention existed in this project when the first dialog (`MessageBox`) was built; review/correct
+this section (and the `dialog_idioms` block in `.claude/state/frontend-analysis.json`) before
+relying on it.
+
+- **Family**: `modalWindow` (SDK baseline) — mechanism: a real modal window, not an inline
+  `.modal-overlay` div.
+- **File shape**: **single-export-inline** — one `Show<Name>(...)` factory is the module's export;
+  the dialog body is inline JSX inside the factory (no separate `ComponentCreator` body export).
+- **Placement**: `res/shared/dialogs/<Name>/<Name>.js` (+ sibling `.css`) — seeded this run with
+  `MessageBox`.
+- **Dismissal**: `Window.this.close([value])` from inside the dialog window.
+- **Trigger idioms** (unresolved which becomes convention; first real caller decides): direct call
+  (`ShowMessageBox(...)`) or a `"modal"` router slot (`registerSlot("modal", ...)` — the slot
+  router already supports it).
+
+## Page placement (resolved this run)
+
+The first real page landed at `res/pages/<PageName>/<PageName>.js` (+ `.css`, `.preview.js`,
+`.Types.d.ts` when state-aware) — resolving the `res/pages/` vs `res/views/` SEED question in
+[Frontend Architecture](reference-architecture-frontend.md) in favor of `res/pages/`. The earlier
+`res/shared/pages/Home/Home.js` sketch in this doc predates that decision.
+
 ## Handoff
 
 Once a real `App` shell + at least one page exist and the router is actually wired,

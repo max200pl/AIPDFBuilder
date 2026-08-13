@@ -1,0 +1,165 @@
+/*
+ * SystemRibbon styleset — Figma file 2jGq5p5qY4lsf5QK2stfOY, node 2139:586 (1920x48 system bar).
+ * Sources: .claude/docs/reference-styling-flow.md (project stepper: tokens -> styleset -> mixin ->
+ * dip) + toolkit reference-sciter-styling.md / reference-sciter-css.md (fallback syntax).
+ * Layout: left/right groups are absolutely positioned over an in-flow full-width title layer, so
+ * the title centers on the WHOLE bar (design: text center = bar center, not leftover-space center)
+ * while the buttons stay on top for hit-testing.
+ */
+
+@set system-ribbon {
+  :root {
+    display: block;
+    width: *;
+    height: 48dip;
+    background: var(--color-core-deep);
+    overflow: none;
+  }
+
+  /* Center title — absolutely centered in the bar (Figma text box: x826 y13 w268 h21 @1920). */
+  .system-ribbon__title-layer {
+    display: block;
+    width: *;
+    padding-top: 13dip; /* Figma text-box y = 13dip (content-box: no height, so 13+21 stays inside 48) */
+    text-align: center;
+  }
+  .system-ribbon__title {
+    display: inline-block;
+    @font-sm-medium; /* Poppins Medium 14 — mixin from typography.css (project rule) */
+    line-height: 21dip; /* Figma text-box height 21dip (14dip Poppins Medium) */
+    color: var(--color-text-light);
+    white-space: pre; /* single line; preserve the double spaces around the dash */
+  }
+
+  /* Left group: logo tile + 8dip gap + 8 icon buttons (Figma frame x0 w440). */
+  .system-ribbon__left {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 48dip;
+    flow: horizontal;
+  }
+
+  /* Sciter sizes width/height as CONTENT-box: inner boxes are placed with margins, not padding
+     (padding would inflate the fixed 48dip tiles — Gate-1-proven: 48+12+12 rendered 72). */
+  /* overflow: none on every fixed-size tile: at fractional-ppx DPI scales (1.25), inner margins
+     that round to half physical pixels otherwise EXPAND the fixed box by +1ppx each (Sciter
+     width yields to content; Gate-1-proven +1ppx/tile creep -> plus six physical pixels across
+     the left group). */
+  .system-ribbon__logo {
+    display: block;
+    width: 48dip;
+    height: 48dip;
+    overflow: none;
+    background: var(--color-core-deep);
+  }
+  .system-ribbon__logo-mark {
+    display: block;
+    width: 34dip;
+    height: 34dip;
+    overflow: none;
+    margin: 7dip; /* red square at (7,7) inside the 48 tile */
+    background: #f34; /* design literal — brand red, no token in tokens.css (unmapped-token) */
+    border-radius: var(--radius-sm);
+    /* 13x17 S glyph centered on the red square — foreground paint, no layout impact */
+    foreground-image: url(img/soda-s.svg);
+    foreground-repeat: no-repeat;
+    foreground-position: 50% 50%;
+  }
+
+  .system-ribbon__actions {
+    margin-left: 8dip; /* gap between logo tile and the icon row */
+    height: 48dip;
+    flow: horizontal;
+  }
+
+  /* Right group: three window buttons, 8dip from the right edge (Figma frame x1768 w144). */
+  .system-ribbon__right {
+    position: absolute;
+    right: 8dip;
+    top: 0;
+    height: 48dip;
+    flow: horizontal;
+  }
+
+  .system-ribbon__btn {
+    display: block;
+    width: 48dip;
+    height: 48dip;
+    overflow: none;
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: transparent;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+  }
+
+  /* NO position:relative here — in Sciter it re-anchors the box out of the button flow
+     (Gate-1-proven: a 34dip y shift). The print composite stacks in-flow instead (see below). */
+  .system-ribbon__icon24 {
+    display: block;
+    width: 24dip;
+    height: 24dip;
+    overflow: none;
+    margin: 12dip; /* centers the 24 box in the 48 button (content-box-safe) */
+  }
+
+  /* Glyphs paint at their exported SVG's natural size (stroke extents included), centered in the
+     24 box via foreground-position — paint only, zero layout impact (the +1ppx creep fix). */
+  .system-ribbon__icon24--undo,
+  .system-ribbon__icon24--redo,
+  .system-ribbon__icon24--open,
+  .system-ribbon__icon24--save,
+  .system-ribbon__icon24--email,
+  .system-ribbon__icon24--plus,
+  .system-ribbon__icon24--chevron,
+  .system-ribbon__icon24--minimize,
+  .system-ribbon__icon24--maximize,
+  .system-ribbon__icon24--close {
+    foreground-repeat: no-repeat;
+    foreground-position: 50% 50%;
+  }
+  .system-ribbon__icon24--undo     { foreground-image: url(img/undo.svg); }
+  .system-ribbon__icon24--redo     { foreground-image: url(img/redo.svg); }
+  .system-ribbon__icon24--open     { foreground-image: url(img/open.svg); }
+  .system-ribbon__icon24--save     { foreground-image: url(img/save.svg); }
+  .system-ribbon__icon24--email    { foreground-image: url(img/email.svg); }
+  .system-ribbon__icon24--plus     { foreground-image: url(img/plus.svg); }
+  .system-ribbon__icon24--chevron  { foreground-image: url(img/chevron.svg); }
+  .system-ribbon__icon24--minimize { foreground-image: url(img/minimize.svg); }
+  .system-ribbon__icon24--maximize { foreground-image: url(img/maximize.svg); }
+  .system-ribbon__icon24--close    { foreground-image: url(img/close.svg); }
+
+  /* Composite print icon inside the 24 box: in-flow stacked rows, horizontally centered via
+     side margins (NO positioning — both Sciter position anchors are quirk-proven broken here;
+     see the JS comment). Rows: paper-in rect (y0-6), printer body (y6-17), paper tray (y17-24,
+     bottom stroke-bleed clipped by the icon24 overflow). */
+  .system-ribbon__print-top {
+    display: block;
+    width: 9dip;  /* + 2x1.5dip border = 12dip border box */
+    height: 3dip; /* + 2x1.5dip border = 6dip border box */
+    margin: 0 6dip;
+    border: 1.5dip solid var(--color-text-light);
+    border-top-left-radius: 1dip;
+    border-top-right-radius: 1dip;
+  }
+  .system-ribbon__print-main {
+    display: block;
+    width: 21dip;
+    height: 11dip;
+    margin: 0 1.5dip;
+    foreground-image: url(img/print-main.svg);
+    foreground-repeat: no-repeat;
+    foreground-position: 50% 50%;
+  }
+  .system-ribbon__print-tray {
+    display: block;
+    width: 15dip;
+    height: 9dip;
+    margin: 0 4.5dip;
+    foreground-image: url(img/print-tray.svg);
+    foreground-repeat: no-repeat;
+    foreground-position: 50% 0%;
+  }
+}

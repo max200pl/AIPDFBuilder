@@ -1,0 +1,20 @@
+/* res/shared/components/GridAndLists/GridAndLists.css
+ * Styling per .claude/docs/reference-styling-flow.md (tokens-first, dip units) with the
+ * toolkit fallback reference-sciter-styling.md / reference-sciter-css.md (@set styleset form).
+ * Design (Figma 2728:6825): bare 24x24 icon box — no background, no border. Raw 24dip is the
+ * icon's intrinsic size (pixel-perfect rule), not a spacing value, so no --space-* token applies.
+ */
+
+@set grid-and-lists {
+  :root {
+    width: 24dip;
+    height: 24dip;
+    cursor: pointer; /* click-stub tier: whole box is the click target */
+  }
+
+  :root > .grid-and-lists__icon {
+    display: block; /* <img> defaults to inline-block in Sciter — block kills offset/descender gap */
+    width: 24dip;
+    height: 24dip;
+  }
+}
