@@ -1,5 +1,5 @@
 {
-  "calibrated_at": "2026-08-13T10:05:40+00:00",
+  "calibrated_at": "2026-09-10T10:31:58+00:00",
   "compare": {
     "distinct": 0.0001,
     "identity": 1.0,
@@ -484,8 +484,8 @@
     "Yu Gothic UI Semilight"
   ],
   "invalidation": {
-    "fingerprint": "1701ed44538e090f718c8d59f840248a7c514a34e5ee8ac9b57a20ea715ffb20",
-    "sciter_version": "5.0.3.21"
+    "fingerprint": "f9d94d045c4e1127373422a9102df70ccaa16d9ebb257f16efa60390aa4cd7cd",
+    "sciter_version": null
   },
   "layout": {
     "capture_png": "C:\\____WORK____\\AIPDFBuilder\\.claude\\state\\layout-matrix.png",
@@ -493,7 +493,7 @@
       {
         "actual": [
           1,
-          1
+          0
         ],
         "expected": [
           0.0,
@@ -505,7 +505,7 @@
       {
         "actual": [
           41,
-          1
+          0
         ],
         "expected": [
           41.0,
@@ -517,7 +517,7 @@
       {
         "actual": [
           81,
-          1
+          0
         ],
         "expected": [
           82,
@@ -565,7 +565,7 @@
       {
         "actual": [
           1,
-          46
+          47
         ],
         "expected": [
           0.0,
@@ -577,7 +577,7 @@
       {
         "actual": [
           41,
-          46
+          47
         ],
         "expected": [
           41.0,
@@ -589,7 +589,7 @@
       {
         "actual": [
           81,
-          46
+          47
         ],
         "expected": [
           82,
@@ -621,6 +621,22 @@
         },
         "name": "two_buttons_row",
         "ok": true
+      },
+      {
+        "detail": {
+          "spring": {
+            "actual_y": 317,
+            "expected_y": 317.0
+          },
+          "va": {
+            "actual_y": 317,
+            "expected_y": 317.0
+          }
+        },
+        "name": "row_mixed_height_centering",
+        "ok": true,
+        "spring_centered": true,
+        "va_centered": true
       }
     ],
     "ok": true,
@@ -630,7 +646,8 @@
     "rules": [
       "alignElements positions a SINGLE child exactly on both axes (l/c/r x t/m/b all land within tolerance).",
       "image+text kids inside a button lay out as a centred horizontal group (icon before text).",
-      "two buttons side by side lay out left-to-right on one row (no overlap)."
+      "two buttons side by side lay out left-to-right on one row (no overlap).",
+      "both margin-top:*/margin-bottom:* AND vertical-align:middle correctly cross-axis-center a shorter sibling among other siblings of a different height in a flow:horizontal row on this engine — either technique is safe here."
     ]
   },
   "project_readiness": [
@@ -658,18 +675,23 @@
       "detail": "absent — gates default to report-only",
       "name": "pipeline_config",
       "status": "ok"
+    },
+    {
+      "detail": "styleset-bound text ignores document @font-face (Sciter quirk); these project-bundled faces are NOT OS-installed and will fall back to a system font in a packed Release until the native host OS-registers them: Poppins:300, Poppins:500, Poppins:600",
+      "name": "font_os_registration",
+      "status": "action"
     }
   ],
   "render": {
     "base_elements": {
       "button": {
-        "ok": true,
-        "uniform_fraction": 0.5835
+        "error": "calib-button: degenerate crop region",
+        "ok": false
       },
-      "ok": true,
+      "ok": false,
       "text": {
         "ok": true,
-        "uniform_fraction": 0.941
+        "uniform_fraction": 0.9293
       }
     },
     "capture": {
@@ -680,8 +702,8 @@
       "width_px": 300
     },
     "images": {
-      "ok": true,
-      "uniform_fraction": 0.405
+      "error": "calib-img: degenerate crop region",
+      "ok": false
     }
   },
   "schema": "calibration/1.4",
@@ -692,8 +714,8 @@
         "id": "styleset-ignores-doc-font-face"
       }
     ],
-    "scapp_path": "C:\\____WORK____\\Adaware\\third_parties\\sciter\\5.0.3.21\\bin\\windows\\x64\\scapp.exe",
-    "version": "5.0.3.21"
+    "scapp_path": "C:\\____WORK____\\sciter-js-sdk-main\\sciter-js-sdk-main\\bin\\windows\\x64\\scapp.exe",
+    "version": null
   },
   "status": "OK",
   "text_styles": []

@@ -141,4 +141,48 @@
 
   .matrix__btn--small { width: 56dip; }
   .matrix__btn--b { margin-left: 8dip; }
+
+  /* --- GP-680: mixed-height siblings sharing one flow:horizontal row ---------------------- */
+  /* Reproduces ToolsRibbon's real row shape (42dip row, a full-height sibling + shorter
+     siblings needing independent cross-axis centering) to verify EMPIRICALLY whether
+     spring-margin centering (tried first in the real build, then Gate-1-corrected) or
+     vertical-align-middle centering (the doc-sanctioned recipe) actually lands on this
+     engine. */
+
+  .matrix__mixed-row {
+    display: block; /* every OTHER working flow container in this fixture sets this
+                        explicitly (.matrix__cell, .matrix__btn) — omitting it on a bare
+                        div left flow:horizontal without effect (verified: children
+                        stacked/overlapped instead of sitting side by side). */
+    flow: horizontal;
+    width: 200dip;
+    height: 42dip;
+    border: 1dip solid #b3b3b3;
+  }
+
+  .matrix__mixed-tall {
+    display: block;
+    width: 60dip;
+    height: 42dip;
+    background: var(--color-border-light, #bdc9db);
+  }
+
+  .matrix__mixed-short {
+    display: block;
+    width: 30dip;
+    height: 20dip;
+    background: var(--color-primary, #2f6fed);
+    margin-left: 10dip;
+  }
+
+  /* Technique A — spring margin (the technique that failed in the real build). */
+  .matrix__mixed-short--spring {
+    margin-top: *;
+    margin-bottom: *;
+  }
+
+  /* Technique B — vertical-align:middle (the doc-sanctioned recipe). */
+  .matrix__mixed-short--va {
+    vertical-align: middle;
+  }
 }

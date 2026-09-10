@@ -70,6 +70,19 @@ export const Default = () => (
           </div>
         </div>
       </div>
+      {/* GP-680 case: verifies whether spring-margin cross-axis centering (which failed on
+          ToolsRibbon's divider/zoom-cluster in the real Edit build) or vertical-align-middle
+          centering actually lands, for a shorter sibling among other differently-sized
+          siblings sharing one horizontal row -- a different scenario from the 3x3 grid
+          above, which centers a lone child alone in its own fixed cell. */}
+      <div class="matrix__case">
+        <div class="matrix__caption">mixed-height row: spring vs vertical-align</div>
+        <div class="matrix__mixed-row">
+          <div id="lay-row-tall" class="matrix__mixed-tall" />
+          <div id="lay-row-short-spring" class="matrix__mixed-short matrix__mixed-short--spring" />
+          <div id="lay-row-short-va" class="matrix__mixed-short matrix__mixed-short--va" />
+        </div>
+      </div>
     </div>
   </div>
 );
