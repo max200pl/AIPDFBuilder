@@ -1,0 +1,75 @@
+/*
+ * TabDocRibbon.css — styleset for TabDocRibbon.js (consumed via
+ * __DIR__ + "TabDocRibbon.css#tab-doc-ribbon").
+ * Styling per .claude/docs/reference-styling-flow.md (project stepper: token-first ->
+ * styleset -> typography mixins only, never shorthand-assembled type -> dip units) with
+ * toolkit fallback reference-sciter-styling.md / reference-sciter-css.md for @set syntax.
+ * Mirrors the FeaturesRibbon.css box-sizing/centering idiom (verified on this project's
+ * scapp — feedback_ssim_styleset_root.md's border-box caveat does not apply here).
+ */
+
+/* Shared typography mixins (@font-xs-medium) — shared lib import, not a sibling component. */
+@import url(../../lib/typography.css);
+
+@set tab-doc-ribbon {
+  :root {
+    box-sizing: border-box; /* content band matches the Gate-1 derived spec's y-offsets
+                                (see FeaturesRibbon.css for the identical measured note) */
+    height: 40dip;
+    flow: horizontal;
+    padding: 0 36dip; /* horizontal only — design has no vertical inset on the root */
+    background: var(--color-bg-white);
+    border-top: 1dip solid var(--color-border-light); /* nearest light-UI border token —
+      --color-border (#333333) is the leftover dark-theme seed value, not this white ribbon's
+      hairline; --color-border-light (#bdc9db) is what FeaturesRibbon already uses for the
+      same top/bottom hairline pattern on a white band */
+    border-bottom: 1dip solid var(--color-border-light);
+    overflow: none;
+  }
+
+  .tab-doc-ribbon__tabs {
+    flow: horizontal;
+    height: *; /* fills the root's bordered content band */
+  }
+
+  .tab-doc-ribbon__tab {
+    box-sizing: border-box; /* keeps the 200dip width exact with the 12dip padding + 1dip
+      side borders included, matching the Gate-1 expected w=200 */
+    width: 200dip;
+    min-width: 72dip;
+    max-width: 200dip;
+    height: *; /* fills .tab-doc-ribbon__tabs — matches Gate-1 expected h=40 (full ribbon height) */
+    padding: 0 12dip; /* horizontal only; vertical centering via label flex margins below */
+    background: var(--color-surface-light); /* nearest light-gray token (#E8EBF0) — no
+      dedicated --color-bg-tabs token exists yet */
+    border-top: 1dip solid var(--color-border-light);
+    border-left: 1dip solid var(--color-border-light);
+    border-right: 1dip solid var(--color-border-light);
+    border-top-left-radius: var(--radius-sm); /* top corners only — nearest radius token;
+      exact design value not re-derivable without a second Figma call (out of scope) */
+    border-top-right-radius: var(--radius-sm);
+    flow: vertical;
+    cursor: pointer; /* click-stub tier — interactive surface */
+  }
+
+  .tab-doc-ribbon__tab + .tab-doc-ribbon__tab {
+    margin-left: 8dip; /* tab gap (margin idiom, never offset/padding stacking) */
+  }
+
+  .tab-doc-ribbon__tab-label {
+    @font-xs-medium; /* Poppins/500/12dip — exact match for this design's tab label; the
+      contract's optional 0.24dip letter-spacing is intentionally omitted (see component
+      header assumption note: unverified engine support + reference-sciter-css.md's explicit
+      "do NOT compensate with letter-spacing" guidance) */
+    /* The mixin's 100% line-height renders a 12dip-tall box (Gate-1 measured); the design's
+       text box is 18dip high (Poppins 12 at the design's 150% default line) — same override
+       FeaturesRibbon.css applies to @font-xs-medium for the identical text style. */
+    line-height: 18dip;
+    color: var(--color-text-primary);
+    display: block;
+    white-space: nowrap;
+    text-overflow: ellipsis; /* single-line label must not wrap in the fixed 200dip tab */
+    margin: * 0; /* vertical flex margins — center the label in the tab's full height,
+      matching the Gate-1 derived spec's text y=11 in a 40dip-tall tab */
+  }
+}

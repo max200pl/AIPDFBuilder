@@ -1,0 +1,1590 @@
+ ▐▛███▜▌   Claude Code v2.1.235
+▝▜█████▛▘  Fable 5 · Claude Enterprise
+  ▘▘ ▝▝    C:\____WORK____\AIPDFBuilder
+
+
+❯ /plugin                                                                       
+
+❯ /reload-plugins                                                               
+  ⎿  Reloaded: 5 plugins · 0 skills · 40 agents · 20 hooks · 1 plugin MCP server · 0 plugin LSP servers
+
+❯ /component-creator:sciter-create-page Implement this design from Figma.       
+@https://www.figma.com/design/2jGq5p5qY4lsf5QK2stfOY/-SANDBOX--Soda-15-Desktop- 
+%E2%80%93-Plugin-Test?node-id=2001-385&m=dev                                    
+  ⎿  Loaded .claude\rules\testing.md
+
+● [component-creator v0.7.100 | sciter-create-page]
+
+  I'll build this Figma frame as a page in the AIPDFBuilder project, following
+  the orchestrated create-page flow.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● [sciter-create-page] ▸ Step 0 — Pre-flight
+
+  Searched for 3 patterns, read 11 files, ran 1 shell command, recalled 3 memories (ctrl+o to expand)
+
+● The devtools venv doesn't exist yet at this plugin version's path — I need to
+  bootstrap it (the one sanctioned pre-P2 exception). Let me inspect the plugin
+  dir layout first.
+
+  Searched for 1 pattern, ran 3 shell commands (ctrl+o to expand)
+
+● Venv bootstrapped; doctor OK, banner under the plugin root (no mixed-copy).
+  Now calibrate-check, engine-parity, and Figma auth in parallel:
+
+  Called plugin:figma:figma, ran 1 shell command (ctrl+o to expand)
+
+● Skill(figma:figma-design-to-code)
+  ⎿  Successfully loaded skill
+
+  Searched for 1 pattern, read 1 file, listed 1 directory, called plugin:figma:figma 3 times, ran 14 shell commands (ctrl+o to expand)
+● Writing the full unit ledger and running the deterministic resolver (W12):
+
+  Listed 1 directory, ran 8 shell commands (ctrl+o to expand)
+
+● All asset ids harvested. Now fetching the 7 component-master JSONs and
+  deriving the Gate-1 specs:
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Path quoting bug — every spec overwrote specs$u.spec.json, and FileListRow's
+  master came back degenerate. Re-deriving with fixed paths and inspecting the
+  FileListRow master:
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● The earlier loop's fetches went to one overwritten literal-$u file. Refetching
+  masters properly:
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● FileListRow's master is empty in the REST payload ("File List/Middle/Default",
+  0 children). I'll derive its spec from the placed instance subtree (real
+  geometry), re-rooted as a component:
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● Specs are list-form with kebab keys. Applying small authored edits (semantic
+  ids + ellipsis on the truncating path cell), then writing the per-root preview
+  shim:
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Write(res\.sdt-preview-shim.js)
+  ⎿  Added 7 lines, removed 24 lines
+       1 -/**                                                            
+       2 - * sciter-devtools preview shim (R2) — root-wide app-shell side
+         - effects every headless                                        
+       3 - * preview/state-check/storybook render needs BEFORE a componen
+         -t mounts.                                                      
+       4 - *                                                             
+       5 - * AIPDFBuilder has no app shell yet (no Localizer/Application 
+         -globals, no                                                    
+       6 - * String.prototype.format callers), so this shim only carries 
+         -the window-modal stubs a                                       
+       7 - * DIALOG body may dereference when previewed OUTSIDE its own m
+         -odal window document:                                          
+       8 - * - Window.this always exists under scapp, so no Window stub i
+         -s needed;                                                      
+       9 - * - dialog bodies read their payload from props (never Window.
+         -this.parameters at mount),                                     
+      10 - *   per the modalWindow family contract (see res/shared/dialog
+         -s/MessageBox/MessageBox.js).                                   
+      11 - *                                                             
+      12 - * Keep this file no-op-safe: it must never throw when a global
+         - already exists.                                               
+      13 - */                                                            
+      14 -                                                               
+      15 -// Guard: some dialog previews call Window.this.close() from cl
+         -ick handlers. Under a                                          
+      16 -// harness that re-mounts bodies in a shared window, closing wo
+         -uld kill the capture run —                                     
+      17 -// leave close() native (captures never click), but make parame
+         -ters read safely.                                              
+      18 -if (typeof Window !== "undefined" && Window.this && Window.this
+         -.parameters === undefined) {                                   
+      19 -  try {                                                        
+      20 -    Window.this.parameters = {};                               
+      21 -  } catch (e) {                                                
+      22 -    // read-only on some engine builds — previews pass options 
+         -via props anyway                                               
+      23 -  }                                                            
+      24 -}                                                              
+       1 +// .sdt-preview-shim.js — per-root preview shim (auto-loaded by
+         + sciter-devtools                                               
+       2 +// preview/state-check/storybook before every component render)
+         +.                                                              
+       3 +// R2 contract: ROOT-WIDE app-shell globals live here, never in
+         +lined in a                                                     
+       4 +// component's .preview.js. This project has no app-shell globa
+         +ls yet                                                         
+       5 +// (components extend the engine-global Element; no localizer/k
+         +ernel exists) —                                                
+       6 +// keep this file minimal and extend it the day a base class de
+         +references a                                                   
+       7 +// host global in its constructor.                             
+
+● Quick contract details check (tab label style, FileListRow strokes,
+  SystemRibbon title), then the design-system extension the units need:
+
+  Ran 1 shell command (ctrl+o to expand)
+● Tab labels are 500/12. Extending the design system pre-wave (tokens +
+  typography mixins + the missing Poppins 400 face):
+
+  Read 2 files (ctrl+o to expand)
+  ⎿  Loaded .claude\rules\architecture.md
+  ⎿  Loaded .claude\rules\code-style.md
+
+● typography.css already carries 16/400, 16/600, 18/600 and the 400 face — only
+  the xs (12dip) mixins and two tokens are missing. Verifying the Regular TTF
+  and applying the design-system extension:
+
+  Listed 1 directory (ctrl+o to expand)
+
+● Update(res\shared\lib\tokens.css)
+  ⎿  Added 7 lines
+      55    --color-select-surface: #E5EDFA;
+      56    --color-select-accent: #0048CE;
+      57  
+      58 +  /* Colors — Figma file 2jGq5p5qY4lsf5QK2stfOY, "Home" section
+         + (node 2001:385) — page background                             
+      59 +     + drag-and-drop overlay tints (10% select-accent for a val
+         +id drag hover; the magenta alt tint                            
+      60 +     is the design's second drag phase, node 15003:1691). */   
+      61 +  --color-bg-page: #F6F7F8;                                    
+      62 +  --color-drag-overlay: rgba(0, 72, 206, 0.1);                 
+      63 +  --color-drag-overlay-alt: rgba(238, 0, 255, 0.1);            
+      64 +                                                               
+      65    /* Shadows */
+      66    --shadow-main: 0 4dip 4dip var(--color-overlay-subtle);
+      67    /* Figma "Basic Shadow" effect (#485F7D33, offset 0/2, no blu
+          r) — Message Box card elevation */
+
+● Update(res\shared\lib\typography.css)
+  ⎿  Added 27 lines, removed 3 lines
+      132  }
+      133  
+      134  /*
+      135 - * Unresolved: xs, lg, xl sizes and a bold (700) weight were n
+          -ot exposed by any text style pulled                           
+      136 - * so far (Release Notes page + Message Box set — see frontend
+          --design-system.md for what was and                            
+      137 - * wasn't reachable). Add mixins here as more text-style varia
+          -bles are pulled, don't guess values.                          
+      135 + * Extracted from Figma file 2jGq5p5qY4lsf5QK2stfOY (node 2001
+          +:385, "Home" section), FileList row                           
+      136 + * path text — 12 Regular. Populates the xs slot of the xs/sm/
+          +base/md/lg scale.                                             
+      137   */
+      138 +@mixin font-xs-regular {                                      
+      139 +  font-family: "Poppins", sans-serif;                         
+      140 +  font-size: 12dip;                                           
+      141 +  font-weight: 400;                                           
+      142 +  line-height: 100%;                                          
+      143 +  letter-spacing: 0;                                          
+      144 +}                                                             
+      145 +                                                              
+      146 +/*                                                            
+      147 + * Extracted from Figma file 2jGq5p5qY4lsf5QK2stfOY (node 2001
+          +:385, "Home" section), FeaturesRibbon                         
+      148 + * tab labels — 12 Medium.                                    
+      149 + */                                                           
+      150 +@mixin font-xs-medium {                                       
+      151 +  font-family: "Poppins", sans-serif;                         
+      152 +  font-size: 12dip;                                           
+      153 +  font-weight: 500;                                           
+      154 +  line-height: 100%;                                          
+      155 +  letter-spacing: 0;                                          
+      156 +}                                                             
+      157 +                                                              
+      158 +/*                                                            
+      159 + * Unresolved: lg, xl sizes and a bold (700) weight were not e
+          +xposed by any text style pulled                               
+      160 + * so far (Release Notes page + Message Box set + Home section
+          +). Add mixins here as more                                    
+      161 + * text-style variables are pulled, don't guess values.       
+      162 + */                                                           
+
+● All four Poppins faces are on disk (the ENVIRONMENT "gap" was fully nominal —
+  the checker only sees OS-installed fonts). Grabbing the exact empty-state
+  copy, then emitting the plan:
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● 📋 P1.5 — Composition dashboard (Home, node 2001:385)
+
+  Archetype: state-aware feature view (Home — <phase> frames ×5) → registry type
+  view · target root res · state union: empty | drag-valid | drag-invalid | 
+  grid | list
+
+  ✅ REUSE (2)
+
+  unit: Button ×2
+  source: res/shared/components/Button/Button.js
+  where: "Open file" CTA inside NoRecentFiles (compose)
+  ────────────────────────────────────────
+  unit: MessageBox ×1
+  source: res/shared/dialogs/MessageBox/MessageBox.js
+  where: dialog phase → ShowMessageBox trigger (modal-window idiom outranks the
+  drawn Overlay scrim — no scrim emitted)
+
+  🔨 BUILD (7 → sciter-build-worker) — all placed res/shared/components/<Name>/
+
+  ┌────────────┬────────┬───────────────┬────────┬──────────┬──────┬──────┐
+  │            │        │               │ scroll │          │ comp │ SSIM │
+  │    unit    │   ×N   │     tier      │  bar   │  icons   │ ose  │      │
+  │            │        │               │        │          │      │ tier │
+  ├────────────┼────────┼───────────────┼────────┼──────────┼──────┼──────┤
+  │ SystemRibb │        │ button        │        │ 12 baked │      │      │
+  │ on         │ ×5     │ (chrome bar)  │ none   │  <img>   │ —    │ 0.92 │
+  │            │        │               │        │ glyphs   │      │      │
+  ├────────────┼────────┼───────────────┼────────┼──────────┼──────┼──────┤
+  │ FeaturesRi │        │ button (menu  │        │ 1 baked  │      │ 0.85 │
+  │ bbon       │ ×5     │ bar)          │ none   │ glyph    │ —    │  (te │
+  │            │        │               │        │          │      │ xt)  │
+  ├────────────┼────────┼───────────────┼────────┼──────────┼──────┼──────┤
+  │            │        │ button        │        │ 10 baked │      │      │
+  │ QuickActio │ ×10/st │ (native       │ none   │  glyphs  │ —    │ 0.92 │
+  │ nCard      │ ate    │ <button>      │        │ (props)  │      │      │
+  │            │        │ root)         │        │          │      │      │
+  ├────────────┼────────┼───────────────┼────────┼──────────┼──────┼──────┤
+  │            │ ×1/sta │ button (popup │        │ 2 baked  │      │ 0.85 │
+  │ SortBy     │ te     │  out of       │ none   │ glyphs   │ —    │  (te │
+  │            │        │ scope)        │        │          │      │ xt)  │
+  ├────────────┼────────┼───────────────┼────────┼──────────┼──────┼──────┤
+  │            │        │               │        │          │ Δ    │ 0.95 │
+  │ GridAndLis │ ×1/sta │ persistent-se │ none   │ CSS-draw │ see  │  (fl │
+  │ ts         │ te     │ lection       │        │ n glyph  │ belo │ at)  │
+  │            │        │               │        │          │ w    │      │
+  ├────────────┼────────┼───────────────┼────────┼──────────┼──────┼──────┤
+  │ FileListRo │ ×9/sta │ button (row + │        │ 3 baked  │      │ 0.85 │
+  │ w          │ te     │  hover        │ none   │ glyphs   │ —    │  (te │
+  │            │        │ actions)      │        │          │      │ xt)  │
+  ├────────────┼────────┼───────────────┼────────┼──────────┼──────┼──────┤
+  │ NoRecentFi │ ×1/sta │ static        │ none   │ 1 illust │ Butt │ 0.92 │
+  │ les        │ te     │ content       │        │ ration   │ on   │      │
+  └────────────┴────────┴───────────────┴────────┴──────────┴──────┴──────┘
+
+  📦 ASSET — NoFilesVisual illustration + 29 glyphs (per-unit img/,
+  asset-workers) · 🧩 SHELL — Main Content 2-col layout (pad 80/24), Action
+  Cards 2×5 grid (gap 16), Recent block (header 18/600 + SortBy + GridAndLists +
+  rows), drag overlay tints, per-state dispatch
+
+  Δ rows (inverted shadow / overrides)
+  - Δ prose GridAndLists: CLI said compose→Button; Button is a fixed 200×40 CTA,
+    size-incompatible with a 24×24 toggle → worker builds a native <button>
+    root instead (deviation documented, not silent).
+  - Δ prose MessageBox: CLI mode compose; page-level treatment is wholesale
+    reuse of the ShowMessageBox factory (nothing rebuilt).
+  - Design gaps folded into P1.6: GridAndLists missing required selected variant
+    (DESIGN); font:Poppins ENV gap dispositioned nominal (project-bundled, all
+    4 weights on disk); Redacted Script ships inside the illustration asset.
+
+  Fan-out: 7 BUILD → 1 wave · ≤7 parallel workers (+ 7 asset-workers, same
+  message). Design system pre-extended: --color-bg-page, drag-overlay tokens,
+  font-xs-regular/medium.
+
+  Σ 7 build · 2 reuse · 30 assets · 4 shell regions · two-green-gate BLOCKED 
+  (report-only) — proceeding (autonomous run; the skill invocation is the build
+  directive).
+
+  [sciter-create-page] ▸ P2 — Build missing components — spawning wave 1 (7
+  build-workers + 7 asset-workers):
+
+● 14 background agents launched (↓ to manage)
+   ├ component-creator:sciter-asset-worker (Assets: SystemRibbon glyphs)
+   ├ component-creator:sciter-asset-worker (Assets: FeaturesRibbon glyph)
+   ├ component-creator:sciter-asset-worker (Assets: QuickActionCard glyphs)
+   ├ component-creator:sciter-asset-worker (Assets: SortBy glyphs)
+   ├ component-creator:sciter-asset-worker (Assets: GridAndLists ref PNG)
+   ├ component-creator:sciter-asset-worker (Assets: FileListRow glyphs)
+   ├ component-creator:sciter-asset-worker (Assets: NoRecentFiles illustration)
+   ├ component-creator:sciter-build-worker (Build SystemRibbon component)
+   ├ component-creator:sciter-build-worker (Build FeaturesRibbon component)
+   ├ component-creator:sciter-build-worker (Build QuickActionCard component)
+   ├ component-creator:sciter-build-worker (Build SortBy component)
+   ├ component-creator:sciter-build-worker (Build GridAndLists component)
+   ├ component-creator:sciter-build-worker (Build FileListRow component)
+   └ component-creator:sciter-build-worker (Build NoRecentFiles component)
+
+● Agent "Assets: GridAndLists ref PNG" finished · 32s
+
+● Agent "Assets: NoRecentFiles illustration" finished · 1m 6s
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Write(res\shared\pages\Home\Home.Types.d.ts)
+  ⎿  Wrote 30 lines to res\shared\pages\Home\Home.Types.d.ts
+       1 /**
+         ion 2001:385
+         op frame).
+       4  *
+         496:11300)
+         761:7803, blue tint)
+         5003:1691, magenta tint)
+       8  * - "grid"         — Home - Recent Files Grid                (3
+       9  * - "list"         — Home - Recent Files List                (3
+      10  *
+     … +32 lines (ctrl+o to expand)
+
+● Wave 1 is running (7 build-workers + 5 remaining asset-workers). P2.5 state
+  types emitted (Home.Types.d.ts — 5-state union), spacing spec extracted for P5
+  (511 containers). I'll assemble the page (P3), wire routing (P4), and verify
+  (P5) as soon as the wave returns — progress updates will follow with each
+  worker completion.
+  ⎿  Stop says: Auto-load cost: 58 lines (~104 tokens)  •  CLAUDE.md 58  •  
+     rules 0 uncond + 7 scoped  •  = unchanged vs last session
+
+✻ Brewed for 25m 49s
+
+● Agent "Assets: FeaturesRibbon glyph" finished · 3m 4s
+
+● FeaturesRibbon assets landed (notably: the fetch pipeline has no
+  stroke-outlining, so the asset-worker outlined the stroke-drawn glyph to
+  fill-only paths via picosvg — zero stroke= residue, #0048CE baked). Still
+  waiting on 4 asset-workers and all 7 build-workers.
+  ⎿  Stop says: Auto-load cost: 58 lines (~104 tokens)  •  CLAUDE.md 58  •  
+     rules 0 uncond + 7 scoped  •  = unchanged vs last session
+
+✻ Crunched for 10s
+
+● Agent "Assets: SystemRibbon glyphs" finished · 3m 21s
+
+● SystemRibbon's 11 glyphs still carry strokes (that worker didn't outline them;
+  they'd render invisible). The FeaturesRibbon worker already proved the
+  deterministic fix — picosvg stroke-outlining. Applying the same mechanical
+  pass to the SystemRibbon glyphs now, before its build-worker reaches SSIM:
+
+  Ran 4 shell commands (ctrl+o to expand)
+● Agent "Assets: SortBy glyphs" finished · 3m 27s
+
+● Agent "Assets: FileListRow glyphs" finished · 3m 49s
+
+● The FeaturesRibbon worker left a reusable picosvg outline.py in the
+  scratchpad. Running it over the remaining stroke-carrying glyphs (SystemRibbon
+  ×11, FileListRow file+pin):
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● All wave-1 asset SVGs this run controls are now fill-only (the
+  Field/img/chevron-down.svg hit is a pre-existing component from an earlier
+  session — out of scope, noted for the report; QuickActionCard's glyphs await
+  that worker's RETURN before I touch them). Waiting on the QuickActionCard
+  asset-worker and the 7 build-workers.
+  ⎿  Stop says: Auto-load cost: 58 lines (~104 tokens)  •  CLAUDE.md 58  •  
+     rules 0 uncond + 7 scoped  •  = unchanged vs last session
+
+✻ Brewed for 1m 56s
+
+● Agent "Assets: QuickActionCard glyphs" finished · 5m 45s
+
+● All 7 asset-workers are done (QuickActionCard outlined its own glyphs;
+  customize.svg is a byte-copy of split.svg because the design's Customize icon
+  is a hidden unswapped placeholder — designer finding for the report).
+  Re-verifying the whole img tree:
+
+  Listed 1 directory (ctrl+o to expand)
+
+● Asset layer is complete and engine-safe: only the pre-existing
+  Field/img/chevron-down.svg (out of scope, prior session) still carries a
+  stroke. All 7 SSIM references are in place. Build-workers still running —
+  they'll hit their pre-SSIM asset gates against ready art now.
+  ⎿  Stop says: Auto-load cost: 58 lines (~104 tokens)  •  CLAUDE.md 58  •  
+     rules 0 uncond + 7 scoped  •  = unchanged vs last session
+
+✻ Brewed for 19s
+
+● Agent "Build NoRecentFiles component" finished · 7m 50s
+
+● NoRecentFiles: ✅ SSIM 0.981 (threshold 0.92, first iteration), Gate-1 pass
+  (all DOM-representable spec nodes matched), registry upserted with uses: 
+  [Button], no .figma.ts (correct — out of scope). One spec-over-prose
+  correction it made: content is top-anchored at y=140 per the reference, not
+  fully centered — spec wins. 6 build-workers remain.
+  ⎿  Stop says: Auto-load cost: 58 lines (~104 tokens)  •  CLAUDE.md 58  •  
+     rules 0 uncond + 7 scoped  •  = unchanged vs last session
+
+✻ Churned for 12s
+
+● Agent "Build SortBy component" finished · 8m 37s
+
+● SortBy: ✅ SSIM 0.874 (threshold 0.85), Gate-1 4/4 after a real fix (button
+  line-box pushed the border off-canvas → display:block). Registry now at 12
+  entries. 5 build-workers remain; I'll also sweep the leftover scapp preview
+  windows between waves per harness hygiene.
+  ⎿  Stop says: Auto-load cost: 58 lines (~104 tokens)  •  CLAUDE.md 58  •  
+     rules 0 uncond + 7 scoped  •  = unchanged vs last session
+
+✻ Crunched for 12s
+
+● Agent "Build SystemRibbon component" finished · 10m 25s
+
+● SystemRibbon: ✅ SSIM 0.972 (threshold 0.92), Gate-1 19/19 exact after three
+  geometry fixes (title 3-column centering, NBSP whitespace, padding→margin).
+  Registry at 14 entries. 4 build-workers remain (FeaturesRibbon,
+  QuickActionCard, GridAndLists, FileListRow).
+  ⎿  Stop says: Auto-load cost: 58 lines (~104 tokens)  •  CLAUDE.md 58  •  
+     rules 0 uncond + 7 scoped  •  = unchanged vs last session
+
+✻ Cogitated for 9s
+
+● Agent "Build QuickActionCard component" finished · 12m 7s
+
+● QuickActionCard: ⚠ SSIM 0.912 vs tier 0.92 → deferred at the 3-iteration
+  budget — Gate-1 geometry is exact (3/3 nodes), residual is cross-engine
+  rasterization (bolder glyph raster + border AA), so it carries forward as
+  pending, not fake-greened. 3 build-workers remain.  ⎿  Stop says: Auto-load cost: 58 lines (~104 tokens)  •  CLAUDE.md 58  •  
+     rules 0 uncond + 7 scoped  •  = unchanged vs last session
+
+✻ Worked for 10s
+
+● Agent "Build FeaturesRibbon component" finished · 12m 49s
+
+● FeaturesRibbon: ⚠ SSIM 0.774 vs 0.85 → deferred — Gate-1 29/29 exact; the
+  residual is the text-antialiasing ceiling on twelve 12dip labels in an
+  extreme-aspect 1920×40 strip. It also surfaced a real harness finding: one
+  capture grabbed a sibling worker's preview window under the parallel wave
+  (detected, voided, re-captured) — going in the P8 report. 2 build-workers
+  remain.
+  ⎿  Stop says: Auto-load cost: 58 lines (~104 tokens)  •  CLAUDE.md 58  •  
+     rules 0 uncond + 7 scoped  •  = unchanged vs last session
+
+✻ Brewed for 11s
+
+● Agent "Build GridAndLists component" finished · 13m 55s
+
+● GridAndLists: ✅ SSIM 0.981 (threshold 0.95, iteration 3 — fixes: 1dip corner
+  radius measured from the reference's alpha profile, display:block root). Two
+  upstream tool findings disclosed (preview window-finder's 50px minimum rejects
+  tiny windows; Button-compose deviation as planned). Only FileListRow remains.
+  ⎿  Stop says: Auto-load cost: 58 lines (~104 tokens)  •  CLAUDE.md 58  •  
+     rules 0 uncond + 7 scoped  •  = unchanged vs last session
+
+✻ Worked for 11s
+
+● Agent "Build FileListRow component" finished · 32m 9s
+
+● Wave 1 complete — all 7 build-workers returned: 5 pass (SystemRibbon 0.972,
+  SortBy 0.874, GridAndLists 0.981, FileListRow 0.907, NoRecentFiles 0.981), 2 
+  deferred on the cross-engine text/raster ceiling with Gate-1 geometry exact
+  (FeaturesRibbon 0.774/0.85, QuickActionCard 0.912/0.92). All RETURNs carried
+  complete phase trails + evidence; .figma.ts correctly absent everywhere.
+
+  Post-wave gates: scapp sweep + the whole-registry cycle validate:
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Clean — no lingering scapp, registry validates (18 entries, no cycles).
+  [sciter-create-page] ▸ P3 — Assemble page-shell + view. Reading the built
+  components' actual APIs:
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● APIs confirmed. Now reading router.js's exact API before wiring the App shell:
+
+  Searched for 1 pattern, read 2 files, ran 7 shell commands (ctrl+o to expand)
+  ⎿  Loaded ..\..\..\.claude\rules\api-design.md
+
+● Update(res\shared\pages\Home\Home.Types.d.ts)
+  ⎿  Added 5 lines, removed 2 lines
+       3   * in file 2jGq5p5qY4lsf5QK2stfOY; one id per `Home — <phase>` 
+          top frame).
+       4   *
+       5   * - "empty"        — Home - No recent files - ALT            (
+          3496:11300)
+       6 - * - "drag-valid"   — Home - No recent files - Drag and Drop  (
+         -3761:7803, blue tint)                                          
+       7 - * - "drag-invalid" — Home - No recent files - Drag and Drop  (
+         -15003:1691, magenta tint)                                      
+       6 + * - "drag_valid"   — Home - No recent files - Drag and Drop  (
+         +3761:7803, blue tint)                                          
+       7 + * - "drag_invalid" — Home - No recent files - Drag and Drop  (
+         +15003:1691, magenta tint)                                      
+       8   * - "grid"         — Home - Recent Files Grid                (
+          3761:8051)
+       9   * - "list"         — Home - Recent Files List                (
+          3761:9673)
+      10   *
+      11 + * (State ids are identifier-safe — they double as the per-stat
+         +e story export                                                 
+      12 + * names in Home.preview.js, which the verify harness looks up 
+         +by name.)                                                      
+      13 + *                                                             
+      14   * The sixth design frame ("Home - Dialogst", 13043:1285) is NO
+          T a view state:
+      15   * it is the list state with the MessageBox modal window open (
+          trigger:
+      16   * ShowMessageBox — the modal blocks input natively; no scrim i
+          s drawn).
+
+● Update(res\shared\pages\Home\Home.Types.d.ts)
+  ⎿  Added 2 lines, removed 2 lines
+      19   */
+      20  export type HomeViewState =
+      21    | "empty"
+      22 -  | "drag-valid"                                               
+      23 -  | "drag-invalid"                                             
+      22 +  | "drag_valid"                                               
+      23 +  | "drag_invalid"                                             
+      24    | "grid"
+      25    | "list";
+      26  
+
+● Write(res\shared\components\AppChrome\AppChrome.js)
+  ⎿  Wrote 29 lines to res\shared\components\AppChrome\AppChrome.js
+       1 import { SystemRibbon } from "../SystemRibbon/SystemRibbon.js";
+         .js";
+       3 
+       5  * AppChrome — the persistent window-chrome band every Home phas
+       6  * (Figma section 2001:385: SystemRibbon 48dip + FeaturesRibbon 
+         40dip appear
+         e project's
+       8  * `layout` band; pages render through it instead of re-arrangin
+       9  *
+         gh to SystemRibbon
+     … +26 lines (ctrl+o to expand)
+
+● Write(res\shared\components\AppChrome\AppChrome.css)
+  ⎿  Wrote 6 lines to res\shared\components\AppChrome\AppChrome.css
+      1 @set app-chrome {
+      2   :root {
+      3     flow: vertical;
+      4     width: *;
+      5   }
+      6 }
+● Write(res\shared\pages\Home\Home.js)
+  ⎿  Wrote 173 lines to res\shared\pages\Home\Home.js
+       1 import { AppChrome } from "../../components/AppChrome/AppChrome.
+       2 import { QuickActionCard } from "../../components/QuickActionCar
+       3 import { SortBy } from "../../components/SortBy/SortBy.js";
+         AndLists.js";
+         stRow.js";
+       6 import { NoRecentFiles } from "../../components/NoRecentFiles/No
+       7 import { ShowMessageBox } from "../../dialogs/MessageBox/Message
+       8 
+         e */
+         Entry */
+     … +194 lines (ctrl+o to expand)
+
+● Write(res\shared\pages\Home\Home.css)
+  ⎿  Wrote 108 lines to res\shared\pages\Home\Home.css
+      1 /* Home view — assembly of Figma section 2001:385 ("Home").
+      2  * Engine notes honored here (field-verified on the vendored 6.0.
+      3  *  - one class + one @set rule per element (compound/stacked sel
+        ectors are
+      4  *    unreliable), so every layout box gets a single dedicated cl
+      5  *  - no position:absolute — flow + spring margins only;
+      6  *  - styleset-bound children (the components) size themselves; s
+        pacing around
+      8  */
+      9 @import url(../../lib/typography.css);
+     … +111 lines (ctrl+o to expand)
+
+● Write(res\shared\pages\Home\Home.preview.js)
+  ⎿  Wrote 14 lines to res\shared\pages\Home\Home.preview.js
+       1 // Home.preview.js — CSF stories for the Home view.
+          story lookup
+       3 // keys for the per-state verify gate), plus Default = the list 
+         state.
+         one needed —
+       5 // this project has no app-shell globals yet); view-specific stu
+       6 import { Home } from "./Home.js";
+       7 
+       8 export const Default = () => <Home state="list" />;
+      10 export const empty = () => <Home state="empty" files={[]} />;
+     … +10 lines (ctrl+o to expand)
+
+● Write(res\App.js)
+  ⎿  Wrote 38 lines to res\App.js
+       1 import {
+       2   route,
+       3   createRouter,
+       4   registerSlot,
+       5   setAppElement,
+       6   currentRouteView,
+       7 } from "./shared/lib/router.js";
+       8 import { Home } from "./shared/pages/Home/Home.js";
+       9 
+      10 /**
+     … +33 lines (ctrl+o to expand)
+
+● Write(res\App.css)
+  ⎿  Wrote 7 lines to res\App.css
+      1 @set app {
+      2   :root {
+      3     flow: vertical;
+      4     width: *;
+      5     height: *;
+      6   }
+      7 }
+
+● Write(res\main.htm)
+  ⎿  Added 6 lines, removed 38 lines
+       8      <meta http-equiv="Content-Type" content="text/html; charset
+          =utf-8" />
+       9      <title>AIPDFBuilder</title>
+      10      <style src="shared/lib/tokens.css" />
+      11 +    <style src="shared/lib/typography.css" />                  
+      12      <style>
+      13        html {
+      13 -        background-color: var(--color-bg);                     
+      14 -        color: var(--color-text);                              
+      14 +        background-color: var(--color-bg-page);                
+      15 +        color: var(--color-text-primary);                      
+      16          font: 14px/1.4 system;
+      17        }
+      18        body {
+      19          width: *;
+      20          height: *;
+      21          flow: vertical;
+      21 -        content-vertical-align: middle;                        
+      22 -        content-horizontal-align: center;                      
+      22        }
+      23      </style>
+      24      <script type="module">
+      26 -      import { ShowMessageBox } from "./shared/dialogs/MessageB
+         -ox/MessageBox.js";                                             
+      27 -      import { ShowComplexDialogue } from "./shared/dialogs/Com
+         -plexDialogue/ComplexDialogue.js";                              
+      25 +      import { App } from "./App.js";                          
+      26  
+      27        // WS-B: a resizable window must not shrink below the bas
+          e 900x600 layout
+      28        Window.this.minSize = [900, 600];
+     ...
+      35          }
+      36        });
+      37  
+      40 -      // demo trigger (direct idiom): open the MessageBox dialo
+         -g over this window                                             
+      41 -      document.on("click", "#demo-messagebox", function () {   
+      42 -        const result = ShowMessageBox({                        
+      43 -          type: "info",                                        
+      44 -          title: "Document [document name.pdf] is protected",  
+      45 -          field: {                                             
+      46 -            title: "Please enter a document owner password",   
+      47 -            placeholder: "Add field text here",                
+      48 -            type: "password",                                  
+      49 -          },                                                   
+      50 -          checkbox: { label: "This is an example of checkbox pl
+         -acement" },                                                    
+      51 -          buttons: [                                           
+      52 -            { id: "cancel", label: "Cancel", variant: "outlined
+         -" },                                                           
+      53 -            { id: "ok", label: "Ok", variant: "primary" },     
+      54 -          ],                                                   
+      55 -        });                                                    
+      56 -        console.log("MessageBox result:", JSON.stringify(result
+         -));                                                            
+      57 -        return true;                                           
+      58 -      });                                                      
+      59 -                                                               
+      60 -      // demo trigger (direct idiom): open the ComplexDialogue 
+         -scanner dialog over this window                                
+      61 -      document.on("click", "#demo-complexdialogue", function ()
+         - {                                                             
+      62 -        const result = ShowComplexDialogue({});                
+      63 -        console.log("ComplexDialogue result:", JSON.stringify(r
+         -esult));                                                       
+      64 -        return true;                                           
+      65 -      });                                                      
+      38 +      document.body.content(<App />);                          
+      39      </script>
+      40    </head>
+      68 -  <body>                                                       
+      69 -    <h1>AIPDFBuilder</h1>                                      
+      70 -    <p>Blank Sciter.js sandbox — build pages/components here.</
+         -p>                                                             
+      71 -    <button id="demo-messagebox">Show MessageBox…</button>     
+      72 -    <button id="demo-complexdialogue">Show ComplexDialogue…</bu
+         -tton>                                                          
+      73 -  </body>                                                      
+      41 +  <body></body>                                                
+      42  </html>
+
+● [sciter-create-page] ▸ P5 — Verify. Gate S1 first (deterministic per-state
+  render, shipped CLI):
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● GATE-S1: PASS 5/5 — every state renders and stamps correctly on the runtime
+  engine. Now Gate S2: fetching the five state-frame references and scoring
+  per-state SSIM:
+
+  Read 1 file, ran 7 shell commands (ctrl+o to expand)
+
+● Update(res\shared\pages\Home\Home.css)
+  ⎿  Added 1 line
+      28    .action-cards {
+      29      flow: vertical;
+      30      width: 312dip;
+      31 +    margin-top: 24dip; /* Action Cards sit 24dip into the custo
+         +mize panel (Figma) */                                          
+      32    }
+      33    .cards-row {
+      34      flow: horizontal;
+
+● Update(res\shared\pages\Home\Home.css)
+  ⎿  Added 1 line
+      47      flow: vertical;
+      48      width: *;
+      49      height: *;
+      50 +    margin-top: 24dip; /* Recent Block sits 24dip into the Rece
+         +nt Section (Figma) */                                          
+      51      margin-left: 160dip;  /* panel inset 80 + recent-block inse
+          t 80 (Figma) */
+      52      margin-right: 160dip;
+      53      padding-bottom: 24dip;
+
+● Update(res\shared\pages\Home\Home.css)
+  ⎿  Added 2 lines
+      77      height: *;
+      78      margin-top: 24dip;
+      79      overflow-y: auto; /* the page owns list scrolling; rows are
+           fixed 80dip */
+      80 +    /* no background here — each row paints its own white; belo
+         +w the last row                                                 
+      81 +     * the page background shows through, matching the design *
+         +/                                                              
+      82    }
+      83  
+      84    /* Empty / drag states — the right region the design calls "M
+          ain Section"
+
+  Listed 1 directory, ran 3 shell commands (ctrl+o to expand)
+
+● [sciter-create-page] ▸ P6.5 — Feature-registry receipt:
+
+  Ran 5 shell commands (ctrl+o to expand)
+● Write(.claude\state\reports\sciter-create-page-20260828-124828.md)
+  ⎿  Wrote 179 lines to
+     .claude\state\reports\sciter-create-page-20260828-124828.md
+       1 <!-- report: skill=sciter-create-page ts=2026-08-28T11:38:21Z wa
+       2 
+       4 
+       5 ## Summary
+       7 - **Frame:** file `2jGq5p5qY4lsf5QK2stfOY` · node `2001:385` — s
+       8 - **Archetype:** state-aware feature (`Home — <phase>` top-frame
+         nt unit-band (SystemRibbon + FeaturesRibbon) registered as **lay
+         out** `AppChrome`.
+      10 - **Page status:** built, routed (`home`, initial route of the n
+         fold doc's SEED/TODO;
+     … +393 lines (ctrl+o to expand)
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Update(.claude\state\reports\sciter-create-page-20260828-124828.md)
+  ⎿  Added 1 line, removed 1 line
+      115  
+      116  **SystemRibbon** — "Captured by window handle (z-order-immune)
+           " · "Preview shim: C:\\____WORK____\\AIPDFBuilder\\res\\.sdt-p
+           review-shim.js" · "Gate 1 OK (19/19 nodes matched) — proceedin
+           g to SSIM (Gate 2)." · "SSIM=0.972 threshold=0.92 iteration=1"
+            · "registry validate: 0 violation(s), 0 warning(s) — 14 entry
+           (ies) checked" · "deps check: 0 violation(s), 0 warning(s)" · 
+           "no DPI PRE-CHECK line printed (reference and capture scale-ma
+           tched at 1920x48)" · derived-spec counter: not applicable — no
+            figma_json_path in the contract (the supplied spec IS the der
+           ived+authored spec; disclosed by the worker, no shadow adjudic
+           ation owed).
+      117  
+      118 -**FeaturesRibbon** — "Captured by window handle (z-order-immun
+          -e)" · "Preview shim: …res\\.sdt-preview-shim.js" · "Gate 1 OK 
+          -(29/29 nodes matched)" · "figma-spec coverage: matched 29/29 n
+          -odes (29 exact)" · "SSIM=0.774 threshold=0.85 iteration=3" · "
+          -registry validate: 0 violation(s), 0 warning(s) — 16 entry(ies
+          -) checked" · "deps check: 0 violation(s), 0 warning(s)" · no D
+          -PI line (disclosed). **Capture-integrity finding:** one iterat
+          -ion-3 measurement was VOID — capture-by-handle grabbed a SIBLI
+          -NG worker's preview window under the parallel wave; worker det
+          -ected it pixel-wise, closed its own stale pids, re-ran once, c
+          -ontent-verified. Harness finding, surfaced below.             
+      118 +**FeaturesRibbon** — "Captured by window handle (z-order-immun
+          +e)" · "Preview shim: …res\\.sdt-preview-shim.js" · "Gate 1 OK 
+          +(29/29 nodes matched)" · "figma-spec coverage: matched 29/29 n
+          +odes (29 exact)" · "SSIM=0.774 threshold=0.85 iteration=3" · "
+          +registry validate: 0 violation(s), 0 warning(s) — 16 entry(ies
+          +) checked" · "deps check: 0 violation(s), 0 warning(s)" · "no 
+          +DPI PRE-CHECK line printed (no dpi-mismatch tag)" · "no artifa
+          +cts_dir supplied — default temp run dirs; compare/overlay/diff
+          + auto-archived to tools/ScreenshotHistory" (i.e. no 'Artifacts
+          +:' line exists — explicit worker marker, satisfied evidence). 
+          +**Capture-integrity finding:** one iteration-3 measurement was
+          + VOID — capture-by-handle grabbed a SIBLING worker's preview w
+          +indow under the parallel wave; worker detected it pixel-wise, 
+          +closed its own stale pids, re-ran once, content-verified. Harn
+          +ess finding, surfaced below.                                  
+      119  
+      120  **QuickActionCard** — "Captured by window handle (z-order-immu
+           ne)" · "Preview shim: …res\\.sdt-preview-shim.js" · "Gate 1 OK
+            (3/3 nodes matched)" · "SSIM=0.847/0.869/0.912 threshold=0.92
+            iterations 1–3" · "registry validate: 0 violation(s), 0 warni
+           ng(s) — 15 entry(ies) checked" · "deps check: 0 violation(s), 
+           0 warning(s)" · no DPI line (disclosed). Deferral: Gate-1-clea
+           n, residual cross-engine rasterization; registry status `pendi
+           ng`.
+      121  
+  ⎿  PostToolUse:Edit hook returned blocking error
+  ⎿  [bash "${CLAUDE_PLUGIN_ROOT}/hooks/lint-md.sh"]: lint-md: markdownlint 
+     issues in C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-
+     page-20260828-124828.md
+
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:85 error MD032/blanks-around-lists Lists should be surrounded
+     by blank lines [Context: "- `Δ prose` GridAndLists: CLI ..."]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:116:86 error MD050/strong-style Strong style [Expected: 
+     asterisk; Actual: underscore]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:116:96 error MD050/strong-style Strong style [Expected: 
+     asterisk; Actual: underscore]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:116:88 error MD050/strong-style Strong style [Expected: 
+     asterisk; Actual: underscore]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:116:94 error MD050/strong-style Strong style [Expected: 
+     asterisk; Actual: underscore]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:154 error MD032/blanks-around-lists Lists should be 
+     surrounded by blank lines [Context: "- `final-greps: visibility OK ..."]
+
+     Config: .markdownlint.json — adjust the doc or the rule, not both.
+
+● Update(.claude\state\reports\sciter-create-page-20260828-124828.md)
+  ⎿  Added 1 line, removed 1 line
+      117  
+      118  **FeaturesRibbon** — "Captured by window handle (z-order-immun
+           e)" · "Preview shim: …res\\.sdt-preview-shim.js" · "Gate 1 OK 
+           (29/29 nodes matched)" · "figma-spec coverage: matched 29/29 n
+           odes (29 exact)" · "SSIM=0.774 threshold=0.85 iteration=3" · "
+           registry validate: 0 violation(s), 0 warning(s) — 16 entry(ies
+           ) checked" · "deps check: 0 violation(s), 0 warning(s)" · "no 
+           DPI PRE-CHECK line printed (no dpi-mismatch tag)" · "no artifa
+           cts_dir supplied — default temp run dirs; compare/overlay/diff
+            auto-archived to tools/ScreenshotHistory" (i.e. no 'Artifacts
+           :' line exists — explicit worker marker, satisfied evidence). 
+           **Capture-integrity finding:** one iteration-3 measurement was
+            VOID — capture-by-handle grabbed a SIBLING worker's preview w
+           indow under the parallel wave; worker detected it pixel-wise, 
+           closed its own stale pids, re-ran once, content-verified. Harn
+           ess finding, surfaced below.
+      119  
+      120 -**QuickActionCard** — "Captured by window handle (z-order-immu
+          -ne)" · "Preview shim: …res\\.sdt-preview-shim.js" · "Gate 1 OK
+          - (3/3 nodes matched)" · "SSIM=0.847/0.869/0.912 threshold=0.92
+          - iterations 1–3" · "registry validate: 0 violation(s), 0 warni
+          -ng(s) — 15 entry(ies) checked" · "deps check: 0 violation(s), 
+          -0 warning(s)" · no DPI line (disclosed). Deferral: Gate-1-clea
+          -n, residual cross-engine rasterization; registry status `pendi
+          -ng`.                                                          
+      120 +**QuickActionCard** — "Captured by window handle (z-order-immu
+          +ne)" · "Preview shim: …res\\.sdt-preview-shim.js" · "Gate 1 OK
+          + (3/3 nodes matched)" · "SSIM=0.847/0.869/0.912 threshold=0.92
+          + iterations 1–3" · "registry validate: 0 violation(s), 0 warni
+          +ng(s) — 15 entry(ies) checked" · "deps check: 0 violation(s), 
+          +0 warning(s)" · "no DPI PRE-CHECK line printed on any of the 3
+          + preview runs (ref and capture both 148x148 @1x)" · "no Artifa
+          +cts: line — artifacts_dir not supplied (default temp-dir behav
+          +ior)". Deferral: Gate-1-clean, residual cross-engine rasteriza
+          +tion; registry status `pending`.                              
+      121  
+      122  **SortBy** — "Captured by window handle (z-order-immune)" · "P
+           review shim: …res\\.sdt-preview-shim.js" · "Gate 1 OK (4/4 nod
+           es matched)" (after one real Gate-1 fail + fix, quoted in RETU
+           RN) · "SSIM=0.874 threshold=0.85 iteration=2 (re-verified iter
+           ation=3)" · "registry validate: 0 violation(s), 0 warning(s) —
+            12 entry(ies) checked" · "deps check: 0 violation(s), 0 warni
+           ng(s)" · "no DPI PRE-CHECK line printed (sizes matched 150x40 
+           both sides)".
+      123  
+  ⎿  PostToolUse:Edit hook returned blocking error
+  ⎿  [bash "${CLAUDE_PLUGIN_ROOT}/hooks/lint-md.sh"]: lint-md: markdownlint 
+     issues in C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-
+     page-20260828-124828.md
+
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:85 error MD032/blanks-around-lists Lists should be surrounded
+     by blank lines [Context: "- `Δ prose` GridAndLists: CLI ..."]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:116:86 error MD050/strong-style Strong style [Expected: 
+     asterisk; Actual: underscore]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:116:96 error MD050/strong-style Strong style [Expected: 
+     asterisk; Actual: underscore]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:116:88 error MD050/strong-style Strong style [Expected: 
+     asterisk; Actual: underscore]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:116:94 error MD050/strong-style Strong style [Expected: 
+     asterisk; Actual: underscore]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:154 error MD032/blanks-around-lists Lists should be 
+     surrounded by blank lines [Context: "- `final-greps: visibility OK ..."]
+
+     Config: .markdownlint.json — adjust the doc or the rule, not both.
+
+● Update(.claude\state\reports\sciter-create-page-20260828-124828.md)
+  ⎿  Added 1 line, removed 1 line
+      119  
+      120  **QuickActionCard** — "Captured by window handle (z-order-immu
+           ne)" · "Preview shim: …res\\.sdt-preview-shim.js" · "Gate 1 OK
+            (3/3 nodes matched)" · "SSIM=0.847/0.869/0.912 threshold=0.92
+            iterations 1–3" · "registry validate: 0 violation(s), 0 warni
+           ng(s) — 15 entry(ies) checked" · "deps check: 0 violation(s), 
+           0 warning(s)" · "no DPI PRE-CHECK line printed on any of the 3
+            preview runs (ref and capture both 148x148 @1x)" · "no Artifa
+           cts: line — artifacts_dir not supplied (default temp-dir behav
+           ior)". Deferral: Gate-1-clean, residual cross-engine rasteriza
+           tion; registry status `pending`.
+      121  
+      122 -**SortBy** — "Captured by window handle (z-order-immune)" · "P
+          -review shim: …res\\.sdt-preview-shim.js" · "Gate 1 OK (4/4 nod
+          -es matched)" (after one real Gate-1 fail + fix, quoted in RETU
+          -RN) · "SSIM=0.874 threshold=0.85 iteration=2 (re-verified iter
+          -ation=3)" · "registry validate: 0 violation(s), 0 warning(s) —
+          - 12 entry(ies) checked" · "deps check: 0 violation(s), 0 warni
+          -ng(s)" · "no DPI PRE-CHECK line printed (sizes matched 150x40 
+          -both sides)".                                                 
+      122 +**SortBy** — "Captured by window handle (z-order-immune)" · "P
+          +review shim: …res\\.sdt-preview-shim.js" · "Gate 1 OK (4/4 nod
+          +es matched)" (after one real Gate-1 fail + fix, quoted in RETU
+          +RN) · "SSIM=0.874 threshold=0.85 iteration=2 (re-verified iter
+          +ation=3)" · "registry validate: 0 violation(s), 0 warning(s) —
+          + 12 entry(ies) checked" · "deps check: 0 violation(s), 0 warni
+          +ng(s)" · "no DPI PRE-CHECK line printed (sizes matched 150x40 
+          +both sides)" · "no artifacts_dir supplied — default temp run d
+          +irs; no 'Artifacts:' line" (explicit worker marker, satisfied 
+          +evidence).                                                    
+      123  
+      124  **GridAndLists** — "Captured by window handle (z-order-immune)
+           " · "Preview shim: …res\\.sdt-preview-shim.js" · "Gate 1 OK (4
+           /4 nodes matched)" · "SSIM=0.981 threshold=0.95 iteration=3" ·
+            "registry validate: 0 violation(s), 0 warning(s) — 17 entry(i
+           es) checked" · "ENGINE-OK: … 6.0.4.3". **Disclosed harness wor
+           karound:** `preview`'s win32 window-finder hardcodes min_width
+           =50px and never matches a 24px window — the worker drove the u
+           nmodified pinned CLI in-process with a runtime clamp of that t
+           hreshold (full disclosure in its RETURN).
+      125  
+  ⎿  PostToolUse:Edit hook returned blocking error
+  ⎿  [bash "${CLAUDE_PLUGIN_ROOT}/hooks/lint-md.sh"]: lint-md: markdownlint 
+     issues in C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-
+     page-20260828-124828.md
+
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:85 error MD032/blanks-around-lists Lists should be surrounded
+     by blank lines [Context: "- `Δ prose` GridAndLists: CLI ..."]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:116:86 error MD050/strong-style Strong style [Expected: 
+     asterisk; Actual: underscore]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:116:96 error MD050/strong-style Strong style [Expected: 
+     asterisk; Actual: underscore]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:116:88 error MD050/strong-style Strong style [Expected: 
+     asterisk; Actual: underscore]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:116:94 error MD050/strong-style Strong style [Expected: 
+     asterisk; Actual: underscore]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:154 error MD032/blanks-around-lists Lists should be 
+     surrounded by blank lines [Context: "- `final-greps: visibility OK ..."]
+
+     Config: .markdownlint.json — adjust the doc or the rule, not both.
+
+● Update(.claude\state\reports\sciter-create-page-20260828-124828.md)
+  ⎿  Added 1 line, removed 1 line
+      121  
+      122  **SortBy** — "Captured by window handle (z-order-immune)" · "P
+           review shim: …res\\.sdt-preview-shim.js" · "Gate 1 OK (4/4 nod
+           es matched)" (after one real Gate-1 fail + fix, quoted in RETU
+           RN) · "SSIM=0.874 threshold=0.85 iteration=2 (re-verified iter
+           ation=3)" · "registry validate: 0 violation(s), 0 warning(s) —
+            12 entry(ies) checked" · "deps check: 0 violation(s), 0 warni
+           ng(s)" · "no DPI PRE-CHECK line printed (sizes matched 150x40 
+           both sides)" · "no artifacts_dir supplied — default temp run d
+           irs; no 'Artifacts:' line" (explicit worker marker, satisfied 
+           evidence).
+      123  
+      124 -**GridAndLists** — "Captured by window handle (z-order-immune)
+          -" · "Preview shim: …res\\.sdt-preview-shim.js" · "Gate 1 OK (4
+          -/4 nodes matched)" · "SSIM=0.981 threshold=0.95 iteration=3" ·
+          - "registry validate: 0 violation(s), 0 warning(s) — 17 entry(i
+          -es) checked" · "ENGINE-OK: … 6.0.4.3". **Disclosed harness wor
+          -karound:** `preview`'s win32 window-finder hardcodes min_width
+          -=50px and never matches a 24px window — the worker drove the u
+          -nmodified pinned CLI in-process with a runtime clamp of that t
+          -hreshold (full disclosure in its RETURN).                     
+      124 +**GridAndLists** — "Captured by window handle (z-order-immune)
+          +" · "Preview shim: …res\\.sdt-preview-shim.js" · "Gate 1 OK (4
+          +/4 nodes matched)" · "SSIM=0.981 threshold=0.95 iteration=3" ·
+          + "registry validate: 0 violation(s), 0 warning(s) — 17 entry(i
+          +es) checked" · "deps check: 0 violation(s), 0 warning(s)" · "n
+          +o DPI PRE-CHECK line printed (reference and capture both 24x24
+          + — scale parity)" · "no Artifacts: line — artifacts_dir not su
+          +pplied (default temp run dirs)" · "ENGINE-OK: … 6.0.4.3". **Di
+          +sclosed harness workaround:** `preview`'s win32 window-finder 
+          +hardcodes min_width=50px and never matches a 24px window — the
+          + worker drove the unmodified pinned CLI in-process with a runt
+          +ime clamp of that threshold (full disclosure in its RETURN).  
+      125  
+      126  **FileListRow** — "Captured by window handle (z-order-immune)"
+            · "Preview shim: …res\\.sdt-preview-shim.js" · "Gate 1 OK (6/
+           6 nodes matched)" · "SSIM=0.907 threshold=0.85 iteration=3" (v
+           erdict-of-record) · "Artifacts: 5 file(s) -> …scratchpad\\arti
+           facts\\FileListRow" · "registry validate: 0 violation(s), 0 wa
+           rning(s) — 18 entry(ies) checked" · "deps check: 0 violation(s
+           ), 0 warning(s)".
+      127  
+  ⎿  PostToolUse:Edit hook returned blocking error
+  ⎿  [bash "${CLAUDE_PLUGIN_ROOT}/hooks/lint-md.sh"]: lint-md: markdownlint 
+     issues in C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-
+     page-20260828-124828.md
+
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:85 error MD032/blanks-around-lists Lists should be surrounded
+     by blank lines [Context: "- `Δ prose` GridAndLists: CLI ..."]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:116:86 error MD050/strong-style Strong style [Expected: 
+     asterisk; Actual: underscore]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:116:96 error MD050/strong-style Strong style [Expected: 
+     asterisk; Actual: underscore]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:116:88 error MD050/strong-style Strong style [Expected: 
+     asterisk; Actual: underscore]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:116:94 error MD050/strong-style Strong style [Expected: 
+     asterisk; Actual: underscore]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:154 error MD032/blanks-around-lists Lists should be 
+     surrounded by blank lines [Context: "- `final-greps: visibility OK ..."]
+
+     Config: .markdownlint.json — adjust the doc or the rule, not both.
+
+● Update(.claude\state\reports\sciter-create-page-20260828-124828.md)
+  ⎿  Added 1 line, removed 1 line
+      123  
+      124  **GridAndLists** — "Captured by window handle (z-order-immune)
+           " · "Preview shim: …res\\.sdt-preview-shim.js" · "Gate 1 OK (4
+           /4 nodes matched)" · "SSIM=0.981 threshold=0.95 iteration=3" ·
+            "registry validate: 0 violation(s), 0 warning(s) — 17 entry(i
+           es) checked" · "deps check: 0 violation(s), 0 warning(s)" · "n
+           o DPI PRE-CHECK line printed (reference and capture both 24x24
+            — scale parity)" · "no Artifacts: line — artifacts_dir not su
+           pplied (default temp run dirs)" · "ENGINE-OK: … 6.0.4.3". **Di
+           sclosed harness workaround:** `preview`'s win32 window-finder 
+           hardcodes min_width=50px and never matches a 24px window — the
+            worker drove the unmodified pinned CLI in-process with a runt
+           ime clamp of that threshold (full disclosure in its RETURN).
+      125  
+      126 -**FileListRow** — "Captured by window handle (z-order-immune)"
+          - · "Preview shim: …res\\.sdt-preview-shim.js" · "Gate 1 OK (6/
+          -6 nodes matched)" · "SSIM=0.907 threshold=0.85 iteration=3" (v
+          -erdict-of-record) · "Artifacts: 5 file(s) -> …scratchpad\\arti
+          -facts\\FileListRow" · "registry validate: 0 violation(s), 0 wa
+          -rning(s) — 18 entry(ies) checked" · "deps check: 0 violation(s
+          -), 0 warning(s)".                                             
+      126 +**FileListRow** — "Captured by window handle (z-order-immune)"
+          + · "Preview shim: …res\\.sdt-preview-shim.js" · "Gate 1 OK (6/
+          +6 nodes matched)" · "SSIM=0.907 threshold=0.85 iteration=3" (v
+          +erdict-of-record) · "Artifacts: 5 file(s) -> …scratchpad\\arti
+          +facts\\FileListRow" · "registry validate: 0 violation(s), 0 wa
+          +rning(s) — 18 entry(ies) checked" · "deps check: 0 violation(s
+          +), 0 warning(s)" · "no DPI PRE-CHECK line printed (scale-parit
+          +y clean)".                                                    
+      127  
+      128  **NoRecentFiles** — "Captured by window handle (z-order-immune
+           )" · "Preview shim: …res\\.sdt-preview-shim.js" · "Gate 1 OK (
+           7/17 nodes matched)" + "figma-spec coverage: matched 7/17 node
+           s (6 exact, 1 containment) — unmatched: … sub-layers INSIDE th
+           e baked no-files.svg illustration … every DOM-representable sp
+           ec node matched" · "SSIM=0.981 threshold=0.92 iteration=1" · "
+           registry validate: 0 violation(s), 0 warning(s) — 13 entry(ies
+           ) checked" · "ENGINE-OK: … 6.0.4.3".
+      129  
+  ⎿  PostToolUse:Edit hook returned blocking error
+  ⎿  [bash "${CLAUDE_PLUGIN_ROOT}/hooks/lint-md.sh"]: lint-md: markdownlint 
+     issues in C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-
+     page-20260828-124828.md
+
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:85 error MD032/blanks-around-lists Lists should be surrounded
+     by blank lines [Context: "- `Δ prose` GridAndLists: CLI ..."]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:116:86 error MD050/strong-style Strong style [Expected: 
+     asterisk; Actual: underscore]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:116:96 error MD050/strong-style Strong style [Expected: 
+     asterisk; Actual: underscore]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:116:88 error MD050/strong-style Strong style [Expected: 
+     asterisk; Actual: underscore]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:116:94 error MD050/strong-style Strong style [Expected: 
+     asterisk; Actual: underscore]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:154 error MD032/blanks-around-lists Lists should be 
+     surrounded by blank lines [Context: "- `final-greps: visibility OK ..."]
+
+     Config: .markdownlint.json — adjust the doc or the rule, not both.
+
+● Update(.claude\state\reports\sciter-create-page-20260828-124828.md)
+  ⎿  Added 1 line, removed 1 line
+      125  
+      126  **FileListRow** — "Captured by window handle (z-order-immune)"
+            · "Preview shim: …res\\.sdt-preview-shim.js" · "Gate 1 OK (6/
+           6 nodes matched)" · "SSIM=0.907 threshold=0.85 iteration=3" (v
+           erdict-of-record) · "Artifacts: 5 file(s) -> …scratchpad\\arti
+           facts\\FileListRow" · "registry validate: 0 violation(s), 0 wa
+           rning(s) — 18 entry(ies) checked" · "deps check: 0 violation(s
+           ), 0 warning(s)" · "no DPI PRE-CHECK line printed (scale-parit
+           y clean)".
+      127  
+      128 -**NoRecentFiles** — "Captured by window handle (z-order-immune
+          -)" · "Preview shim: …res\\.sdt-preview-shim.js" · "Gate 1 OK (
+          -7/17 nodes matched)" + "figma-spec coverage: matched 7/17 node
+          -s (6 exact, 1 containment) — unmatched: … sub-layers INSIDE th
+          -e baked no-files.svg illustration … every DOM-representable sp
+          -ec node matched" · "SSIM=0.981 threshold=0.92 iteration=1" · "
+          -registry validate: 0 violation(s), 0 warning(s) — 13 entry(ies
+          -) checked" · "ENGINE-OK: … 6.0.4.3".                          
+      128 +**NoRecentFiles** — "Captured by window handle (z-order-immune
+          +)" · "Preview shim: …res\\.sdt-preview-shim.js" · "Gate 1 OK (
+          +7/17 nodes matched)" + "figma-spec coverage: matched 7/17 node
+          +s (6 exact, 1 containment) — unmatched: … sub-layers INSIDE th
+          +e baked no-files.svg illustration … every DOM-representable sp
+          +ec node matched" · "SSIM=0.981 threshold=0.92 iteration=1" · "
+          +registry validate: 0 violation(s), 0 warning(s) — 13 entry(ies
+          +) checked" · "deps check: 0 violation(s), 0 warning(s)" · "no 
+          +DPI PRE-CHECK line printed (scale parity: reference 1288x894 v
+          +s preview 1288x894)" · "no Artifacts: line — contract supplied
+          + no artifacts_dir (default temp-dir behavior; run dir …sciter-
+          +devtools-run-28484)" · "ENGINE-OK: … 6.0.4.3".                
+      129  
+      130  Asset-workers (7): all printed the pinned banner `sciter-devto
+           ols 0.1.0 @ …\0.7.100\…` (no mixed-copy); no `Design tint` lin
+           es (all static/illustration, `--keep-fills` — correct); stroke
+           -residue findings raised by 3 workers and RESOLVED: FeaturesRi
+           bbon + QuickActionCard + SortBy asset-workers outlined strokes
+            themselves (picosvg / capsule geometry); SystemRibbon (11 gly
+           phs) + FileListRow (file, pin) + the NoFilesVisual white strok
+           es were outlined by the ORCHESTRATOR with the same picosvg pas
+           s (mechanical stroke→fill, engine constraint, zero `stroke=` r
+           esidue verified by grep — a content-class fix, not a tint edit
+           ). FileListRow asset-worker note: pin/more instance-path ids r
+           eturned null export URLs; re-fetched from master ids 3698:1542
+           0/3698:15436 (possible instance overrides unverified — geometr
+           y/colour matched).
+      131  
+  ⎿  PostToolUse:Edit hook returned blocking error
+  ⎿  [bash "${CLAUDE_PLUGIN_ROOT}/hooks/lint-md.sh"]: lint-md: markdownlint 
+     issues in C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-
+     page-20260828-124828.md
+
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:85 error MD032/blanks-around-lists Lists should be surrounded
+     by blank lines [Context: "- `Δ prose` GridAndLists: CLI ..."]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:116:86 error MD050/strong-style Strong style [Expected: 
+     asterisk; Actual: underscore]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:116:96 error MD050/strong-style Strong style [Expected: 
+     asterisk; Actual: underscore]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:116:88 error MD050/strong-style Strong style [Expected: 
+     asterisk; Actual: underscore]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:116:94 error MD050/strong-style Strong style [Expected: 
+     asterisk; Actual: underscore]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:154 error MD032/blanks-around-lists Lists should be 
+     surrounded by blank lines [Context: "- `final-greps: visibility OK ..."]
+
+     Config: .markdownlint.json — adjust the doc or the rule, not both.
+
+● Update(.claude\state\reports\sciter-create-page-20260828-124828.md)
+  ⎿  Added 1 line
+      82  ## Shadow parity
+      83  
+      84  `prose_disagreements: 2` · `overrides: 1`
+      85 +                                                               
+      86  - `Δ prose` GridAndLists: CLI `compose→Button`; prose read: 24×
+          24 toggle can't compose a fixed 200×40 CTA. CLI decision follow
+          ed at the ledger level; the worker implemented a native `<butto
+          n>` root and disclosed the deviation in its RETURN (documented,
+           not silent).
+      87  - `Δ prose` MessageBox: CLI `compose`; page-level treatment is 
+          wholesale reuse of `ShowMessageBox` (nothing rebuilt).
+      88  - `Δ override` (on-disk existence class): none demoted — both c
+          andidates (Button, MessageBox) verified on disk.
+  ⎿  PostToolUse:Edit hook returned blocking error
+  ⎿  [bash "${CLAUDE_PLUGIN_ROOT}/hooks/lint-md.sh"]: lint-md: markdownlint 
+     issues in C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-
+     page-20260828-124828.md
+
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:117:86 error MD050/strong-style Strong style [Expected: 
+     asterisk; Actual: underscore]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:117:96 error MD050/strong-style Strong style [Expected: 
+     asterisk; Actual: underscore]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:117:88 error MD050/strong-style Strong style [Expected: 
+     asterisk; Actual: underscore]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:117:94 error MD050/strong-style Strong style [Expected: 
+     asterisk; Actual: underscore]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:155 error MD032/blanks-around-lists Lists should be 
+     surrounded by blank lines [Context: "- `final-greps: visibility OK ..."]
+
+     Config: .markdownlint.json — adjust the doc or the rule, not both.
+
+● Update(.claude\state\reports\sciter-create-page-20260828-124828.md)
+  ⎿  Added 1 line
+      152  ## Final-bytes greps
+      153  
+      154  Run AFTER the last worker returned (last RETURN ≈ 12:39Z; grep
+           s at **2026-08-28T12:48:16Z**) via the shipped CLI (stages fir
+           st, greps the INDEX, self-checks visibility):
+      155 +                                                              
+      156  - `final-greps: visibility OK — 3/3 cycle file(s) present in g
+           it ls-files --cached output`
+      157  - Polyfill: `git grep --cached -nE 'globalThis\.(LocalizerAsse
+           t|Localizer|Application|format|stylesetPathMapping)[[:space:]]
+           *='` → `0 hit(s) (0 pre-existing, 0 shim-exempt, 0 new)`
+      158  - Litter: `1 hit(s) (0 pre-existing, 1 new)` — `res/.sdt-previ
+           ew-shim.js [new]`. **Disposition: sanctioned per-root shim, ke
+           pt.** The tool's shim-exemption heuristic requires an `index.h
+           tml` beside the shim; this Sciter root's entry is `main.htm`, 
+           so the sanctioned file false-positives. Tool-gap finding (belo
+           w), not litter. No `*_probe*`/other `.sdt-preview*` files exis
+           t.
+  ⎿  PostToolUse:Edit hook returned blocking error
+  ⎿  [bash "${CLAUDE_PLUGIN_ROOT}/hooks/lint-md.sh"]: lint-md: markdownlint 
+     issues in C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-
+     page-20260828-124828.md
+
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:117:86 error MD050/strong-style Strong style [Expected: 
+     asterisk; Actual: underscore]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:117:96 error MD050/strong-style Strong style [Expected: 
+     asterisk; Actual: underscore]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:117:88 error MD050/strong-style Strong style [Expected: 
+     asterisk; Actual: underscore]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:117:94 error MD050/strong-style Strong style [Expected: 
+     asterisk; Actual: underscore]
+
+     Config: .markdownlint.json — adjust the doc or the rule, not both.
+
+● Update(.claude\state\reports\sciter-create-page-20260828-124828.md)
+  ⎿  Added 1 line, removed 1 line
+      160  
+      161  ## P5 verification detail
+      162  
+      163 -- **Gate S1 (mandatory, deterministic):** `GATE-S1: PASS 5/5` 
+          -— every state rendered via its story export on engine 6.0.4.3;
+          - `effective == requested` for empty / drag_valid / drag_invali
+          -d / grid / list.                                              
+      163 +- **Gate S1 (mandatory, deterministic):** `GATE-S1: PASS 5/5` 
+          +— every state rendered via its story export on engine 6.0.4.3;
+          + `effective == requested` for `empty` / `drag_valid` / `drag_i
+          +nvalid` / `grid` / `list`.                                    
+      164  - **Gate S2 (per-state SSIM vs the five state-frame references
+           , threshold 0.85, capture-lock serialized):** round 1 exposed 
+           a real assembly defect — a flattened 24dip nesting inset (list
+            scored 0.834); fixed in Home.css (margin-top 24dip on .action
+           -cards/.recent-host + row-container background removal). Round
+            2 (verdict-of-record): empty **0.979**, drag_valid **0.977**,
+            drag_invalid **0.977**, grid **0.933**, list **0.933** — PASS
+            5/5.
+      165  - **Dispatch exhaustiveness:** HomeViewState union (5) ↔ switc
+           h branches (5) ↔ Figma phase frames (5) — exact. The sixth fra
+           me ("Home - Dialogst") is the list state + MessageBox open, wi
+           red as the TODO opener, not a state.
+      166  - **dialog-spacing:** `extract` produced spacing.json (511 con
+           tainers); `check` **deferred — no runtime node-box dump** is p
+           roduced by the page preview path. The inter-component-gap fail
+           ure class it targets was exercised by the whole-page per-state
+            SSIM instead (it caught exactly that class in round 1).
+  ⎿  PostToolUse:Edit hook returned blocking error
+  ⎿  [bash "${CLAUDE_PLUGIN_ROOT}/hooks/lint-md.sh"]: lint-md: markdownlint 
+     issues in C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-
+     page-20260828-124828.md
+
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:117:86 error MD050/strong-style Strong style [Expected: 
+     asterisk; Actual: underscore]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:117:96 error MD050/strong-style Strong style [Expected: 
+     asterisk; Actual: underscore]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:117:88 error MD050/strong-style Strong style [Expected: 
+     asterisk; Actual: underscore]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     828-124828.md:117:94 error MD050/strong-style Strong style [Expected: 
+     asterisk; Actual: underscore]
+
+     Config: .markdownlint.json — adjust the doc or the rule, not both.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Update(.claude\state\reports\sciter-create-page-20260828-124828.md)  ⎿  Added 1 line, removed 1 line
+      114  
+      115  Evidence lines copied verbatim from worker RETURNs (background
+           -worker stdout does not persist — this section is the durable 
+           carrier):
+      116  
+      117 -**SystemRibbon** — "Captured by window handle (z-order-immune)
+          -" · "Preview shim: C:\\____WORK____\\AIPDFBuilder\\res\\.sdt-p
+          -review-shim.js" · "Gate 1 OK (19/19 nodes matched) — proceedin
+          -g to SSIM (Gate 2)." · "SSIM=0.972 threshold=0.92 iteration=1"
+          - · "registry validate: 0 violation(s), 0 warning(s) — 14 entry
+          -(ies) checked" · "deps check: 0 violation(s), 0 warning(s)" · 
+          -"no DPI PRE-CHECK line printed (reference and capture scale-ma
+          -tched at 1920x48)" · derived-spec counter: not applicable — no
+          - figma_json_path in the contract (the supplied spec IS the der
+          -ived+authored spec; disclosed by the worker, no shadow adjudic
+          -ation owed).                                                  
+      117 +**SystemRibbon** — "Captured by window handle (z-order-immune)
+          +" · "Preview shim: `C:\____WORK____\AIPDFBuilder\res\.sdt-prev
+          +iew-shim.js`" · "Gate 1 OK (19/19 nodes matched) — proceeding 
+          +to SSIM (Gate 2)." · "SSIM=0.972 threshold=0.92 iteration=1" ·
+          + "registry validate: 0 violation(s), 0 warning(s) — 14 entry(i
+          +es) checked" · "deps check: 0 violation(s), 0 warning(s)" · "n
+          +o DPI PRE-CHECK line printed (reference and capture scale-matc
+          +hed at 1920x48)" · derived-spec counter: not applicable — no f
+          +igma_json_path in the contract (the supplied spec IS the deriv
+          +ed+authored spec; disclosed by the worker, no shadow adjudicat
+          +ion owed).                                                    
+      118  
+      119  **FeaturesRibbon** — "Captured by window handle (z-order-immun
+           e)" · "Preview shim: …res\\.sdt-preview-shim.js" · "Gate 1 OK 
+           (29/29 nodes matched)" · "figma-spec coverage: matched 29/29 n
+           odes (29 exact)" · "SSIM=0.774 threshold=0.85 iteration=3" · "
+           registry validate: 0 violation(s), 0 warning(s) — 16 entry(ies
+           ) checked" · "deps check: 0 violation(s), 0 warning(s)" · "no 
+           DPI PRE-CHECK line printed (no dpi-mismatch tag)" · "no artifa
+           cts_dir supplied — default temp run dirs; compare/overlay/diff
+            auto-archived to tools/ScreenshotHistory" (i.e. no 'Artifacts
+           :' line exists — explicit worker marker, satisfied evidence). 
+           **Capture-integrity finding:** one iteration-3 measurement was
+            VOID — capture-by-handle grabbed a SIBLING worker's preview w
+           indow under the parallel wave; worker detected it pixel-wise, 
+           closed its own stale pids, re-ran once, content-verified. Harn
+           ess finding, surfaced below.
+      120  
+
+● Markdown lint clean. Re-running report-lint on the final bytes:
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Update(.claude\state\reports\sciter-create-page-20260828-124828.md)
+  ⎿  Added 1 line, removed 1 line
+      114  
+      115  Evidence lines copied verbatim from worker RETURNs (background
+           -worker stdout does not persist — this section is the durable 
+           carrier):
+      116  
+      117 -**SystemRibbon** — "Captured by window handle (z-order-immune)
+          -" · "Preview shim: `C:\____WORK____\AIPDFBuilder\res\.sdt-prev
+          -iew-shim.js`" · "Gate 1 OK (19/19 nodes matched) — proceeding 
+          -to SSIM (Gate 2)." · "SSIM=0.972 threshold=0.92 iteration=1" ·
+          - "registry validate: 0 violation(s), 0 warning(s) — 14 entry(i
+          -es) checked" · "deps check: 0 violation(s), 0 warning(s)" · "n
+          -o DPI PRE-CHECK line printed (reference and capture scale-matc
+          -hed at 1920x48)" · derived-spec counter: not applicable — no f
+          -igma_json_path in the contract (the supplied spec IS the deriv
+          -ed+authored spec; disclosed by the worker, no shadow adjudicat
+          -ion owed).                                                    
+      117 +**SystemRibbon** — "Captured by window handle (z-order-immune)
+          +" · "Preview shim: `C:\____WORK____\AIPDFBuilder\res\.sdt-prev
+          +iew-shim.js`" · "Gate 1 OK (19/19 nodes matched) — proceeding 
+          +to SSIM (Gate 2)." · "SSIM=0.972 threshold=0.92 iteration=1" ·
+          + "registry validate: 0 violation(s), 0 warning(s) — 14 entry(i
+          +es) checked" · "deps check: 0 violation(s), 0 warning(s)" · "n
+          +o DPI PRE-CHECK line printed (reference and capture scale-matc
+          +hed at 1920x48)" · "no Artifacts line — contract carried no ar
+          +tifacts_dir (default temp behavior)" · derived-spec counter: n
+          +ot applicable — no figma_json_path in the contract (the suppli
+          +ed spec IS the derived+authored spec; disclosed by the worker,
+          + no shadow adjudication owed).                                
+      118  
+      119  **FeaturesRibbon** — "Captured by window handle (z-order-immun
+           e)" · "Preview shim: …res\\.sdt-preview-shim.js" · "Gate 1 OK 
+           (29/29 nodes matched)" · "figma-spec coverage: matched 29/29 n
+           odes (29 exact)" · "SSIM=0.774 threshold=0.85 iteration=3" · "
+           registry validate: 0 violation(s), 0 warning(s) — 16 entry(ies
+           ) checked" · "deps check: 0 violation(s), 0 warning(s)" · "no 
+           DPI PRE-CHECK line printed (no dpi-mismatch tag)" · "no artifa
+           cts_dir supplied — default temp run dirs; compare/overlay/diff
+            auto-archived to tools/ScreenshotHistory" (i.e. no 'Artifacts
+           :' line exists — explicit worker marker, satisfied evidence). 
+           **Capture-integrity finding:** one iteration-3 measurement was
+            VOID — capture-by-handle grabbed a SIBLING worker's preview w
+           indow under the parallel wave; worker detected it pixel-wise, 
+           closed its own stale pids, re-ran once, content-verified. Harn
+           ess finding, surfaced below.
+      120  
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Update(.claude\state\reports\sciter-create-page-20260828-124828.md)
+  ⎿  Added 1 line, removed 1 line
+      114  
+      115  Evidence lines copied verbatim from worker RETURNs (background
+           -worker stdout does not persist — this section is the durable 
+           carrier):
+      116  
+      117 -**SystemRibbon** — "Captured by window handle (z-order-immune)
+          -" · "Preview shim: `C:\____WORK____\AIPDFBuilder\res\.sdt-prev
+          -iew-shim.js`" · "Gate 1 OK (19/19 nodes matched) — proceeding 
+          -to SSIM (Gate 2)." · "SSIM=0.972 threshold=0.92 iteration=1" ·
+          - "registry validate: 0 violation(s), 0 warning(s) — 14 entry(i
+          -es) checked" · "deps check: 0 violation(s), 0 warning(s)" · "n
+          -o DPI PRE-CHECK line printed (reference and capture scale-matc
+          -hed at 1920x48)" · "no Artifacts line — contract carried no ar
+          -tifacts_dir (default temp behavior)" · derived-spec counter: n
+          -ot applicable — no figma_json_path in the contract (the suppli
+          -ed spec IS the derived+authored spec; disclosed by the worker,
+          - no shadow adjudication owed).                                
+      117 +**SystemRibbon** — "Captured by window handle (z-order-immune)
+          +" · "Preview shim: `C:\____WORK____\AIPDFBuilder\res\.sdt-prev
+          +iew-shim.js`" · "Gate 1 OK (19/19 nodes matched) — proceeding 
+          +to SSIM (Gate 2)." · "SSIM=0.972 threshold=0.92 iteration=1" ·
+          + "registry validate: 0 violation(s), 0 warning(s) — 14 entry(i
+          +es) checked" · "deps check: 0 violation(s), 0 warning(s)" · "n
+          +o DPI PRE-CHECK line printed (reference and capture scale-matc
+          +hed at 1920x48)" · "no Artifacts line — contract carried no ar
+          +tifacts_dir (default temp behavior)" (i.e. no 'Artifacts:' evi
+          +dence line exists — explicit worker marker, satisfied evidence
+          +) · derived-spec counter: not applicable — no figma_json_path 
+          +in the contract (the supplied spec IS the derived+authored spe
+          +c; disclosed by the worker, no shadow adjudication owed).     
+      118  
+      119  **FeaturesRibbon** — "Captured by window handle (z-order-immun
+           e)" · "Preview shim: …res\\.sdt-preview-shim.js" · "Gate 1 OK 
+           (29/29 nodes matched)" · "figma-spec coverage: matched 29/29 n
+           odes (29 exact)" · "SSIM=0.774 threshold=0.85 iteration=3" · "
+           registry validate: 0 violation(s), 0 warning(s) — 16 entry(ies
+           ) checked" · "deps check: 0 violation(s), 0 warning(s)" · "no 
+           DPI PRE-CHECK line printed (no dpi-mismatch tag)" · "no artifa
+           cts_dir supplied — default temp run dirs; compare/overlay/diff
+            auto-archived to tools/ScreenshotHistory" (i.e. no 'Artifacts
+           :' line exists — explicit worker marker, satisfied evidence). 
+           **Capture-integrity finding:** one iteration-3 measurement was
+            VOID — capture-by-handle grabbed a SIBLING worker's preview w
+           indow under the parallel wave; worker detected it pixel-wise, 
+           closed its own stale pids, re-ran once, content-verified. Harn
+           ess finding, surfaced below.
+      120  
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● report-lint: 0 finding(s) — OK. [sciter-create-page] ▸ P9 — Open Storybook on 
+  the built page:
+
+  Ran 1 shell command, wrote 2 memories (ctrl+o to expand)
+
+● ✅ Home page built, routed, and verified — Storybook is open on it
+
+  The Figma "Home" section (2001:385) is now the app's landing view. The
+  storybook window is open with Target OK: 'Home' renderable; the app itself now
+  boots into Home via the newly wired router (build.bat Debug && run.bat Debug
+  to see it in the real window).
+
+  What landed
+
+  - 7 new components (delegated builds, each SSIM-gated against its Figma
+    reference): SystemRibbon 0.972 ✅ · SortBy 0.874 ✅ · GridAndLists 0.981 ✅
+    · FileListRow 0.907 ✅ · NoRecentFiles 0.981 ✅ · FeaturesRibbon 0.774/0.85 
+    ⚠ deferred · QuickActionCard 0.912/0.92 ⚠ deferred — both deferrals are
+    Gate-1-exact geometry with the residual diagnosed as cross-engine
+    text/raster antialiasing; they sit honestly at pending in the registry.
+  - State-aware view res/shared/pages/Home/ — 5 states (empty | drag_valid | 
+    drag_invalid | grid | list) + Home.Types.d.ts. Gate S1 PASS 5/5 (every state
+    renders + stamps on the runtime 6.0.4.3 engine) and Gate S2 per-state SSIM 
+    PASS 5/5 (0.933–0.979 vs 0.85) — round 1 caught a real assembly bug (a
+    flattened 24dip nesting inset) that S2 then confirmed fixed.
+  - Reuse: the existing MessageBox covers the design's dialog frame (trigger
+    wired as a TODO opener on file-row activation — modal-window idiom, no
+    scrim, per the project convention); the existing Button is the empty-state
+    CTA. AppChrome (layout) registers the persistent ribbon band.
+  - First router wiring: res/App.js + main.htm now mount the App shell with home
+    as the initial route — this resolved the scaffold doc's long-standing
+    SEED/TODO (the placeholder body and its demo dialog buttons were replaced;
+    noted in the report if you want the ComplexDialogue demo trigger back).
+  - Design system extended from the frame: 3 tokens + 2 xs typography mixins; 29
+    engine-safe (stroke-outlined) SVGs + 1 illustration.
+
+  Governance record — full report at
+  .claude/state/reports/sciter-create-page-20260828-124828.md (report-lint: 0 
+  finding(s) — OK): design-guard KNOWN-GOOD: FAIL (105 advisory R1 findings —
+  the un-componentized "Row" frames), two-green-gate BLOCKED — REPORT-ONLY,
+  feature-registry receipt written (ready_for_dev=False, truthful), registry at
+  20 entries with zero cycle violations.
+
+  Worth your attention next: re-run calibrate (snapshot is stale, fingerprints
+  the old scapp); designer fixes — componentize the "Row" frames, add
+  GridAndLists' selected variant, unhide the Customize card icon (it ships
+  Split's glyph today); and re-run /analyze-frontend so the SEED docs get
+  replaced with detected fact now that real pages exist.
+  ⎿  Stop says: Auto-load cost: 58 lines (~104 tokens)  •  CLAUDE.md 58  •  
+     rules 0 uncond + 7 scoped  •  = unchanged vs last session
+
+✻ Sautéed for 1h 20m 39s
+
+❯ /export                                                                       
+  ⎿  Conversation exported to: C:_WORK_\AIPDFBuilder\2026-08-28-160224-local-com
+     mand-caveatcaveat-the-messages-below.txt
+
+❯ запусти апку                                                                  
+
+● Соберу Debug и запущу:
+
+  Ran 4 shell commands (ctrl+o to expand)
+
+● Сборка успешна (0 warnings, 0 errors). Запускаю:
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● Апка запущена ✅ — AIPDFBuilder.exe (Debug, pid 26732) работает. Debug-сборка
+  грузит res/ прямо с диска, так что окно должно открыться сразу на новой
+  Home-странице: тёмный SystemRibbon + меню FeaturesRibbon, слева панель из 10
+  карточек Quick Actions, справа список Recent с 9 демо-файлами (SortBy +
+  переключатель grid/list).
+
+  Подсказки: Ctrl+R в окне перезагружает UI с диска после правок в res/; клик по
+  строке файла пока только заглушка (TODO-опенер для MessageBox с паролем).
+  ⎿  Stop says: Auto-load cost: 58 lines (~104 tokens)  •  CLAUDE.md 58  •  
+     rules 0 uncond + 7 scoped  •  = unchanged vs last session
+
+✻ Crunched for 1m 20s
+
+※ recap: Built the Figma Home page into AIPDFBuilder: 7 new components, 5-state Home view, routing wired, all gates run, report saved. App is now running (Debug, pid 26732). Next action: visually check the window matches the design. (disable recaps in /config)
+
+● Background command "Launch AIPDFBuilder.exe (Debug)" failed with exit code 127
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Фоновый шелл упал (exit 127) и процесс закрылся вместе с ним. Перезапускаю
+  отвязанно от шелла через start:
+  Ran 1 shell command (ctrl+o to expand)
+
+● Теперь запущена как отдельный процесс (pid 31256) — окно не привязано к моему
+  шеллу и не закроется само. Первый запуск падал, потому что апка стартовала как
+  ребёнок фонового шелла и умерла вместе с ним.
+
+  Окно должно показывать Home: риббоны сверху, карточки Quick Actions слева,
+  список Recent справа. Ctrl+R — перезагрузка UI с диска.
+  ⎿  Stop says: Auto-load cost: 58 lines (~104 tokens)  •  CLAUDE.md 58  •  
+     rules 0 uncond + 7 scoped  •  = unchanged vs last session
+
+✻ Churned for 37s
+
+※ recap: Built the Figma "Home" page end-to-end (7 new components, routing, 5-state verification passed) and the app is now running with it (pid 31256). Next action: review the window, or address the two SSIM-deferred units (FeaturesRibbon, QuickActionCard). (disable recaps in /config)

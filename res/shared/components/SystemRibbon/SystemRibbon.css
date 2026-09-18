@@ -9,6 +9,16 @@
 
 @set system-ribbon {
   :root {
+    /* Containing block for .system-ribbon__left/.system-ribbon__right below — without it, Sciter
+       anchors position:absolute descendants to the OUTERMOST styleset root in the containment
+       chain, not to THIS component's own root (this project's "absolutes anchor to styleset root"
+       engine quirk). This component happened to render correctly wherever it shipped before
+       (Home page, this page) only because it was always the FIRST child there, so its own root
+       origin coincided with the page's origin — the bug was latent, not absent. Surfaced when
+       ToolsRibbon (a LATER sibling using the same absolute-over-root idiom, without this fix)
+       collapsed onto the SAME page-root origin instead of its own row (res/pages/Edit/Edit.js,
+       AIPDFBuilder 2026-09-10) — added here too, preventively, since the same latent bug applies. */
+    position: relative;
     display: block;
     width: *;
     height: 48dip;

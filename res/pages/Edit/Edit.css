@@ -1,0 +1,47 @@
+/* Edit page styleset — Figma file 2jGq5p5qY4lsf5QK2stfOY, section node 15092:4589 ("Edit"),
+ * component node 15099:12998 (1920x1080, fluid here). Tokens from ../../shared/lib/tokens.css.
+ * Engine facts applied (per calibration.json layout.rules): declarations for the styleset root
+ * live in :root{}; box-sizing border-box everywhere; a child narrower than a sibling does NOT
+ * centre under a shared parent centring — RightPanelTab/Page each get their own row treatment.
+ *
+ * Chrome band (SystemRibbon 48 + FeaturesRibbon 40 + ToolsRibbon 50 = 138dip) is a flow:vertical
+ * stack of self-sized (width:*, fixed-height) children — the same LAYOUT-FIRST precedent Home.css
+ * already established for its own persistent SystemRibbon+FeaturesRibbon band.
+ *
+ * Main Content (design: 1920x942, absolute-positioned in Figma) is reproduced here as: a full-width
+ * TabDocRibbon bar (40dip) on top, then a horizontal row of [RightPanelTab left][canvas][RightPanelTab
+ * right] filling the remainder. Page sits centered in the canvas column with a 90dip top margin
+ * (Figma Page.y=130 inside Main Content, minus the 40dip TabDocRibbon already accounted for above it).
+ */
+
+@import url(../../shared/lib/typography.css);
+
+@set edit {
+  :root {
+    flow: vertical;
+    width: *;
+    height: *;
+    box-sizing: border-box;
+    background: var(--color-bg-workspace);
+  }
+
+  .edit__main-content { flow: vertical; width: *; height: *; box-sizing: border-box; }
+
+  .edit__canvas-row { flow: horizontal; width: *; height: *; box-sizing: border-box; }
+
+  .edit__canvas-center {
+    flow: vertical;
+    width: *;
+    height: *;
+    box-sizing: border-box;
+  }
+
+  /* Page.y=130 inside Main Content minus the 40dip TabDocRibbon already stacked above this row
+   * = 90dip top margin; spring left/right margins center the fixed 1094dip canvas horizontally
+   * (Home.css's .home__empty-visual established this same margin-left:*/margin-right:* idiom for
+   * centering a single fixed-size child — calibration.json's layout.rules confirms it holds). */
+  .edit__page-slot {
+    margin: 90dip * 0 *;
+    width: 1094dip;
+  }
+}

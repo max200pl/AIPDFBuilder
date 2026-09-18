@@ -1,0 +1,54 @@
+/* RightPanelTab — Figma file 2jGq5p5qY4lsf5QK2stfOY, node 15092:8965 ("ItemCount=2", 40x80).
+ * Styling per .claude/docs/reference-styling-flow.md (tokens via var()) + toolkit
+ * reference-sciter-styling.md / reference-sciter-css.md.
+ *
+ * Token substitution note: the design calls for a neutral card border; `--color-border` in
+ * tokens.css is a DARK-theme value (#333333) left over from an earlier palette and does not match
+ * this light UI family — `--color-border-light` (#bdc9db) is the token this project's other
+ * light-surface cards already use for exactly this purpose (see QuickActionCard.css,
+ * FileListRow.css). No radius token was specified by the design; `--radius-sm` (4dip) is reused
+ * per the same precedent (QuickActionCard's card radius).
+ *
+ * Geometry note: each 40x40dip cell centers its 24x24dip icon with a flat 8dip margin on every
+ * side — 8 + 24 + 8 = 40 exactly, so no spring-margin centering trick is needed (unlike the
+ * variable-height layouts elsewhere in this project).
+ */
+@set right-panel-tab {
+  :root {
+    box-sizing: border-box;
+    width: 40dip;
+    height: 80dip;
+    flow: vertical;
+    background: var(--color-bg-white);
+    border-top: 1dip solid var(--color-border-light);
+    border-bottom: 1dip solid var(--color-border-light);
+    border-left: 1dip solid var(--color-border-light);
+    border-right: none;
+    border-top-left-radius: var(--radius-sm);
+    border-bottom-left-radius: var(--radius-sm);
+  }
+
+  /* side="left": mirror the border + rounding to the opposite (right) edge */
+  :root.right-panel-tab--left {
+    border-left: none;
+    border-right: 1dip solid var(--color-border-light);
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: var(--radius-sm);
+    border-bottom-right-radius: var(--radius-sm);
+  }
+
+  .right-panel-tab__cell {
+    display: block;
+    width: *;
+    height: 40dip;
+    cursor: pointer; /* click-stub tier: whole 40x40 cell is the click target */
+  }
+
+  .right-panel-tab__icon {
+    display: block; /* <img> defaults to inline-block in Sciter — block avoids offset/descender gap (feedback_ssim_icon_in_flow) */
+    width: 24dip;
+    height: 24dip;
+    margin: 8dip; /* flat inset on all sides — centers the 24dip glyph in the 40dip cell exactly */
+  }
+}

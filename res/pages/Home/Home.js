@@ -5,6 +5,7 @@
 // slot switches per state. State lives in a plain `viewState` field + componentUpdate() —
 // never `this.state` (Sciter's Element reserves `.state`; assigning it blanks the render).
 
+import { navigate } from "../../shared/lib/router.js";
 import { SystemRibbon } from "../../shared/components/SystemRibbon/SystemRibbon.js";
 import { FeaturesRibbon } from "../../shared/components/FeaturesRibbon/FeaturesRibbon.js";
 import { QuickActionCard } from "../../shared/components/QuickActionCard/QuickActionCard.js";
@@ -187,7 +188,9 @@ export class Home extends Element {
     );
   }
 
-  /** Open-file flow: system file-picker, then present the chosen files in the list view.
+  /** Open-file flow: system file-picker, records the pick(s) into the recent-files list, then
+   * navigates into the Edit workspace on the opened file — opening a document is how a user
+   * reaches the editor, mirroring the design's Edit screen (res/pages/Edit/Edit.js).
    * Duplicate picks (same path) are ignored; cancel leaves the current state untouched. */
   openFileDialog() {
     const picked = Window.this.selectFile({
@@ -202,12 +205,16 @@ export class Home extends Element {
       if (!files.some((f) => f.path === path))
         files.push({ name: path.split(/[\\/]/).pop() || path, path });
     }
-    this.componentUpdate({ files, viewState: "list" });
+    this.componentUpdate({ files });
+    navigate("edit");
   }
 
   // Semantic-event sinks — child components bubble intents; unhandled ones stay kernel TODO.
   ["on quick-action"](evt) {
     if (evt.data === "open-pdf") this.openFileDialog();
+    // "Edit PDF" opens the same file-picker flow — there is no blank/new-document editor in
+    // this design, only an editor bound to an opened file.
+    else if (evt.data === "edit-pdf") this.openFileDialog();
     // TODO(kernel): remaining quick actions (evt.data)
     return true;
   }

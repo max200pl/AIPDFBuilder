@@ -1,0 +1,23 @@
+/* Page — blank document-canvas placeholder (Figma file 2jGq5p5qY4lsf5QK2stfOY, node 15099:13086,
+ * "Page", 1094×812). Styling per .claude/docs/reference-styling-flow.md (tokens via var()).
+ *
+ * No typography import — the component renders no text.
+ *
+ * Background: nearest white surface token (--color-bg-white, #ffffff) — matches the design's
+ * opaque white fill exactly (Class A: self-contained background, no --stage-bg needed).
+ *
+ * Shadow: design effect "Page Shadow" = offset -1/3 dip, blur 4dip, spread 2dip,
+ * rgba(72,95,125,0.15). No --shadow-* token matches within reasonable tolerance —
+ * --shadow-card is the closest color family (same 72,95,125 base) but a different offset/blur/
+ * spread/alpha combination (0 2dip 0, 20%), so the literal design value is kept rather than
+ * bending a token, per the reference-styling-flow "token first, but don't force it" rule. */
+
+@set page {
+  :root {
+    width: *;
+    height: *;
+    box-sizing: border-box;
+    background: var(--color-bg-white);
+    box-shadow: -1dip 3dip 4dip 2dip rgba(72, 95, 125, 0.15);
+  }
+}

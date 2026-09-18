@@ -1,0 +1,1075 @@
+ ▐▛███▜▌   Claude Code v2.1.235
+▝▜█████▛▘  Sonnet 5 · Claude Enterprise
+  ▘▘ ▝▝    C:\____WORK____\AIPDFBuilder
+
+
+❯ /plugin                                                                       
+
+❯ /reload-plugins                                                               
+  ⎿  Reloaded: 5 plugins · 0 skills · 40 agents · 21 hooks · 1 plugin MCP server · 0 plugin LSP servers
+
+❯ /component-creator:calibrate-building-process                                 
+
+● [component-creator v0.7.104 | calibrate-building-process]
+
+  I'll run the calibration process for this project. Let me start by checking
+  the bootstrap setup and then running the idempotency check.
+
+  Searched for 1 pattern, listed 2 directories (ctrl+o to expand)
+
+● Now let's bootstrap the venv (Windows paths) and run doctor.
+
+  Searched for 4 patterns, read 1 file, listed 1 directory, ran 3 shell commands (ctrl+o to expand)
+
+● There's a matching scapp.exe in the sciter-js-sdk-main checkout. Let me check
+  its version matches the vendored SDK (6.0.4.3).
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● Good, that resolves the version mismatch. Now let's check calibration.json's
+  existing state per Step 2's idempotency check.
+
+  Searched for 5 patterns, read 3 files, ran 1 shell command (ctrl+o to expand)
+
+● The layout fixture already exists and is doc-grounded — no need to rewrite it.
+  Now running Step 5, the full calibration probe, with the corrected engine
+  pinned via SCAPP_BIN.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● The calibration ran successfully against engine 6.0.4.3 (correctly matching
+  the project's vendored SDK, fixing the previous 5.0.3.21 mismatch). Let's
+  check the resulting calibration.json.
+
+  Searched for 1 pattern, read 1 file, ran 6 shell commands (ctrl+o to expand)
+
+● The render probe alone overwrites the whole file (no merge across separate
+  runs) — I need to redo the full all run to restore
+  font_profile/layout/sciter/readiness together with this render result.
+
+  Ran 1 shell command (ctrl+o to expand)
+● This confirms it: the render probe consistently fails "button"/"images"
+  base-elements checks across multiple clean runs (real environment defect, not
+  stray-window noise). Let me clean up the leftover processes and check the
+  final calibration state.
+
+  Searched for 4 patterns, read 2 files, ran 4 shell commands (ctrl+o to expand)
+
+● CLAUDE.md already contains the calibration.json pointer bullet (visible in the
+  provided context), so Step 6 needs no edit. Let me verify quickly, then check
+  final git diff state.
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+● Confirmed — already present, no edit needed. Let me do a final check on the
+  layout-matrix.png capture and the full calibration.json diff to make sure
+  everything is consistent before reporting.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Calibration complete
+
+  Environment issue found and fixed: the existing calibration.json had been
+  calibrated against scapp 5.0.3.21 from a completely different product
+  (AVANQUEST_LIBRARIES_ROOT → C:\____WORK____\Adaware\...), while this project
+  vendors Sciter 6.0.4.3 (third_party/sciter-sdk). That's a major-version
+  mismatch — exactly the failure mode calibrate-check's engine-parity guard
+  exists to catch, and it flagged the snapshot stale. I re-pointed the probe via
+  SCAPP_BIN at the matching engine already referenced in this repo's own
+  tools/run-scapp.bat (C:\____WORK____\sciter-js-sdk-main\...\scapp.exe),
+  confirmed at runtime as engine=6.0.4.3 (matches vendored SDK).
+
+  Summary:
+  - Fonts probed: 398 system fonts + project-bundled Poppins family
+  - Font profile verdict: Poppins:300 / :500 / :600 — all matched,
+    project-bundled (Light/Medium/SemiBold TTFs in res/shared/fonts/poppins/),
+    per frontend-design-system.md
+  - Sciter quirks: styleset-bound elements ignore document @font-face
+    (OS-registered fonts only) — carried forward from prior notes
+  - Sciter version confirmed: 6.0.4.3 at runtime, but calibrate's own detector
+    can't resolve it structurally for this layout (no props/sciter.props, no
+    Avanquest versioned-SDK path pattern) — so calibrate-check reports OK with
+    an engine-parity-unknown caution. I did not fabricate a props/sciter.props
+    file to silence this, since that's not this project's actual build
+    convention (build.bat/MSBuild use SCITER_SDK_ROOT env var, not props files)
+    — flagging as a known tool-detection gap rather than inventing structure.
+  - Layout matrix: all 13 doc-driven positioning cases pass (3×3 alignElements
+    grid, EmptyState off-centre bundle, button icon+text, two-button row,
+    mixed-height row centering) — same rules/quirks as previously recorded, now
+    verified on the correct engine
+  - Render probe: capture ✅ and text base-element ✅, but button and images 
+    base-elements both fail (degenerate crop region) — reproduced twice after
+    killing stray scapp.exe processes left over from prior runs, so this reads
+    as a genuine defect on this engine/probe combination, not stray-window
+    noise. Worth a follow-up look before relying on visual-verify for
+    button/image-heavy components.
+  - Project readiness: component-registry, reference docs, preview shim, Figma
+    token, pipeline config all ✅; one action item — bundled Poppins faces
+    aren't OS-registered, so a packed Release build will silently fall back to a
+    system font for styleset-bound text unless the native host registers them
+    (win32.register_fonts) before load.
+  - CLAUDE.md pointer: already present, no edit needed.
+
+  Invalidation triggers going forward: a Sciter SDK version change, edits to any
+  project CSS file this scan covered, or an explicit --force re-run.
+
+  Nothing was auto-committed — calibration.json and layout-matrix.png are left
+  as working-tree changes for you to review and commit.
+  ⎿  Stop says: Auto-load cost: 44 lines (~79 tokens)  •  CLAUDE.md 44  •  rules
+     0 uncond + 7 scoped  •  = unchanged vs last session
+
+✻ Sautéed for 7m 27s
+
+※ recap: Ran project calibration for AIPDFBuilder, fixing a Sciter engine version mismatch and confirming fonts, layout, and render checks. Calibration is done and OK; next step is for you to review and commit the updated calibration.json. (disable recaps in /config)
+
+❯ а почему мы сларузе не updated calibration.json ?                             
+
+● Потому что --probes render (отдельный вызов) не делает merge с уже
+  существующим файлом — он полностью перезаписывает calibration.json, а не
+  только секцию render. Единственное поле, которое CLI сохраняет между запусками
+  — font_profile.substitutions; всё остальное (font_profile, layout, sciter,
+  project_readiness) при вызове только render обнулилось бы.
+
+  Последовательность была такая:
+  1. Первый --probes all — посчитал всё (fonts, layout, sciter, readiness) +
+     render, но render упал (degenerate crop region на button/images).
+  2. Я заподозрил зависшие окна scapp.exe от предыдущего запуска (это явно
+     описано в заметках скилла как частая причина) — убил их, перезапустил
+     только --probes render, чтобы дёшево проверить гипотезу. Ошибка осталась
+     той же — значит, это не артефакт зависших окон, а реальный дефект.
+  3. Но этот изолированный render-запуск уже перетёр файл, обнулив
+     font_profile/layout/sciter.
+  4. Поэтому пришлось запустить --probes all ещё раз целиком, чтобы получить
+     один консистентный файл со всеми секциями сразу — это и есть финальная
+     версия на диске сейчас.
+
+  Так что «сразу» обновить не получилось — сначала нужно было
+  продиагностировать, реальная ли это проблема с рендером или просто зависшие
+  процессы, а диагностика через --probes render стоила отдельного полного
+  прогона для восстановления остальных полей.
+  ⎿  Stop says: Auto-load cost: 44 lines (~79 tokens)  •  CLAUDE.md 44  •  rules
+     0 uncond + 7 scoped  •  = unchanged vs last session
+
+✻ Cooked for 35s
+
+❯ окей обнови                                                                   
+
+● User answered Claude's questions:
+  ⎿  · Файл calibration.json уже в финальном консистентном состоянии после 
+     последнего полного прогона — что именно обновить? → Закоммитить изменения 
+     (Recommended)
+
+  Ran 3 shell commands (ctrl+o to expand)
+
+● Good — only the calibration outputs are staged; compression-snapshot.txt
+  (unrelated, pre-existing, no real content change) and the untracked
+  capture-invalid PNGs (pre-existing, not part of this run) are left alone.
+
+  Committed ac17ac5 (ctrl+o to expand)
+
+● Закоммичено (ac17ac5) на текущей ветке run/edit-create-page-20260908: только 4
+  файла, которые реально затронул этот прогон калибровки —
+
+  - .claude/state/calibration.json
+  - .claude/state/layout-matrix.{css,png,preview.js}
+
+  compression-snapshot.txt (modified, но без реального diff — только LF/CRLF) и
+  untracked layout-matrix.capture-invalid-*.png не трогал — они не относятся к
+  этому прогону. Не пушил — только локальный коммит.
+  ⎿  Stop says: Auto-load cost: 44 lines (~79 tokens)  •  CLAUDE.md 44  •  rules
+     0 uncond + 7 scoped  •  = unchanged vs last session
+
+✻ Worked for 1m 6s
+※ recap: Ran project calibration for AIPDFBuilder, fixed a Sciter engine version mismatch, and committed the updated calibration.json plus layout-matrix files. Next: decide whether to investigate the button/images render-probe failure or move on. (disable recaps in /config)
+
+❯ /component-creator:sciter-create-page                                         
+@https://www.figma.com/design/2jGq5p5qY4lsf5QK2stfOY/-SANDBOX--Soda-15-Desktop- 
+%E2%80%93-Plugin-Test?node-id=15092-4589&m=dev                                  
+  ⎿  Loaded .claude\rules\testing.md
+
+● [component-creator v0.7.104 | sciter-create-page]
+
+  Searched for 5 patterns, read 10 files, ran 4 shell commands (ctrl+o to expand)
+  ⎿  Loaded .claude\rules\api-design.md
+  ⎿  Loaded .claude\rules\architecture.md
+  ⎿  Loaded .claude\rules\code-style.md
+
+● Already seeded — no need to reseed. Let's read the page-level memory files
+  quickly.
+
+  Called plugin:figma:figma 2 times, recalled 3 memories (ctrl+o to expand)
+
+● Skill(figma:figma-design-to-code)
+  ⎿  Successfully loaded skill
+
+  Read 2 files, called plugin:figma:figma 2 times, ran 1 shell command (ctrl+o to expand)
+
+● Write(~\AppData\Local\Temp\claude\C------WORK-----AIPDFBuilder\abf01d93-7c2a-4
+       134-a7b2-91e6b35a9eca\scratchpad\edit-page-nodes.json)
+  ⎿  Wrote 12 lines to ..\..\Users\MPoskannyi.KH-AVQ-LP70\AppData\Local\Tem
+     p\claude\C------WORK-----AIPDFBuilder\abf01d93-7c2a-4134-a7b2-91e6b35a
+     9eca\scratchpad\edit-page-nodes.json
+       1 {
+       3   "frontend_roots": ["res"],
+       4   "nodes": [
+         "15092:6882"},
+         : "15099:13260"},
+       7     {"name": "ToolsRibbon", "type": "detect", "figma_node_id": "
+       8     {"name": "TabDocRibbon", "type": "detect", "figma_node_id": 
+         "2139:589"},
+          "15092:8965"},
+         3086"}
+     … +8 lines (ctrl+o to expand)
+
+  Called plugin:figma:figma 2 times, ran 1 shell command (ctrl+o to expand)
+
+● P1.5 — Page plan + composition dashboard
+
+  Frame: Edit (section 15092:4589, file 2jGq5p5qY4lsf5QK2stfOY) — contains two
+  side-by-side instances, Edit-Free user (15099:13077) and Edit-Pro user
+  (15100:13732), of the same Edit component (15099:12998). This is the main
+  PDF-editing workspace screen.
+
+  Archetype: full-window app screen → registry type: page (same category as
+  Home). Free/Pro is a role axis (per the axis-compile-map, role/theme →
+  context/token scope), not an R11 lifecycle-phase state set — so this build
+  threads a plan: "free"|"pro" prop rather than emitting a .Types.d.ts state
+  union / per-state SSIM gate.
+
+  ┌─────────────┬───────────┬───────────────────────────────────────────────┐
+  │    Unit     │  Status   │                Source / notes                 │
+  ├─────────────┼───────────┼───────────────────────────────────────────────┤
+  │ SystemRibbo │ ✅ REUSE  │ res/shared/components/SystemRibbon/SystemRibb │
+  │ n ×1        │ (wholesal │ on.js — CLI-resolved match                    │
+  │             │ e)        │                                               │
+  ├─────────────┼───────────┼───────────────────────────────────────────────┤
+  │ FeaturesRib │ ✅ REUSE  │ res/shared/components/FeaturesRibbon/Features │
+  │ bon ×1      │ (wholesal │ Ribbon.js — CLI-resolved match                │
+  │             │ e)        │                                               │
+  ├─────────────┼───────────┼───────────────────────────────────────────────┤
+  │ ToolsRibbon │           │ new — 12 ToolRibbonButtons + 4 dividers +     │
+  │  ×1         │ 🔨 BUILD  │ Zoom control (Type=Edit variant, node         │
+  │             │           │ 15092:7800)                                   │
+  ├─────────────┼───────────┼───────────────────────────────────────────────┤
+  │ TabDocRibbo │ 🔨 BUILD  │ new — single doc-tab strip (node 2139:589)    │
+  │ n ×1        │           │                                               │
+  ├─────────────┼───────────┼───────────────────────────────────────────────┤
+  │ RightPanelT │ 🔨 BUILD  │ new — bookmark-icon panel strip, left+right   │
+  │ ab ×2       │           │ mirror (node 15092:8965/15092:9011)           │
+  ├─────────────┼───────────┼───────────────────────────────────────────────┤
+  │ Page ×1     │ 🔨 BUILD  │ new — plain white canvas rect + drop shadow   │
+  │             │           │ (node 15099:13086), no interactivity          │
+  └─────────────┴───────────┴───────────────────────────────────────────────┘
+
+  Σ: 2 ✅ REUSE · 4 🔨 BUILD (5 instances) · 0 📦 ASSET-only · 0 🧩 SHELL
+
+  Δ prose (shadow-parity disagreement — logged, CLI decision stands): I disagree
+  with treating SystemRibbon/FeaturesRibbon as complete wholesale reuse. This
+  Figma instance's SystemRibbon adds a Go Pro button + "Soda PDF Free" title (vs
+  the built component's fixed "Soda PDF PRO" title, no Go-Pro button), and
+  FeaturesRibbon adds an entire right-side cluster the built component doesn't
+  have: view-mode toggle, "Activate now" CTA, a search bar, and share/support
+  icons. The registry-matched files render without any of that — reusing them
+  wholesale ships a visibly incomplete Edit screen relative to this design. The
+  CLI's wholesale verdict is authoritative per W12, so I'm not blocking on it or
+  hand-rolling a divergent copy, but flagging it now rather than burying it in
+  P8: recommend a follow-up update-component pass on both to add a
+  plan/role-aware branch. This run will render the Edit page with the current
+  Pro-only versions of both bars.
+
+  Fan-out: all 4 BUILD units are independent leaves (no unit imports another) →
+  1 wave, width 4 — all four spawn together, each paired with its own
+  asset-worker.
+
+  Per-BUILD pre-decisions:
+  - ToolsRibbon — tier: button (click-stub, one bubbling event per tool id);
+    Zoom's % field — tier: button (dropdown/menu-content out of scope — the 
+    Figma component set defines no open/menu-content variant for the zoom 
+    selector); every tool button shares one generic glyph in the source design
+    (no per-tool icon exists yet) — built faithfully as-is, not invented.
+  - TabDocRibbon — tier: click-stub (tab select).
+  - RightPanelTab — tier: click-stub (bookmark toggles); one component, side: 
+    "left"|"right" prop for the mirrored placement.
+  - Page — tier: none (pure decorative canvas).
+
+  Gate: [Build] · [Adjust plan] · [Reuse-only]
+
+● User answered Claude's questions:
+  ⎿  · Proceed with this plan? 4 new components (ToolsRibbon, TabDocRibbon, 
+     RightPanelTab, Page) will be built via parallel sciter-build-worker agents;
+     SystemRibbon/FeaturesRibbon reuse the existing files as-is (missing the 
+     Free/Pro extras noted above). → Build (Recommended)
+
+  Ran 2 shell commands (ctrl+o to expand)
+● Now let's run design-guard (P1.5 verdict pass, per-unit targets) and the P1.6
+  gate pipeline.
+
+  Ran 4 shell commands (ctrl+o to expand)
+
+● Now let's derive font requirements and run feasibility assess + gate check.
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● Write(~\AppData\Local\Temp\claude\C------WORK-----AIPDFBuilder\abf01d93-7c2a-4
+       134-a7b2-91e6b35a9eca\scratchpad\edit-page\reuse-results.json)
+  ⎿  Wrote 10 lines to ..\..\Users\MPoskannyi.KH-AVQ-LP70\AppData\Local\Tem
+     p\claude\C------WORK-----AIPDFBuilder\abf01d93-7c2a-4134-a7b2-91e6b35a
+     9eca\scratchpad\edit-page\reuse-results.json
+      1 {
+      3     "SystemRibbon": {"reuse_candidate": "res/shared/components/Sy
+        stemRibbon/SystemRibbon.js", "reuse_mode": "wholesale", "composab
+        ility": null, "cross_root": false},
+        FeaturesRibbon/FeaturesRibbon.js", "reuse_mode": "wholesale", "co
+        mposability": null, "cross_root": false},
+        ", "composability": null, "cross_root": false},
+      6     "TabDocRibbon": {"reuse_candidate": null, "reuse_mode": "buil
+        d", "composability": null, "cross_root": false},
+        ld", "composability": null, "cross_root": f
+     … +8 lines (ctrl+o to expand)
+
+  Read 1 file, ran 7 shell commands (ctrl+o to expand)
+
+● Both are true masters. Now let's fetch RightPanelTab and Page — likely
+  instances, so spec derive will redirect us to the master componentId.
+
+  Read 1 file, ran 2 shell commands (ctrl+o to expand)
+
+● 6 background agents launched (↓ to manage)
+   ├ component-creator:sciter-asset-worker (Fetch ToolsRibbon assets)
+   ├ component-creator:sciter-asset-worker (Fetch RightPanelTab assets)
+   ├ component-creator:sciter-build-worker (Build ToolsRibbon component)
+   ├ component-creator:sciter-build-worker (Build TabDocRibbon component)
+   ├ component-creator:sciter-build-worker (Build RightPanelTab component)
+   └ component-creator:sciter-build-worker (Build Page component)
+
+● Agent "Fetch RightPanelTab assets" finished · 42s
+
+● RightPanelTab's assets landed cleanly. Waiting on the ToolsRibbon asset-worker
+  and the four build-workers to finish before assembling the page.
+
+● Still running — 5 of 6 in progress. I'll wait for the completion
+  notifications.
+
+● Still in progress. I'll wait for the scheduled wakeup or task notifications
+  rather than poll further.  ⎿  Stop says: Auto-load cost: 44 lines (~79 tokens)  •  CLAUDE.md 44  •  rules
+     0 uncond + 7 scoped  •  = unchanged vs last session
+
+✻ Cooked for 12m 58s
+
+● Agent "Fetch ToolsRibbon assets" finished · 1m 56s
+
+● All ToolsRibbon assets landed too. Still waiting on the 4 build-workers.
+
+● Both asset-worker fetches (ToolsRibbon and RightPanelTab) are done and clean.
+  The four sciter-build-worker agents (ToolsRibbon, TabDocRibbon, RightPanelTab,
+  Page) are still running their codegen/Gate-1/SSIM pipelines — I'll continue
+  waiting for their completion notifications before moving to P3 (page
+  assembly).
+  ⎿  Stop says: Auto-load cost: 44 lines (~79 tokens)  •  CLAUDE.md 44  •  rules
+     0 uncond + 7 scoped  •  = unchanged vs last session
+
+✻ Crunched for 29s
+
+● Agent "Build RightPanelTab component" finished · 6m 17s
+
+● RightPanelTab build finished — Gate-1 matched 4/4 exactly, SSIM deferred due
+  to a DPI-scale mismatch (this machine's 125% display scaling vs. the reference
+  fetched at scale=1), correctly flagged as a non-actionable environment
+  artifact rather than iterated on. Still waiting on ToolsRibbon, TabDocRibbon,
+  and Page.
+
+● Waiting for the remaining build-worker notifications.
+  ⎿  Stop says: Auto-load cost: 44 lines (~79 tokens)  •  CLAUDE.md 44  •  rules
+     0 uncond + 7 scoped  •  = unchanged vs last session
+
+✻ Crunched for 23s
+
+● Agent "Build Page component" finished · 8m 5s
+
+● Page build passed cleanly (SSIM 1.000 after correcting a DPI-scale artifact
+  out-of-band, component itself untouched). Note: calibration now reports stale
+  again — expected, since these builds just added new component CSS files, which
+  is exactly what invalidates the calibration fingerprint; I'll recommend a
+  fresh calibrate run once the whole page build lands. Still waiting on
+  ToolsRibbon and TabDocRibbon.
+
+● Waiting for ToolsRibbon and TabDocRibbon to finish.
+  ⎿  Stop says: Auto-load cost: 44 lines (~79 tokens)  •  CLAUDE.md 44  •  rules
+     0 uncond + 7 scoped  •  = unchanged vs last session
+
+✻ Crunched for 28s
+
+● Agent "Build TabDocRibbon component" finished · 8m 50s
+
+● TabDocRibbon build finished — Gate-1 passed 3/3 after one geometry fix, SSIM
+  0.927 (comfortably above the 0.85 tier) but marked deferred due to the same
+  DPI-scale artifact class as the others. Only ToolsRibbon (the biggest unit) is
+  still running.
+
+● Waiting on ToolsRibbon's completion.
+  ⎿  Stop says: Auto-load cost: 44 lines (~79 tokens)  •  CLAUDE.md 44  •  rules
+     0 uncond + 7 scoped  •  = unchanged vs last session
+
+✻ Churned for 21s
+
+● Agent "Build ToolsRibbon component" finished · 14m 13s
+● All four build-workers are done. Let me verify the registry state — one
+  flagged a concern (ToolsRibbon written with type: "widget", which would break
+  the project's established convention where every UI entry uses type: 
+  "component").
+
+  Ran 3 shell commands (ctrl+o to expand)
+
+● Write(~\AppData\Local\Temp\claude\C------WORK-----AIPDFBuilder\abf01d93-7c2a-4
+       134-a7b2-91e6b35a9eca\scratchpad\edit-page\toolsribbon-fix.json)
+  ⎿  Wrote 22 lines to ..\..\Users\MPoskannyi.KH-AVQ-LP70\AppData\Local\Tem
+     p\claude\C------WORK-----AIPDFBuilder\abf01d93-7c2a-4134-a7b2-91e6b35a
+     9eca\scratchpad\edit-page\toolsribbon-fix.json
+       1 {
+       3   "path": "res/shared/components/ToolsRibbon/ToolsRibbon.js",
+       5   "type": "component",
+       6   "description": "1920x50dip \"Type=Edit\" tools bar: 13 tool bu
+         label) + 5 dividers in a left group, plus a right-side zoom cont
+         down.svg, zoom-in plus.svg button). Click-stub tier: every tool/
+         he action id; the zoom field itself is static/non-interactive (n
+         o dropdown variant in this design fetch).",
+       8   "parent": null,
+      10     "Type=Edit"
+     … +19 lines (ctrl+o to expand)
+
+  Read 6 files, ran 2 shell commands (ctrl+o to expand)
+
+● Write(res\pages\Edit\Edit.js)
+  ⎿  Wrote 67 lines to res\pages\Edit\Edit.js
+       1 // res/pages/Edit/Edit.js — Edit page view (registry type "page"
+       2 // workspace. Figma: file 2jGq5p5qY4lsf5QK2stfOY, section node 1
+       3 // node 15099:12998 ("Edit"), two side-by-side instances "Edit-F
+         ree user" (15099:13077) and
+         eaturesRibbon + ToolsRibbon render
+         elow varies with `plan`.
+       7 // Free/Pro is a ROLE axis (context/token scope per the project'
+         s axis-compile-map), not an R11
+         rop.
+      10 // TODO(scope-gap): the Figma "Edit-Free user" instance a
+     … +81 lines (ctrl+o to expand)
+
+  Searched for 1 pattern, read 2 files (ctrl+o to expand)
+
+● Write(res\pages\Edit\Edit.css)
+  ⎿  Wrote 38 lines to res\pages\Edit\Edit.css
+      1 /* Edit page styleset — Figma file 2jGq5p5qY4lsf5QK2stfOY, sectio
+      2  * component node 15099:12998 (1920x1080, fluid here). Tokens fro
+        m ../../shared/lib/tokens.css.
+        arations for the styleset root
+        rower than a sibling does NOT
+      5  * centre under a shared parent centring — RightPanelTab/Page eac
+      6  *
+      7  * Chrome band (SystemRibbon 48 + FeaturesRibbon 40 + ToolsRibbon
+      8  * stack of self-sized (width:*, fixed-height) children — the sam
+      9  * already est
+     … +42 lines (ctrl+o to expand)
+
+● Update(res\pages\Edit\Edit.js)
+  ⎿  Added 3 lines, removed 1 line
+      46            <div class="edit__canvas-row">
+      47              <RightPanelTab side="left" />
+      48              <div class="edit__canvas-center">
+      49 -              <Page width={1094} height={812} />               
+      49 +              <div class="edit__page-slot">                    
+      50 +                <Page width={1094} height={812} />             
+      51 +              </div>                                           
+      52              </div>
+      53              <RightPanelTab side="right" />
+      54            </div>
+
+● Update(res\pages\Edit\Edit.css)
+  ⎿  Added 9 lines
+      35      height: *;
+      36      box-sizing: border-box;
+      37    }
+      38 +                                                               
+      39 +  /* Page.y=130 inside Main Content minus the 40dip TabDocRibbo
+         +n already stacked above this row                               
+      40 +   * = 90dip top margin; spring left/right margins center the f
+         +ixed 1094dip canvas horizontally                               
+      41 +   * (Home.css's .home__empty-visual established this same marg
+         +in-left:*/margin-right:* idiom for                             
+      42 +   * centering a single fixed-size child — calibration.json's l
+         +ayout.rules confirms it holds). */                             
+      43 +  .edit__page-slot {                                           
+      44 +    margin: 90dip * 0 *;                                       
+      45 +    width: 1094dip;                                            
+      46 +  }                                                            
+      47  }
+
+  Read 1 file (ctrl+o to expand)
+
+● Write(res\pages\Edit\Edit.preview.js)
+  ⎿  Wrote 8 lines to res\pages\Edit\Edit.preview.js
+      1 // res/pages/Edit/Edit.preview.js — CSF story mounting the whole 
+        Edit view. Root-wide shell stubs
+      2 // live in res/.sdt-preview-shim.js (R2) — nothing view-specific 
+      3 // globals in this project). Edit is not state-aware (Free/Pro is
+         a role prop, not a lifecycle
+      4 // phase) so there is a single Default export, no per-state expor
+        ts.
+      6 import { Edit } from "./Edit.js";
+      7 
+      8 export const Default = () => <Edit />;
+     … +1 line (ctrl+o to expand)
+
+● Update(res\app\App.js)
+  ⎿  Added 5 lines, removed 1 line
+       6  
+       7  import { route, createRouter, registerSlot, setAppElement, curr
+          entRouteView } from "../shared/lib/router.js";
+       8  import { Home } from "../pages/Home/Home.js";
+       9 +import { Edit } from "../pages/Edit/Edit.js";                  
+      10  
+      11  // Main-slot route tree. "home" is the boot route: the app had 
+          only a placeholder body before
+      12  // this page existed, and the Home screen-set IS the app landin
+          g in the design — an explicit
+      12 -// landing-archetype decision, not a hijack of a prior route.  
+      13 +// landing-archetype decision, not a hijack of a prior route. "
+         +edit" is registered only — the                                 
+      14 +// boot route stays "home" (Edit is the PDF-editing workspace a
+         + document is opened INTO, not the                              
+      15 +// app landing).                                               
+      16  const mainRouter = createRouter({
+      17    routes: [
+      18      route({ path: "home", component: Home }),
+      19 +    route({ path: "edit", component: Edit }),                  
+      20    ],
+      21    initial: "home",
+      22  });
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Clean. Now let's render the assembled Edit page to visually verify the
+  assembly (structural pass, since per-unit Gate-1 already covers each
+  component's own geometry).
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● Let me view the captured screenshot to visually verify the assembly.
+
+  Searched for 1 pattern, read 5 files, ran 4 shell commands (ctrl+o to expand)
+● This confirms a real, newly-surfaced assembly-level defect: position:absolute
+  children inside SystemRibbon and ToolsRibbon anchor to the outermost styleset
+  root (the whole Edit page) instead of their own component root — invisible
+  when each component is tested standalone (or is the first child in a stack),
+  but breaking the moment they're composed into a multi-band page. Let me fix it
+  by giving each component root a position: relative containing-block.
+
+● Update(res\shared\components\ToolsRibbon\ToolsRibbon.css)
+  ⎿  Added 8 lines
+      21  
+      22  @set tools-ribbon {
+      23    :root {
+      24 +    position: relative; /* containing block for .tools-ribbon__
+         +tools/.tools-ribbon__zoom below —                              
+      25 +      without it, Sciter anchors position:absolute descendants 
+         +to the OUTERMOST styleset root in                              
+      26 +      the containment chain (this project's own "absolutes anch
+         +or to styleset root" engine quirk),                            
+      27 +      not to THIS component's own root. Invisible when this com
+         +ponent is tested standalone or is                              
+      28 +      the first child of a page (both cases coincide with the o
+         +utermost root anyway) — it only                                
+      29 +      surfaces once a page assembles this component alongside e
+         +arlier siblings, where the                                     
+      30 +      unanchored absolutes collapse onto the PAGE's root instea
+         +d of this bar's own box (found                                 
+      31 +      assembling res/pages/Edit/Edit.js, AIPDFBuilder 2026-09-1
+         +0). */                                                         
+      32      box-sizing: border-box;
+      33      width: *;
+      34      height: 50dip;
+
+● Update(res\shared\components\SystemRibbon\SystemRibbon.css)
+  ⎿  Added 10 lines
+       9  
+      10  @set system-ribbon {
+      11    :root {
+      12 +    /* Containing block for .system-ribbon__left/.system-ribbon
+         +__right below — without it, Sciter                             
+      13 +       anchors position:absolute descendants to the OUTERMOST s
+         +tyleset root in the containment                                
+      14 +       chain, not to THIS component's own root (this project's 
+         +"absolutes anchor to styleset root"                            
+      15 +       engine quirk). This component happened to render correct
+         +ly wherever it shipped before                                  
+      16 +       (Home page, this page) only because it was always the FI
+         +RST child there, so its own root                               
+      17 +       origin coincided with the page's origin — the bug was la
+         +tent, not absent. Surfaced when                                
+      18 +       ToolsRibbon (a LATER sibling using the same absolute-ove
+         +r-root idiom, without this fix)                                
+      19 +       collapsed onto the SAME page-root origin instead of its 
+         +own row (res/pages/Edit/Edit.js,                               
+      20 +       AIPDFBuilder 2026-09-10) — added here too, preventively,
+         + since the same latent bug applies. */                         
+      21 +    position: relative;                                        
+      22      display: block;
+      23      width: *;
+      24      height: 48dip;
+
+● Now let's re-render and verify the fix works, and also spot-check that this
+  didn't break SystemRibbon's existing Home-page rendering.
+
+  Read 1 file, ran 1 shell command (ctrl+o to expand)
+
+● Assembly is now correct — all 4 chrome bands render in their proper rows with
+  no overlap, TabDocRibbon and the Page canvas with mirrored RightPanelTab rails
+  all match the design. Let me quickly verify the SystemRibbon.css fix didn't
+  regress the existing Home page.
+
+  Read 1 file, ran 2 shell commands (ctrl+o to expand)
+
+● Clean. Now let's proceed to P6 — registry upsert for the Edit page entry
+  itself.
+
+● Write(~\AppData\Local\Temp\claude\C------WORK-----AIPDFBuilder\abf01d93-7c2a-4
+       134-a7b2-91e6b35a9eca\scratchpad\edit-page\edit-page-entry.json)
+  ⎿  Wrote 16 lines to ..\..\Users\MPoskannyi.KH-AVQ-LP70\AppData\Local\Tem
+     p\claude\C------WORK-----AIPDFBuilder\abf01d93-7c2a-4134-a7b2-91e6b35a
+     9eca\scratchpad\edit-page\edit-page-entry.json
+       1 {
+       3   "path": "res/pages/Edit/Edit.js",
+       5   "type": "page",
+       6   "description": "Main PDF-editing workspace: persistent SystemR
+          strip, left/right RightPanelTab rails, and a centered Page canv
+         emRibbon/FeaturesRibbon render their Pro-only content regardless
+         ge P8 report's Shadow-parity section).",
+       7   "uses": ["SystemRibbon", "FeaturesRibbon", "ToolsRibbon", "Tab
+       8   "parent": null,
+      10   "states": [],
+     … +13 lines (ctrl+o to expand)
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● No cycle, clean registry. Now P6.5 — feature-registry receipt.
+
+  Ran 6 shell commands (ctrl+o to expand)
+
+● Write(.claude\state\reports\sciter-create-page-20260910-105936.md)
+  ⎿  Wrote 196 lines to
+     .claude\state\reports\sciter-create-page-20260910-105936.md
+       1 <!-- report: skill=sciter-create-page ts=2026-09-10T10:59:36Z wa
+       2 
+       4 
+       6 
+         e `15092:4589`, component node `15099:12998` (two side-by-side i
+         nstances `Edit-Free user` 15099:13077 / `Edit-Pro user` 15100:13
+       8 - **Archetype → registry type**: full-window app screen → `page`
+          (context/token scope per the axis-compile-map), not an R11 life
+         d.
+      10 - **Pa
+     … +385 lines (ctrl+o to expand)
+  ⎿  PostToolUse:Write hook returned blocking error
+  ⎿  [bash "${CLAUDE_PLUGIN_ROOT}/hooks/lint-md.sh"]: lint-md: markdownlint 
+     issues in C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-
+     page-20260910-105936.md
+
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     910-105936.md:101 error MD032/blanks-around-lists Lists should be 
+     surrounded by blank lines [Context: "- 4× `Features` frame, 2× `Lab..."]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     910-105936.md:121 error MD032/blanks-around-lists Lists should be 
+     surrounded by blank lines [Context: "- `layout: OK (61 nodes)` / `f..."]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     910-105936.md:130 error MD032/blanks-around-lists Lists should be 
+     surrounded by blank lines [Context: "- Iteration 1: `layout: FAIL (..."]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     910-105936.md:136 error MD032/blanks-around-lists Lists should be 
+     surrounded by blank lines [Context: "- `layout: OK (6 nodes)` / `fi..."]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     910-105936.md:143 error MD032/blanks-around-lists Lists should be 
+     surrounded by blank lines [Context: "- Iteration 1: `Gate 1 OK (1/1..."]
+
+     Config: .markdownlint.json — adjust the doc or the rule, not both.
+
+● Update(.claude\state\reports\sciter-create-page-20260910-105936.md)
+  ⎿  Added 1 line
+       98  ```
+       99  
+      100  10 advisory findings, all `R1` ("plain FRAME named 'X' appears
+            N× — should be a Component reused via instances"):
+      101 +                                                              
+      102  - 4× `Features` frame, 2× `Label`, 2× `Options` — all inside t
+           he REUSE units (SystemRibbon/FeaturesRibbon's own internal str
+           ucture, out of this run's build scope, unaffected by anything 
+           built here).
+      103  - 2× `Tools` frame — inside ToolsRibbon itself, an artifact of
+            the Figma file showing the SAME ToolsRibbon component placed 
+           twice (Free-user + Pro-user copies) without being instanced fr
+           om one master in the design file — exactly what this build's o
+           wn `ToolsRibbon` component (imported once, instanced via `<Too
+           lsRibbon/>`) resolves in code, even though the design-time R1 
+           finding persists.
+      104  
+  ⎿  PostToolUse:Edit hook returned blocking error
+  ⎿  [bash "${CLAUDE_PLUGIN_ROOT}/hooks/lint-md.sh"]: lint-md: markdownlint 
+     issues in C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-
+     page-20260910-105936.md
+
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     910-105936.md:122 error MD032/blanks-around-lists Lists should be 
+     surrounded by blank lines [Context: "- `layout: OK (61 nodes)` / `f..."]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     910-105936.md:131 error MD032/blanks-around-lists Lists should be 
+     surrounded by blank lines [Context: "- Iteration 1: `layout: FAIL (..."]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     910-105936.md:137 error MD032/blanks-around-lists Lists should be 
+     surrounded by blank lines [Context: "- `layout: OK (6 nodes)` / `fi..."]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     910-105936.md:144 error MD032/blanks-around-lists Lists should be 
+     surrounded by blank lines [Context: "- Iteration 1: `Gate 1 OK (1/1..."]
+
+     Config: .markdownlint.json — adjust the doc or the rule, not both.
+
+● Update(.claude\state\reports\sciter-create-page-20260910-105936.md)  ⎿  Added 1 line
+      119  ## Worker evidence
+      120  
+      121  **ToolsRibbon** (`gate1_iterations: 4`):
+      122 +                                                              
+      123  - `layout: OK (61 nodes)` / `figma-spec coverage: matched 53/5
+           3 nodes (53 exact)` / `Gate 1 OK (53/53 nodes matched)`
+      124  - `DPI PRE-CHECK: reference 1920x50 vs capture 2400x63 (x0.80 
+           uniform)` / `SSIM=0.783 threshold=0.85 (dpi-mismatch x0.80 — d
+           o not iterate; normalize the scale) iteration=1`
+      125  - `Registered 4/4 project font(s) with the OS session for scap
+           p` (required an explicit `--main-css` pointing at `typography.
+           css` — this project's real font entry point isn't at an auto-d
+           etected `res/app/main.css`/`index.css` path)
+  ⎿  PostToolUse:Edit hook returned blocking error
+  ⎿  [bash "${CLAUDE_PLUGIN_ROOT}/hooks/lint-md.sh"]: lint-md: markdownlint 
+     issues in C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-
+     page-20260910-105936.md
+
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     910-105936.md:132 error MD032/blanks-around-lists Lists should be 
+     surrounded by blank lines [Context: "- Iteration 1: `layout: FAIL (..."]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     910-105936.md:138 error MD032/blanks-around-lists Lists should be 
+     surrounded by blank lines [Context: "- `layout: OK (6 nodes)` / `fi..."]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     910-105936.md:145 error MD032/blanks-around-lists Lists should be 
+     surrounded by blank lines [Context: "- Iteration 1: `Gate 1 OK (1/1..."]
+
+     Config: .markdownlint.json — adjust the doc or the rule, not both.
+
+● Update(.claude\state\reports\sciter-create-page-20260910-105936.md)
+  ⎿  Added 1 line
+      129  - Registry `type` written as `widget` — **corrected to `compon
+           ent` by the orchestrator** post-return (confirmed by reading t
+           he registry back: all 13 other UI entries use `component`, non
+           e use `widget` — see § Scope check).
+      130  
+      131  **TabDocRibbon** (`gate1_iterations: 2`):
+      132 +                                                              
+      133  - Iteration 1: `layout: FAIL (6 nodes)` — a 6px y-delta on the
+            tab label text box (line-height/mixin mismatch) — fixed.
+      134  - Iteration 2: `Gate 1 OK (3/3 nodes matched)` / `DPI PRE-CHEC
+           K: reference 1920x40 vs capture 2400x50 (x0.80 uniform)` / `SS
+           IM=0.927 threshold=0.85 (dpi-mismatch x0.80) iteration=2`
+      135  - `gap-lint: OK` / structural lint: 1 finding (`missing-box-si
+           zing`) fixed, then clean.
+  ⎿  PostToolUse:Edit hook returned blocking error
+  ⎿  [bash "${CLAUDE_PLUGIN_ROOT}/hooks/lint-md.sh"]: lint-md: markdownlint 
+     issues in C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-
+     page-20260910-105936.md
+
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     910-105936.md:139 error MD032/blanks-around-lists Lists should be 
+     surrounded by blank lines [Context: "- `layout: OK (6 nodes)` / `fi..."]
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     910-105936.md:146 error MD032/blanks-around-lists Lists should be 
+     surrounded by blank lines [Context: "- Iteration 1: `Gate 1 OK (1/1..."]
+
+     Config: .markdownlint.json — adjust the doc or the rule, not both.
+
+● Update(.claude\state\reports\sciter-create-page-20260910-105936.md)
+  ⎿  Added 1 line
+      136  - `registry validate: 0/0 — 13 entries`.
+      137  
+      138  **RightPanelTab** (`gate1_iterations: 1`):
+      139 +                                                              
+      140  - `layout: OK (6 nodes)` / `figma-spec coverage: matched 4/4 n
+           odes (4 exact)` / `Gate 1 OK`
+      141  - `DPI PRE-CHECK: reference 40x80 vs capture 50x100 (x0.80 uni
+           form)` / `SSIM=0.805 threshold=0.92 iteration=1`
+      142  - `gap-lint: OK` / structural lint: `pass:true, violation_coun
+           t:0`.
+  ⎿  PostToolUse:Edit hook returned blocking error
+  ⎿  [bash "${CLAUDE_PLUGIN_ROOT}/hooks/lint-md.sh"]: lint-md: markdownlint 
+     issues in C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-
+     page-20260910-105936.md
+
+     C:\____WORK____\AIPDFBuilder\.claude\state\reports\sciter-create-page-20260
+     910-105936.md:147 error MD032/blanks-around-lists Lists should be 
+     surrounded by blank lines [Context: "- Iteration 1: `Gate 1 OK (1/1..."]
+
+     Config: .markdownlint.json — adjust the doc or the rule, not both.
+
+● Update(.claude\state\reports\sciter-create-page-20260910-105936.md)
+  ⎿  Added 1 line
+      144  - Code Connect: `.figma.ts` generated, publish not run (scope)
+           .
+      145  
+      146  **Page** (`gate1_iterations: 2`):
+      147 +                                                              
+      148  - Iteration 1: `Gate 1 OK (1/1)` but `DPI PRE-CHECK` fired (`1
+           094x812` vs `1368x1015`, x0.80) — `SSIM=1.000` (already 1.0 ev
+           en under the mismatched scale, since the component is a single
+            flat-color rect + shadow with no fine detail sensitive to the
+            ratio).
+      149  - Iteration 2: reference resized out-of-band to the capture's 
+           exact pixel grid (component untouched) → `SSIM=1.000 threshold
+           =0.92 iteration=2`, no DPI PRE-CHECK line.
+      150  - `code-connect publish`: `FileNotFoundError` — the `@figma/co
+           de-connect` CLI binary is not installed on this machine (`wher
+           e figma` empty). Environment/tooling gap, not a code defect; `
+           .figma.ts` itself generated correctly.
+
+● Good, lint passed this time. Now let's run report-lint against the finished
+  report.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Update(.claude\state\reports\sciter-create-page-20260910-105936.md)
+  ⎿  Added 9 lines, removed 5 lines
+      120  
+      121  **ToolsRibbon** (`gate1_iterations: 4`):
+      122  
+      123 +- `"sciter-devtools 0.1.0 @ C:\Users\MPoskannyi.KH-AVQ-LP70\.c
+          +laude\plugins\cache\frontend-toolkit\component-creator\0.7.104
+          +\skills\sciter-create-component\sciter-devtools\src\sciter_dev
+          +tools"` (identical on every invocation — no mixed-copy)       
+      124 +- `"deps check: 0 violation(s), 0 warning(s)"`                
+      125 +- `"Registered 4/4 project font(s) with the OS session for sca
+          +pp"` (required an explicit `--main-css` pointing at `typograph
+          +y.css` — this project's real font entry point isn't at an auto
+          +-detected `res/app/main.css`/`index.css` path)                
+      126 +- `"Preview shim: C:\____WORK____\AIPDFBuilder\res\.sdt-previe
+          +w-shim.js"`                                                   
+      127 +- `"Captured by window handle (z-order-immune)"`              
+      128  - `layout: OK (61 nodes)` / `figma-spec coverage: matched 53/5
+           3 nodes (53 exact)` / `Gate 1 OK (53/53 nodes matched)`
+      124 -- `DPI PRE-CHECK: reference 1920x50 vs capture 2400x63 (x0.80 
+          -uniform)` / `SSIM=0.783 threshold=0.85 (dpi-mismatch x0.80 — d
+          -o not iterate; normalize the scale) iteration=1`              
+      125 -- `Registered 4/4 project font(s) with the OS session for scap
+          -p` (required an explicit `--main-css` pointing at `typography.
+          -css` — this project's real font entry point isn't at an auto-d
+          -etected `res/app/main.css`/`index.css` path)                  
+      126 -- `gap-lint: OK` / structural lint final: `pass:true, violatio
+          -n_count:0`                                                    
+      127 -- `registry validate: 0 violation(s), 0 warning(s) — 14 entry(
+          -ies) checked`                                                 
+      128 -- `Generated: .../ToolsRibbon.figma.ts` (publish not run — gen
+          -eration only was in scope)                                    
+      129 +- `"DPI PRE-CHECK: reference 1920x50 vs capture 2400x63 (x0.80
+          + uniform)"` / `"SSIM=0.783 threshold=0.85 (dpi-mismatch x0.80 
+          +— do not iterate; normalize the scale) iteration=1"`          
+      130 +- `"gap-lint: OK (no nested Container offset=, no inline shim 
+          +globals, no numeric root width)"` / structural lint final: `pa
+          +ss:true, violation_count:0`                                   
+      131 +- `"registry validate: 0 violation(s), 0 warning(s) — 14 entry
+          +(ies) checked"`                                               
+      132 +- `"Generated: C:\____WORK____\AIPDFBuilder\res\shared\compone
+          +nts\ToolsRibbon\ToolsRibbon.figma.ts"` (publish not run — gene
+          +ration only was in scope)                                     
+      133  - Registry `type` written as `widget` — **corrected to `compon
+           ent` by the orchestrator** post-return (confirmed by reading t
+           he registry back: all 13 other UI entries use `component`, non
+           e use `widget` — see § Scope check).
+      134  
+      135  **TabDocRibbon** (`gate1_iterations: 2`):
+
+● Update(.claude\state\reports\sciter-create-page-20260910-105936.md)
+  ⎿  Added 7 lines, removed 3 lines
+      134  
+      135  **TabDocRibbon** (`gate1_iterations: 2`):
+      136  
+      137 +- `"sciter-devtools 0.1.0 @ ...\sciter-create-component\sciter
+          +-devtools\src\sciter_devtools"` (identical on every invocation
+          +)                                                             
+      138 +- `"deps check: 0 violation(s), 0 warning(s)"`                
+      139 +- `"Preview shim: C:\____WORK____\AIPDFBuilder\res\.sdt-previe
+          +w-shim.js"`                                                   
+      140 +- `"Captured by window handle (z-order-immune)"`              
+      141  - Iteration 1: `layout: FAIL (6 nodes)` — a 6px y-delta on the
+            tab label text box (line-height/mixin mismatch) — fixed.
+      138 -- Iteration 2: `Gate 1 OK (3/3 nodes matched)` / `DPI PRE-CHEC
+          -K: reference 1920x40 vs capture 2400x50 (x0.80 uniform)` / `SS
+          -IM=0.927 threshold=0.85 (dpi-mismatch x0.80) iteration=2`     
+      139 -- `gap-lint: OK` / structural lint: 1 finding (`missing-box-si
+          -zing`) fixed, then clean.                                     
+      140 -- `registry validate: 0/0 — 13 entries`.                      
+      142 +- Iteration 2: `"Gate 1 OK (3/3 nodes matched)"` / `"DPI PRE-C
+          +HECK: reference 1920x40 vs capture 2400x50 (x0.80 uniform)"` /
+          + `"SSIM=0.927 threshold=0.85 (dpi-mismatch x0.80) iteration=2"
+          +`                                                             
+      143 +- `"gap-lint: OK (no nested Container offset=, no inline shim 
+          +globals, no numeric root width)"` / structural lint: 1 finding
+          + (`missing-box-sizing`) fixed, then clean.                    
+      144 +- `"registry validate: 0 violation(s), 0 warning(s) — 13 entry
+          +(ies) checked"`.                                              
+      145  
+      146  **RightPanelTab** (`gate1_iterations: 1`):
+      147  
+
+● Update(.claude\state\reports\sciter-create-page-20260910-105936.md)
+  ⎿  Added 8 lines, removed 4 lines
+      145  
+      146  **RightPanelTab** (`gate1_iterations: 1`):
+      147  
+      148 -- `layout: OK (6 nodes)` / `figma-spec coverage: matched 4/4 n
+          -odes (4 exact)` / `Gate 1 OK`                                 
+      149 -- `DPI PRE-CHECK: reference 40x80 vs capture 50x100 (x0.80 uni
+          -form)` / `SSIM=0.805 threshold=0.92 iteration=1`              
+      150 -- `gap-lint: OK` / structural lint: `pass:true, violation_coun
+          -t:0`.                                                         
+      151 -- `registry validate: 0/0 — 11 entries`.                      
+      148 +- `"sciter-devtools 0.1.0 @ ...\sciter-create-component\sciter
+          +-devtools\src\sciter_devtools"` (identical on every invocation
+          +)                                                             
+      149 +- `"deps check: 0 violation(s), 0 warning(s)"`                
+      150 +- `"Preview shim: C:\____WORK____\AIPDFBuilder\res\.sdt-previe
+          +w-shim.js"`                                                   
+      151 +- `"Captured by window handle (z-order-immune)"`              
+      152 +- `"layout: OK (6 nodes)"` / `"figma-spec coverage: matched 4/
+          +4 nodes (4 exact)"` / `"Gate 1 OK (4/4 nodes matched)"`       
+      153 +- `"DPI PRE-CHECK: reference 40x80 vs capture 50x100 (x0.80 un
+          +iform)"` / `"SSIM=0.805 threshold=0.92 (dpi-mismatch x0.80 — d
+          +o not iterate; normalize the scale) iteration=1"`             
+      154 +- `"gap-lint: OK (no nested Container offset=, no inline shim 
+          +globals, no numeric root width)"` / structural lint: `pass:tru
+          +e, violation_count:0`.                                        
+      155 +- `"registry validate: 0 violation(s), 0 warning(s) — 11 entry
+          +(ies) checked"`.                                              
+      156  - Code Connect: `.figma.ts` generated, publish not run (scope)
+           .
+      157  
+      158  **Page** (`gate1_iterations: 2`):
+
+● Update(.claude\state\reports\sciter-create-page-20260910-105936.md)
+  ⎿  Added 7 lines, removed 2 lines
+      157  
+      158  **Page** (`gate1_iterations: 2`):
+      159  
+      160 -- Iteration 1: `Gate 1 OK (1/1)` but `DPI PRE-CHECK` fired (`1
+          -094x812` vs `1368x1015`, x0.80) — `SSIM=1.000` (already 1.0 ev
+          -en under the mismatched scale, since the component is a single
+          - flat-color rect + shadow with no fine detail sensitive to the
+          - ratio).                                                      
+      161 -- Iteration 2: reference resized out-of-band to the capture's 
+          -exact pixel grid (component untouched) → `SSIM=1.000 threshold
+          -=0.92 iteration=2`, no DPI PRE-CHECK line.                    
+      160 +- `"sciter-devtools 0.1.0 @ ...\sciter-create-component\sciter
+          +-devtools\src\sciter_devtools"` (identical on every invocation
+          +)                                                             
+      161 +- `"deps check: 0 violation(s), 0 warning(s)"`                
+      162 +- `"Preview shim: C:\____WORK____\AIPDFBuilder\res\.sdt-previe
+          +w-shim.js"`                                                   
+      163 +- `"Captured by window handle (z-order-immune)"`              
+      164 +- Iteration 1: `"Gate 1 OK (1/1 nodes matched)"` but `"DPI PRE
+          +-CHECK: reference 1094x812 vs capture 1368x1015 (x0.80 uniform
+          +)"` fired — `"SSIM=1.000 threshold=0.92 (dpi-mismatch x0.80 — 
+          +do not iterate; normalize the scale) iteration=1"` (already 1.
+          +0 even under the mismatched scale, since the component is a si
+          +ngle flat-color rect + shadow with no fine detail sensitive to
+          + the ratio).                                                  
+      165 +- Iteration 2: reference resized out-of-band to the capture's 
+          +exact pixel grid (component untouched) → `"Gate 1 OK (1/1 node
+          +s matched)"` / `"SSIM=1.000 threshold=0.92 iteration=2"`, no D
+          +PI PRE-CHECK line.                                            
+      166 +- `"Upserted 'Page' into C:\____WORK____\AIPDFBuilder\.claude\
+          +state\component-registry.json"` / `"registry validate: 0 viola
+          +tion(s), 0 warning(s) — 12 entry(ies) checked"`.              
+      167  - `code-connect publish`: `FileNotFoundError` — the `@figma/co
+           de-connect` CLI binary is not installed on this machine (`wher
+           e figma` empty). Environment/tooling gap, not a code defect; `
+           .figma.ts` itself generated correctly.
+      168  - Two preview `scapp` windows (pid 30068, 23800) were intentio
+           nally left open per the harness's own convention.
+      169  
+
+● Now let's re-run report-lint.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+● Report-lint is clean. Now P9 — build the Storybook catalog and gate-open the
+  Edit page.
+
+  Ran 5 shell commands (ctrl+o to expand)
+
+● The Edit page build is complete. Here's the summary:
+
+  sciter-create-page — Edit page (Free/Pro workspace)
+
+  Built: res/pages/Edit/ — the main PDF-editing screen, wired at route edit
+  (boot route unchanged, still home). Composed of SystemRibbon + FeaturesRibbon
+  (reused as-is) + 4 new components: ToolsRibbon (13-button tool bar + zoom
+  control), TabDocRibbon (open-document tab strip), RightPanelTab (mirrored
+  bookmark rail), Page (document canvas). All registered, registry validate
+  clean (15 entries, no cycles), feature-registry receipt written.
+
+  Real defect found and fixed mid-build: composing SystemRibbon and ToolsRibbon
+  together exposed a genuine Sciter engine quirk — their internal
+  position:absolute groups anchor to the page's outermost styleset root instead
+  of their own component root, invisible when either component is tested alone
+  or is first in a stack, but causing them to visually collapse on top of each
+  other once assembled mid-page. Fixed with position: relative on both component
+  roots; verified visually (before/after screenshots) and regression-checked
+  against the existing Home page (unaffected).
+
+  Honest gaps, not silently dropped:
+  - SystemRibbon/FeaturesRibbon were reused wholesale per the CLI's decision,
+    but this Figma instance's Free-tier chrome ("Go Pro" button, "Activate now"
+    CTA, search bar, share/support icons) isn't in the current components —
+    flagged as a follow-up extension, not built here.
+  - Two-green-gate reports NOT_BUILDABLE (report-only, build proceeded): a
+    design-readiness R1 finding plus a real, previously-known environment gap —
+    bundled Poppins isn't OS-registered, so packed Release falls back to a
+    system font.
+  - 3 of 4 new components have SSIM deferred (not failed) purely from this
+    machine's 125% display scaling vs. scale-1 Figma references — Gate-1
+    geometry is exact on all of them.
+
+  Verified: Storybook gate passed — 15/15 rendered, Target OK: target 'Edit' 
+  renderable. Full report at
+  .claude/state/reports/sciter-create-page-20260910-105936.md (report-lint
+  clean).
+
+  Nothing was committed — working tree has the new/modified files ready for your
+  review.
+  ⎿  Stop says: Auto-load cost: 44 lines (~79 tokens)  •  CLAUDE.md 44  •  rules
+     0 uncond + 7 scoped  •  = unchanged vs last session
+
+✻ Crunched for 55m 10s
+
+✻ Claude resuming /loop wakeup (Sep 10 2:54pm)
+
+● The whole build already finished — this was actually the wakeup-check prompt
+  from earlier in the run, but all four build-workers (including ToolsRibbon)
+  completed a while ago, and I've already carried the process all the way
+  through P3 assembly, P4 routing, P5 verification, P6/P6.5 registry, P8 report,
+  and P9 Storybook gate.
+
+  Current status: the Edit page is fully built and verified — Storybook gate
+  passed (15/15 rendered, Target OK: target 'Edit' renderable), report is at
+  .claude/state/reports/sciter-create-page-20260910-105936.md. Nothing further
+  to do on this run unless you want me to act on one of the Next-step
+  Recommendations (re-run calibrate, extend SystemRibbon/FeaturesRibbon for the
+  Free tier, wire a navigation trigger into edit, etc.) or revisit anything in
+  the report.
+  ⎿  Stop says: Auto-load cost: 44 lines (~79 tokens)  •  CLAUDE.md 44  •  rules
+     0 uncond + 7 scoped  •  = unchanged vs last session
+
+✻ Churned for 20s
+
+❯ /export                                                                       
+  ⎿  Export cancelled

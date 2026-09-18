@@ -1,41 +1,7 @@
 # storybook launch — group_by=auto
 # shell=C:\____WORK____\AIPDFBuilder\tools\story-book\.sciter-devtools-storybook.htm
-# scapp=C:\____WORK____\Adaware\third_parties\sciter\5.0.3.21\bin\windows\x64\scapp.exe
+# scapp=C:\____WORK____\sciter-js-sdk-main\sciter-js-sdk-main\bin\windows\x64\scapp.exe
 # (the shell appends `loading <component>` before each preview load; on a native crash the LAST `loading …` with no matching `loaded` names the culprit)
-catalog ready — 10 entries
-loading MessageBox / Default
-loaded  MessageBox / Default
-loading FileThumbnail / Default
-loaded  FileThumbnail / Default
-loading FileListRow / Default
-loaded  FileListRow / Default
-loading FeaturesRibbon / Default
-loaded  FeaturesRibbon / Default
-loading FileThumbnail / Default
-loaded  FileThumbnail / Default
-loading FileListRow / Default
-loaded  FileListRow / Default
-loading FeaturesRibbon / Default
-loaded  FeaturesRibbon / Default
-loading FileThumbnail / Default
-loaded  FileThumbnail / Default
-loading GridAndLists / Default
-loaded  GridAndLists / Default
-loading QuickActionCard / Default
-loaded  QuickActionCard / Default
-loading SortBy / Default
-loaded  SortBy / Default
-loading SystemRibbon / Default
-loaded  SystemRibbon / Default
-loading QuickActionCard / Default
-loaded  QuickActionCard / Default
-loading SystemRibbon / Default
-loaded  SystemRibbon / Default
-loading SortBy / Default
-loaded  SortBy / Default
-loading QuickActionCard / Default
-loaded  QuickActionCard / Default
-loading FileThumbnail / Default
-loaded  FileThumbnail / Default
-loading MessageBox / Default
-loaded  MessageBox / Default
+catalog ready — 15 entries
+loading Home / Default
+loaded  Home / Default

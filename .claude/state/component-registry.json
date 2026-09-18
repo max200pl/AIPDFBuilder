@@ -205,7 +205,118 @@
         "PrimaryButton",
         "MessageBox"
       ]
+    },
+    {
+      "name": "RightPanelTab",
+      "path": "res/shared/components/RightPanelTab/RightPanelTab.js",
+      "kind": "ui",
+      "type": "component",
+      "description": "40x80dip vertical rail of two stacked 40x40dip icon-button cells (24x24dip bookmark glyph, 8dip inset); mirrors between the left/right workspace edges via the `side` prop (border+radius on the edge facing away from the canvas). Each cell click dispatches a bubbling 'panel-tab-select' event with {index}.",
+      "uses": [],
+      "parent": null,
+      "variants": [
+        "ItemCount=2"
+      ],
+      "states": [],
+      "figma_node_id": "15092:8965",
+      "figma_file_key": "2jGq5p5qY4lsf5QK2stfOY",
+      "figma_connected": false,
+      "ssim_score": null,
+      "status": "pending",
+      "interactivity": "click-stub",
+      "interaction_axes": [
+        "click-emit"
+      ]
+    },
+    {
+      "name": "Page",
+      "path": "res/shared/components/Page/Page.js",
+      "kind": "ui",
+      "type": "component",
+      "description": "1094x812dip blank document-canvas placeholder behind the PDF viewport — opaque white fill + a subtle drop shadow. Purely decorative: no props beyond optional width/height (default fill-parent), no interactivity, no children.",
+      "uses": [],
+      "parent": null,
+      "variants": [
+        "Default"
+      ],
+      "states": [],
+      "figma_node_id": "15099:13086",
+      "figma_file_key": "2jGq5p5qY4lsf5QK2stfOY",
+      "figma_connected": true,
+      "ssim_score": 1.0,
+      "interactivity": "stateless",
+      "status": "managed"
+    },
+    {
+      "name": "TabDocRibbon",
+      "path": "res/shared/components/TabDocRibbon/TabDocRibbon.js",
+      "kind": "ui",
+      "type": "component",
+      "description": "1920x40dip open-documents tab strip (root of the working-area header); renders one fixed-shape 200x40dip tab per `tabs` prop entry (default one: 'Longer Document Name.pdf'). Click-stub interactivity: clicking a tab dispatches a bubbling 'doc-tab-select' event carrying the tab id in evt.data. No close affordance (out of scope for this design).",
+      "uses": [],
+      "parent": null,
+      "variants": [
+        "Default"
+      ],
+      "states": [],
+      "status": "pending",
+      "figma_node_id": "2139:589",
+      "figma_file_key": "2jGq5p5qY4lsf5QK2stfOY",
+      "figma_connected": false,
+      "ssim_score": 0.927,
+      "interactivity": "click-stub",
+      "interaction_axes": [
+        "click-emit"
+      ]
+    },
+    {
+      "name": "ToolsRibbon",
+      "path": "res/shared/components/ToolsRibbon/ToolsRibbon.js",
+      "kind": "ui",
+      "type": "component",
+      "description": "1920x50dip \"Type=Edit\" tools bar: 13 tool buttons (shared burger-menu.svg glyph over a 12dip Poppins-Medium label) + 5 dividers in a left group, plus a right-side zoom control (icon-less zoom-out box, static \"100%\" field with chevron-down.svg, zoom-in plus.svg button). Click-stub tier: every tool/zoom button dispatches a bubbling 'tool-select' event carrying the action id; the zoom field itself is static/non-interactive (no dropdown variant in this design fetch).",
+      "uses": [],
+      "parent": null,
+      "variants": [
+        "Type=Edit"
+      ],
+      "states": [],
+      "status": "pending",
+      "figma_node_id": "15092:7800",
+      "figma_file_key": "2jGq5p5qY4lsf5QK2stfOY",
+      "figma_connected": false,
+      "ssim_score": null,
+      "interactivity": "button",
+      "interaction_axes": [
+        "click-emit"
+      ]
+    },
+    {
+      "name": "Edit",
+      "path": "res/pages/Edit/Edit.js",
+      "kind": "ui",
+      "type": "page",
+      "description": "Main PDF-editing workspace: persistent SystemRibbon+FeaturesRibbon+ToolsRibbon chrome band over a TabDocRibbon strip, left/right RightPanelTab rails, and a centered Page canvas. Free/Pro is a role prop (plan), not a lifecycle state — SystemRibbon/FeaturesRibbon render their Pro-only content regardless of plan pending a follow-up extension (see the sciter-create-page P8 report's Shadow-parity section).",
+      "uses": [
+        "SystemRibbon",
+        "FeaturesRibbon",
+        "ToolsRibbon",
+        "TabDocRibbon",
+        "RightPanelTab",
+        "Page"
+      ],
+      "parent": null,
+      "variants": [
+        "free",
+        "pro"
+      ],
+      "states": [],
+      "status": "pending",
+      "figma_node_id": "15092:4589",
+      "figma_file_key": "2jGq5p5qY4lsf5QK2stfOY",
+      "figma_connected": false,
+      "ssim_score": null
     }
   ],
-  "generated": "2026-08-12T16:22:33Z"
+  "generated": "2026-09-10T11:44:00Z"
 }

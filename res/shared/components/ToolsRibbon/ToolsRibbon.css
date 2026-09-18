@@ -1,0 +1,180 @@
+/*
+ * ToolsRibbon.css — styleset for ToolsRibbon.js (consumed via
+ * __DIR__ + "ToolsRibbon.css#tools-ribbon").
+ * Styling per .claude/docs/reference-styling-flow.md (project stepper: token-first ->
+ * styleset -> typography mixins only, never shorthand-assembled type -> dip units) with
+ * toolkit fallback reference-sciter-styling.md / reference-sciter-css.md for @set syntax.
+ * Icon pattern follows project convention — see .claude/docs/reference-icon-connection.md
+ * (static glyph via <img>, baked design color — no host fill/tint).
+ *
+ * Layout: mirrors SystemRibbon.css's proven idiom — the two groups (#tools left, #zoom right)
+ * are absolutely positioned over the styleset root rather than relying on justify-content
+ * (not a Sciter/flow property; SystemRibbon already establishes absolute-position-over-root as
+ * this project's working recipe for a "two groups, opposite edges" bar). Every fixed dip value
+ * below (widths, offsets, gaps) is copied verbatim from the derived Gate-1 spec
+ * (scratchpad/edit-page/units/ToolsRibbon/spec.json) — per the project calibration quirk,
+ * differently-sized children under one shared centring parent don't reliably centre, so each
+ * item gets an explicit width and its own centred children instead.
+ */
+
+@import url(../../lib/typography.css);
+
+@set tools-ribbon {
+  :root {
+    position: relative; /* containing block for .tools-ribbon__tools/.tools-ribbon__zoom below —
+      without it, Sciter anchors position:absolute descendants to the OUTERMOST styleset root in
+      the containment chain (this project's own "absolutes anchor to styleset root" engine quirk),
+      not to THIS component's own root. Invisible when this component is tested standalone or is
+      the first child of a page (both cases coincide with the outermost root anyway) — it only
+      surfaces once a page assembles this component alongside earlier siblings, where the
+      unanchored absolutes collapse onto the PAGE's root instead of this bar's own box (found
+      assembling res/pages/Edit/Edit.js, AIPDFBuilder 2026-09-10). */
+    box-sizing: border-box;
+    width: *;
+    height: 50dip;
+    background: var(--color-bg-white);
+    border-bottom: 1dip solid var(--color-border-light);
+    overflow: none;
+  }
+
+  /* Left group: 13 tool buttons + 5 dividers. Height 42dip / top 4dip reproduces the derived
+     spec's #tools frame box (x8 y4 w1291 h42) exactly under the root's 50dip height. */
+  .tools-ribbon__tools {
+    position: absolute;
+    left: 8dip;
+    top: 4dip;
+    height: 42dip;
+    flow: horizontal;
+  }
+
+  /* Uniform 8dip gap between every adjacent item (button-button, button-divider,
+     divider-button alike) — matches the derived spec's x-deltas between every pair of
+     siblings. The first child (x=8, flush with #tools's own left edge) gets no extra margin. */
+  .tools-ribbon__tools > * + * {
+    margin-left: 8dip;
+  }
+
+  /* Button height = icon(24) + label(18) stacked with zero gap = 42dip exactly (spec-verified:
+     the icon top-aligns with the button top, the label bottom-aligns with the button bottom). */
+  .tools-ribbon__btn {
+    height: 42dip;
+    flow: vertical;
+    overflow: none;
+    cursor: pointer; /* click-stub tier — interactive surface */
+  }
+
+  .tools-ribbon__btn-icon {
+    display: block; /* agent-memory feedback_ssim_icon_in_flow: block img in flow:vertical */
+    width: 24dip;
+    height: 24dip;
+    margin: 0 *; /* flex margins — centers the fixed 24dip icon in the button's variable width */
+  }
+
+  .tools-ribbon__btn-label {
+    @font-xs-medium; /* Poppins Medium 12 — same mixin FeaturesRibbon's tab label uses */
+    /* inline-block (not block+width:*) shrink-wraps to the label's OWN text width — matching
+       Figma's tight per-text-node box — instead of stretching to the button's full width
+       (Gate-1-proven: width:* on a block span rendered the button's full width, not the text's
+       natural width, a structural w-delta on every label). margin:0 * then centers the
+       shrink-wrapped label in the button, mirroring the icon's centering technique above. */
+    display: inline-block;
+    height: 18dip;
+    vertical-align: middle;
+    line-height: 18dip;
+    color: var(--color-text-muted); /* nearest token to the design's secondary label ink */
+    margin: 0 *;
+    white-space: nowrap;
+  }
+
+  /* Divider: 20dip bar vertically centred in the 42dip row (vertical-align:middle on the
+     container, mirroring FeaturesRibbon's divider/divider-bar pattern), 8dip padding each side
+     of the 1.25dip bar (8 + 1.25 + 8 = 17.25dip, matches the derived spec's 17dip box). */
+  .tools-ribbon__divider {
+    /* Pinned to the derived spec's integer box width (17dip) instead of the shrink-wrapped
+       8+1.25+8=17.25dip intrinsic sum — the fractional remainder was accumulating into a
+       cumulative sub-pixel/DPI-rounding drift by the last divider (Gate-1-proven: +3dip on
+       tool-ribbon-button-12/-13 and the #tools total only, everything before it exact). */
+    box-sizing: border-box;
+    width: 17dip;
+    height: 20dip;
+    vertical-align: middle;
+    flow: horizontal;
+    padding: 0 8dip;
+  }
+
+  .tools-ribbon__divider-bar {
+    width: 1.25dip;
+    height: *;
+    background: var(--color-border-light);
+    border-radius: var(--radius-sm);
+  }
+
+  /* Right group: zoom-out icon button + static "100%" field + zoom-in icon button, 4dip gaps.
+     Top 9dip / height 32dip reproduces the derived spec's zoom box (x1770 y9 w142 h32) centred
+     in the root's 50dip height. */
+  .tools-ribbon__zoom {
+    position: absolute;
+    right: 8dip;
+    top: 9dip;
+    height: 32dip;
+    flow: horizontal;
+  }
+
+  .tools-ribbon__zoom > * + * {
+    margin-left: 4dip;
+  }
+
+  .tools-ribbon__zoom-btn {
+    width: 32dip;
+    height: 32dip;
+    overflow: none;
+    cursor: pointer; /* click-stub tier — interactive surface */
+  }
+
+  /* Icon-less zoom-out box (no distinct glyph resolved by the design fetch) — same 24-in-32
+     centring geometry as the zoom-in icon below, just without foreground art. */
+  .tools-ribbon__zoom-icon-box {
+    display: block;
+    width: 24dip;
+    height: 24dip;
+    margin: 4dip;
+  }
+
+  .tools-ribbon__zoom-icon {
+    display: block;
+    width: 24dip;
+    height: 24dip;
+    margin: 4dip;
+  }
+
+  /* Static, non-interactive "100%" field: 8dip left pad, text, 4dip gap, 24dip chevron, 4dip
+     right pad = 8 + text + 4 + 24 + 4 = 70dip (derived spec's field width). No click handler —
+     this run's design fetch defines no open/menu-content variant for it. */
+  .tools-ribbon__zoom-field {
+    box-sizing: border-box; /* 70dip target includes the 1dip border + 8dip left padding */
+    width: 70dip;
+    height: 32dip;
+    flow: horizontal;
+    padding-left: 8dip;
+    background: var(--color-bg-white);
+    border: 1dip solid var(--color-border-light);
+  }
+
+  .tools-ribbon__zoom-value {
+    @font-xs-semibold; /* Poppins SemiBold 12 — added to typography.css for this unit */
+    line-height: 18dip; /* Figma text box is 18dip high (150% line, same convention as the
+                            tool-button label and FeaturesRibbon's tab label) */
+    color: var(--color-text-primary);
+    vertical-align: middle;
+    margin-right: 4dip;
+    white-space: nowrap;
+  }
+
+  .tools-ribbon__zoom-chevron {
+    display: block;
+    width: 24dip;
+    height: 24dip;
+    vertical-align: middle;
+    margin-right: 4dip;
+  }
+}

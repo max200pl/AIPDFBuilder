@@ -57,6 +57,69 @@
       "ready_for_dev": false,
       "units": {}
     },
+    "15092:4589": {
+      "built": null,
+      "covered_state_node_ids": [],
+      "design_version_token": "sha256:d6520fc4886a3a93aa80cd9d743bd1ff9792f27c90d2b78abc2eb6c454c735a6",
+      "drift": {
+        "changed_units": [],
+        "checked_at": "2026-09-10T11:44:18Z",
+        "design_updated": false,
+        "needs_rebuild": [],
+        "new_units": [],
+        "removed_units": []
+      },
+      "evidence_ref": ".claude/state/reports/sciter-create-page-pending.md",
+      "figma_node_id": "15092:4589",
+      "gate1_design_ready": {
+        "band": "Not Ready",
+        "counts": {
+          "ambiguous": 0,
+          "blocking": 10,
+          "ds_violations": 0,
+          "missing_states": 0,
+          "naming_divergence": 0,
+          "warnings": 0
+        },
+        "score": 88,
+        "tool_version": "figma-design-guard",
+        "verified_at": "2026-09-10T11:44:18Z"
+      },
+      "gate2_feature_feasible": {
+        "axes_absent": [
+          "REQUIREMENTS"
+        ],
+        "axes_evaluated": [
+          "DESIGN",
+          "PROJECT",
+          "ENVIRONMENT"
+        ],
+        "counts": {
+          "DESIGN": 1,
+          "ENVIRONMENT": 1,
+          "PROJECT": 0,
+          "REQUIREMENTS": 0
+        },
+        "gaps": [
+          {
+            "band": "Not Ready",
+            "detail": "design not ready (band: 'Not Ready'; 10 must-fix)",
+            "owner": "DESIGN"
+          },
+          {
+            "detail": "font:Poppins is unavailable in this environment",
+            "owner": "ENVIRONMENT",
+            "requirement": "font:Poppins"
+          }
+        ],
+        "notes": [],
+        "verdict": "NOT_BUILDABLE"
+      },
+      "kind": "feature",
+      "name": "Edit",
+      "ready_for_dev": false,
+      "units": {}
+    },
     "2001:385": {
       "built": null,
       "design_version_token": "sha256:11dff893cc46928d1ac76f9ab3bfe9aaf28b6372b697d49264fa98e3166bbe5d",

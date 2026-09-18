@@ -165,6 +165,43 @@
 }
 
 /*
+ * Extracted from Figma file 2jGq5p5qY4lsf5QK2stfOY (node 15092:7800, "Type=Edit" — ToolsRibbon),
+ * the zoom field's "100%" text style (Poppins SemiBold 12). Requires the Poppins-SemiBold.ttf
+ * (600) face already vendored above.
+ */
+@mixin font-xs-semibold {
+  font-family: "Poppins", sans-serif;
+  font-size: 12dip;
+  font-weight: 600;
+  line-height: 100%;
+  letter-spacing: 0;
+}
+
+/*
+ * Extracted from Figma file 2jGq5p5qY4lsf5QK2stfOY (node 15092:7052, the Edit screen's
+ * FeaturesRibbon "Modes + Right Icon Group" view-toggle label), text style "10 Medium".
+ */
+@mixin font-2xs-medium {
+  font-family: "Poppins", sans-serif;
+  font-size: 10dip;
+  font-weight: 500;
+  line-height: 100%;
+  letter-spacing: 0;
+}
+
+/*
+ * Extracted from Figma file 2jGq5p5qY4lsf5QK2stfOY (node 15092:9069, the same cluster's search-bar
+ * placeholder text), text style "10 Regular".
+ */
+@mixin font-2xs-regular {
+  font-family: "Poppins", sans-serif;
+  font-size: 10dip;
+  font-weight: 400;
+  line-height: 100%;
+  letter-spacing: 0;
+}
+
+/*
  * Unresolved: xl sizes and a bold (700) weight have not been exposed by any text style pulled so
  * far. Add mixins here as more text-style variables are pulled, don't guess values.
  */

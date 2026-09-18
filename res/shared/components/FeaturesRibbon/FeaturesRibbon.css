@@ -13,6 +13,12 @@
 
 @set features-ribbon {
   :root {
+    /* Containing block for .features-ribbon__modes below (position:absolute) — without it,
+       Sciter anchors position:absolute descendants to the OUTERMOST styleset root in the
+       containment chain, not to THIS component's own root (this project's "absolutes anchor to
+       styleset root" engine quirk — see SystemRibbon.css/ToolsRibbon.css for the same fix,
+       found assembling res/pages/Edit/Edit.js, AIPDFBuilder 2026-09-10). */
+    position: relative;
     box-sizing: border-box; /* Sciter defaults to content-box — without this the root renders
                                48dip tall (40 + borders + padding) and underhangs the band
                                (measured: 48dip body in the first capture) */
@@ -100,5 +106,140 @@
     display: block;
     margin: * 0; /* vertical flex margins — center the 18dip line in the 25dip tab */
     white-space: nowrap;
+  }
+
+  /* ── Modes + Right Icon Group (Edit screen only, rightCluster=true) ─────────────────────────
+   * Geometry below is measured directly from the Figma node document (root-relative offsets
+   * under I...;15092:7047, absoluteBoundingBox deltas) — same derivation the Gate-1 spec JSONs
+   * use elsewhere in this project, applied by hand here rather than through the full
+   * sciter-create-component pipeline (a small addition to an existing shared component, not a
+   * new unit). Verified visually via a preview render, not SSIM-graded. */
+  .features-ribbon__modes {
+    position: absolute;
+    right: 8dip;
+    top: 4dip;
+    height: 32dip;
+    flow: horizontal;
+  }
+
+  .features-ribbon__view-cta {
+    width: 185dip;
+    height: 24dip;
+    margin: 4dip 0; /* centers the 24dip row in the cluster's 32dip height */
+    flow: horizontal;
+  }
+
+  .features-ribbon__options {
+    box-sizing: border-box;
+    width: 57dip;
+    height: 22dip;
+    margin: * 0; /* centers the 22dip pill in the 24dip View+CTA row */
+    padding: 3dip 8dip 3dip 4dip;
+    border: 1dip solid var(--color-border-light);
+    border-radius: 11dip; /* pill: half of the 22dip height */
+    flow: horizontal;
+  }
+
+  .features-ribbon__toggle {
+    flow: horizontal;
+    height: 16dip;
+  }
+
+  .features-ribbon__toggle-dot {
+    width: 16dip;
+    height: 16dip;
+    border-radius: 50%;
+    background: var(--color-primary);
+  }
+
+  .features-ribbon__toggle-label {
+    @font-2xs-medium;
+    line-height: 15dip;
+    color: var(--color-text-primary);
+    margin-left: 4dip;
+    white-space: nowrap;
+  }
+
+  .features-ribbon__activate {
+    box-sizing: border-box;
+    width: 120dip;
+    height: 24dip;
+    margin-left: 8dip;
+    background: var(--color-core-deep);
+    border-radius: var(--radius-button);
+    flow: horizontal;
+    cursor: pointer;
+  }
+
+  .features-ribbon__activate-label {
+    @font-xs-medium;
+    color: var(--color-text-light);
+    margin: * *; /* centers the label in the 120x24 button */
+    white-space: nowrap;
+  }
+
+  .features-ribbon__right-icons {
+    height: 32dip;
+    flow: horizontal;
+  }
+
+  /* Same visual as .features-ribbon__divider-bar's wrapper but flush (no margin-left) — this
+     divider sits directly adjacent to .features-ribbon__view-cta, not after a tabs group. */
+  .features-ribbon__modes-divider {
+    box-sizing: border-box;
+    width: 17dip;
+    height: 20dip;
+    vertical-align: middle;
+    padding: 0 8dip;
+    flow: horizontal;
+  }
+
+  .features-ribbon__search {
+    box-sizing: border-box;
+    width: 208dip;
+    height: 32dip;
+    flow: horizontal;
+    cursor: pointer;
+  }
+
+  .features-ribbon__search-icon {
+    display: block;
+    width: 24dip;
+    height: 24dip;
+    margin: 4dip 0 4dip 8dip;
+  }
+
+  .features-ribbon__search-bar {
+    box-sizing: border-box;
+    width: 160dip;
+    height: 24dip;
+    margin: 4dip 0 4dip 8dip;
+    padding-left: 8dip;
+    background: var(--color-bg-white);
+    border: 1dip solid var(--color-border-light);
+    border-radius: 2dip;
+    flow: horizontal;
+  }
+
+  .features-ribbon__search-bar span {
+    @font-2xs-regular;
+    color: var(--color-text-primary);
+    margin: * 0;
+    white-space: nowrap;
+  }
+
+  .features-ribbon__icon-btn {
+    box-sizing: border-box;
+    width: 32dip;
+    height: 32dip;
+    overflow: none;
+    cursor: pointer;
+  }
+
+  .features-ribbon__icon-btn-img {
+    display: block;
+    width: 24dip;
+    height: 24dip;
+    margin: 4dip;
   }
 }

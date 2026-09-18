@@ -6,13 +6,17 @@
 
 import { route, createRouter, registerSlot, setAppElement, currentRouteView } from "../shared/lib/router.js";
 import { Home } from "../pages/Home/Home.js";
+import { Edit } from "../pages/Edit/Edit.js";
 
 // Main-slot route tree. "home" is the boot route: the app had only a placeholder body before
 // this page existed, and the Home screen-set IS the app landing in the design — an explicit
-// landing-archetype decision, not a hijack of a prior route.
+// landing-archetype decision, not a hijack of a prior route. "edit" is registered only — the
+// boot route stays "home" (Edit is the PDF-editing workspace a document is opened INTO, not the
+// app landing).
 const mainRouter = createRouter({
   routes: [
     route({ path: "home", component: Home }),
+    route({ path: "edit", component: Edit }),
   ],
   initial: "home",
 });
