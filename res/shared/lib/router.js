@@ -232,3 +232,27 @@ export function currentRootRoute() { return slotRootRoute("main"); }
 
 /** @returns {any} */
 export function currentRouteView() { return slotView("main"); }
+
+/**
+ * Every registered route path of a slot (placeholders included).
+ * @param {string} slotName
+ * @returns {string[]}
+ */
+export function slotRoutes(slotName) {
+  const slot = _slots[slotName];
+  return slot ? Object.keys(slot.routeMap) : [];
+}
+
+/**
+ * The nested route chain of a slot's current route (root first).
+ * @param {string} slotName
+ * @returns {RouteNode[]}
+ */
+export function slotChain(slotName) {
+  const slot = _slots[slotName];
+  if (!slot || !slot.current) return [];
+  return slot.routeMap[slot.current] || [];
+}
+
+/** @returns {string[]} */
+export function allRoutes() { return slotRoutes("main"); }

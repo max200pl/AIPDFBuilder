@@ -35,7 +35,7 @@ export class App extends Element {
   }
 
   render() {
-    return <div class="app" styleset={appStyleset}>{currentRouteView()}</div>;
+    return <div id="app" class="app" styleset={appStyleset}>{currentRouteView()}</div>;
   }
 
   // Window-caption intents. SystemRibbon's buttons are click-stub tier — they only dispatch

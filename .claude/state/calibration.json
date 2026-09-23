@@ -718,5 +718,81 @@
     "version": null
   },
   "status": "OK",
-  "text_styles": []
+  "text_styles": [],
+  "control_channels": {
+    "ok": false,
+    "probed_at": "2026-09-22T14:03:53Z",
+    "toolkit_version": "0.1.0",
+    "app": "C:\\____WORK____\\AIPDFBuilder\\res\\main.htm",
+    "bridge": {
+      "state": "ok",
+      "bridge_dir": "C:\\____WORK____\\AIPDFBuilder\\tools\\dev-bridge",
+      "installed_version": "0.1.0",
+      "toolkit_version": "0.1.0",
+      "missing": [],
+      "adapter_present": true,
+      "adapter_missing": []
+    },
+    "bridge_channel": {
+      "ok": true,
+      "protocol": "sciter-dev-bridge/1.0",
+      "route": "home",
+      "details": {
+        "ok": true,
+        "protocol": "sciter-dev-bridge/1.0",
+        "commands": [
+          "ping",
+          "getRoute",
+          "listRoutes",
+          "navigate",
+          "back",
+          "listStates",
+          "getState",
+          "setState",
+          "setFixture",
+          "query",
+          "hitTest",
+          "click",
+          "box",
+          "waitFor",
+          "runSpec",
+          "protocol"
+        ]
+      }
+    },
+    "self_test": {
+      "ok": true,
+      "ran": true,
+      "passed": 6,
+      "failed": 0,
+      "ms": 410,
+      "error": null,
+      "failed_cases": []
+    },
+    "engine_channel": {
+      "status": "listening (pipe)",
+      "ready": {
+        "tcp": "error: Error: address already in use",
+        "pipe": "listening",
+        "t": 1790085833426
+      },
+      "connections": 0,
+      "transports": [],
+      "report": "C:\\____WORK____\\AIPDFBuilder\\.claude\\state\\reports\\engine-channel\\engine-diagnostics.test.json"
+    },
+    "engine_diagnostics": {
+      "ok": true,
+      "errors": 0,
+      "warnings": 0,
+      "ignored": 0,
+      "logs": 0,
+      "resources": 0,
+      "findings": []
+    },
+    "windows": [],
+    "reasons": [
+      "engine channel listening but no engine connected (is the app launched in debug mode?)"
+    ],
+    "boot_ms": 2280
+  }
 }

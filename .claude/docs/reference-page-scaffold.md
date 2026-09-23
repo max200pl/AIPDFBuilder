@@ -96,6 +96,63 @@ The first real page landed at `res/pages/<PageName>/<PageName>.js` (+ `.css`, `.
 [Frontend Architecture](reference-architecture-frontend.md) in favor of `res/pages/`. The earlier
 `res/shared/pages/Home/Home.js` sketch in this doc predates that decision.
 
+## Build
+
+> SEED — skeleton section.
+
+| Fact | Value |
+| ---- | ---- |
+| prod_roots | Not observed |
+| pack_tool | Not observed |
+| pack_command | Not observed |
+| exclusions | Not observed |
+| url_scheme | Not observed |
+| build_command | Not observed |
+| artefact | Not observed |
+| mock_switch | Not observed |
+
+Not observed — filled by `update-frontend-docs architecture` from `frontend-analysis.json#packaging` once a build file exists in the tree.
+
+## Events
+
+> SEED — skeleton section.
+
+| Event | Payload | Posted by | Consumed by | Pinned by |
+| ---- | ---- | ---- | ---- | ---- |
+
+Not observed — filled by `update-frontend-docs data-flow` from `frontend-analysis.json#data_flow` (events) once a component posts an event; every feature build appends its rows.
+
+## Localization
+
+> SEED — skeleton section.
+
+Not observed — filled by `update-frontend-docs data-flow` from `frontend-analysis.json#data_flow` (localization) once a string marker or a catalog file is observed. Policy: `reference-localization.md`.
+
+## UI tests
+
+> SEED — skeleton section.
+
+| Fact | Value |
+| ---- | ---- |
+| tests root | `tests/e2e` |
+| runner | `sciter_devtools test run --project <repo>` (no launcher script in the tree) |
+| click mode | Not observed |
+| goldens | `tests/e2e/goldens/<route>[.<role>][.<phase>][.<state>].png` |
+
+`tests root` and `runner` read from the tree this run; `click mode` — Not observed, filled by `update-frontend-docs` once a spec runs against the bridge.
+
+## Dev control channel
+
+> SEED — skeleton section.
+
+| Fact | Value |
+| ---- | ---- |
+| bridge module path | Not observed |
+| port | Not observed |
+| marker | `.dev-bridge.json` (repo root, gitignored) |
+
+Not observed — filled by `update-frontend-docs` (or by `sciter_devtools test init`, which installs the bridge and prints the entry-document snippet) once a bridge exists under the tree.
+
 ## Handoff
 
 Once a real `App` shell + at least one page exist and the router is actually wired,

@@ -37,8 +37,24 @@
       });
 
       // App bootstrap — mount the root shell (router wiring lives in app/App.js).
+      // The dev-bridge boot is imported ONLY from a file:// document (the working tree: the e2e
+      // runner, the storybook, a scapp preview). Evaluating it sets globalThis.__SDT_ALLOW_MOCK__ —
+      // the host switch behind which each feature's _debug/ mock is installed AS that feature's
+      // asset below. A packed build (this://app/) never takes this branch and packs no _debug/.
       import { App } from "./app/App.js";
-      document.body.content(<App />);
+
+      async function boot() {
+        let bridge = null;
+        if (String(document.url()).startsWith("file://")) {
+          try { bridge = await import("../tools/dev-bridge/boot.js"); } catch (_) {}
+        }
+        // --- feature mock installs (guarded by the host switch) — one block per feature ---------
+        // SDT:FEATURE-MOCKS:BEGIN
+        // SDT:FEATURE-MOCKS:END
+        document.body.content(<App />);
+        if (bridge) bridge.attachDevBridge(document.$("#app")).catch(() => {});
+      }
+      boot();
     </script>
   </head>
   <body></body>

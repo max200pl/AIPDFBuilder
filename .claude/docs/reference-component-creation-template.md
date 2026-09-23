@@ -156,6 +156,20 @@ export class Tabs extends Element {
 }
 ```
 
+## Component Placement Rules
+
+> SEED — skeleton section.
+
+| Class | Reach | Folder | Registry type |
+| ---- | ---- | ---- | ---- |
+| shared primitive | Not observed | Not observed | Not observed |
+| app chrome | Not observed | Not observed | Not observed |
+| feature component | Not observed | Not observed | Not observed |
+| feature dialog | Not observed | Not observed | Not observed |
+| orphan | Not observed | Not observed | Not observed |
+
+Not observed — filled by `update-frontend-docs architecture` from `frontend-analysis.json#feature_architecture` (placement classes) once a component directory and a feature folder exist under `<root>`.
+
 ## Handoff
 
 This whole file is a seed. Once real components exist under `res/`, run `/analyze-frontend` →
